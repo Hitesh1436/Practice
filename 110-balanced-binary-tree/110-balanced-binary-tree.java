@@ -15,30 +15,21 @@
  */
 class Solution {
     
-    class pair{
-        int h;
-        boolean isBal;
-    }
+    boolean isBal = true;
     
-    public pair isBal(TreeNode node){
+    public int isBTBal(TreeNode node){
         if(node == null){
-            pair base = new pair();
-            base.h = 0;
-            base.isBal = true;
-            return base;
+            return 0;
         }
-        pair left  = isBal(node.left);
-        pair right = isBal(node.right);
+        int lH = isBTBal(node.left);
+        int rH = isBTBal(node.right);
         
-        pair my = new pair();
-        my.isBal = left.isBal && right.isBal && Math.abs(left.h-right.h)<=1;
+        isBal = isBal && Math.abs(lH-rH)<=1;
+        return Math.max(lH,rH)+1;
         
-        my.h = Math.max(left.h,right.h)+1;
-        return my;
     }
-    
     public boolean isBalanced(TreeNode root) {
-        pair ans = isBal(root);
-        return ans.isBal;
+        isBTBal(root);
+        return isBal;
     }
 }
