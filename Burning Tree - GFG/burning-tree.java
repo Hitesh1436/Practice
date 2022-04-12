@@ -163,7 +163,7 @@ class Solution
         list = new ArrayList<>();
         find(root,target);
         for(int i=0;i<list.size();i++){
-            burnTree(list.get(i), i == 0 ? null : list.get(i - 1), i);
+            burnTree(list.get(i), i == 0 ? null : list.get(i - 1), i);  // ternary operator h bas easy h
         }
 
         return maxTime;
