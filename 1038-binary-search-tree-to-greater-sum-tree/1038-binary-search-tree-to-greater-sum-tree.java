@@ -14,23 +14,19 @@
  * }
  */
 class Solution {
-    public TreeNode bstToGst(TreeNode root) {
-        if(root == null) return null;
-        Stack<TreeNode> stack = new Stack<>();
-        TreeNode node = root;
-        int rightSum = 0;
-        while(node !=null || !stack.isEmpty()) {
-            while(node !=null) {
-                stack.push(node);
-                node = node.right;
-            }
-            node = stack.pop();
-            node.val += rightSum; 
-            rightSum =node.val;
-            node = node.left;           
-        }
-        return root;       
+    int cache = 0;
+    private void preOrderReversed(TreeNode root){
+        if(root == null)
+            return;
         
-    }    
-
+        preOrderReversed(root.right);
+        cache = root.val + cache;
+        root.val = cache;
+        preOrderReversed(root.left);
+        
+    }
+    public TreeNode bstToGst(TreeNode root) {
+        preOrderReversed(root);
+        return root;
+    }
 }
