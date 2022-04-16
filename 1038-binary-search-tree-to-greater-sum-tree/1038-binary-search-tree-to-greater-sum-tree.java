@@ -14,19 +14,20 @@
  * }
  */
 class Solution {
-    int cache = 0;
-    private void preOrderReversed(TreeNode root){
-        if(root == null)
+    
+    int sum =0;
+    
+    public void traversal(TreeNode root){
+        if(root == null){
             return;
-        
-        preOrderReversed(root.right);
-        cache = root.val + cache;
-        root.val = cache;
-        preOrderReversed(root.left);
-        
+        }
+        traversal(root.right);
+        sum = sum + root.val;
+        root.val = sum;
+        traversal(root.left);
     }
     public TreeNode bstToGst(TreeNode root) {
-        preOrderReversed(root);
+        traversal(root);
         return root;
     }
 }
