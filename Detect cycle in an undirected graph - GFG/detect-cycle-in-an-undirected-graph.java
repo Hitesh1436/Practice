@@ -31,51 +31,35 @@ class GFG {
 }// } Driver Code Ends
 
 
-class Pair{
-    int first;
-    int second;
-    public Pair(int first , int second){
-        this.first = first;
-        this.second = second;
-    }
-}
 class Solution {
     // Function to detect cycle in an undirected graph.
     public boolean isCycle(int V, ArrayList<ArrayList<Integer>> adj) {
-
-    //     *****bfs*****
+        // Code here
         boolean vis[] = new boolean[V];
-        Arrays.fill(vis , false);
+        // Arrays.fill(vis , false);
         
         for(int i=0 ; i<V ; i++){
             if(vis[i] == false){
-                if(checkCycle(i , vis , adj)==true)
+                if(checkCycle (i , -1 , vis , adj) == true)
                     return true;
             }
         }
         return false;
     }
-    public boolean checkCycle(int s , boolean vis[] , ArrayList<ArrayList<Integer>> adj){
+    public boolean checkCycle(int node , int parent , boolean vis[] , ArrayList<ArrayList<Integer>> adj){
         
-        Queue<Pair> q = new LinkedList<>();
-        q.add(new Pair(s , -1));
-        vis[s] = true;
+        vis[node] = true;
         
-        while(q.isEmpty()==false){
-            int node = q.peek().first;
-            int parent = q.peek().second;
-            q.remove();
+        for(Integer it : adj.get(node)){
             
-            for(Integer it : adj.get(node)){
-                
-                if(vis[it] == false){
-                    q.add(new Pair(it , node));
-                    vis[it] = true;
-                }
-                else if(parent != it)
+            if(vis[it] == false){
+                if(checkCycle(it , node , vis , adj) == true)
                     return true;
             }
+            else if(it != parent)
+                return true;
         }
         return false;
     }
+    
 }
