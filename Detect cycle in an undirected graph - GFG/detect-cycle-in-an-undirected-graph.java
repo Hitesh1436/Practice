@@ -33,34 +33,30 @@ class GFG {
 
 class Solution {
     // Function to detect cycle in an undirected graph.
-        public static boolean isCycle(int V, ArrayList<ArrayList<Integer>> adj) {
-        boolean[] visited = new boolean[V];
-        int[] parent = new int[V];
-        Arrays.fill(parent, -1);
-        for (int i = 0; i < V; ++i) {
-            if (visited[i] == false)
-                if (bfsDetect(i, parent, visited, adj))
+         public boolean isCycle(int V, ArrayList<ArrayList<Integer>> adj) {
+        // Code here
+        boolean visited[] = new boolean[V];
+        
+        for(int i = 0; i < V; ++i)
+            if(visited[i] == false)
+                if(dfsDetect(i, -1, visited, adj))
                     return true;
-        }
+        
         return false;
+
     }
-
-    public static boolean bfsDetect(int node, int[] parent, boolean[] visited, ArrayList<ArrayList<Integer>> adj) {
-        Queue<Integer> q = new LinkedList<>();
-        q.add(node);
+    
+    public boolean dfsDetect(int node, int parent, boolean[] visited, ArrayList<ArrayList<Integer>> adj) {
         visited[node] = true;
-        parent[node] = -1;
-
-        while (!q.isEmpty()) {
-            int u = q.remove();
-            for (int v : adj.get(u)) {
-                if (visited[v] == false) {
-                    visited[v] = true;
-                    parent[v] = u;
-                    q.add(v);
-                } else if (parent[u] != v)
+        
+        for(int v : adj.get(node))
+        {
+            if(visited[v] == false) {
+                if(dfsDetect(v, node,visited, adj))
                     return true;
             }
+            else if(v != parent) return true;
+        
         }
         return false;
     }
