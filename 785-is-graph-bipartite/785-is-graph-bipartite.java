@@ -1,28 +1,39 @@
 class Solution {
-    public boolean checkBFS(int node, int[][] graph, int[] color){
-        Queue<Integer> q = new LinkedList<>();
-        q.add(node);
-        color[node]=1;
-        while(!q.isEmpty()){
-            int n = q.poll();
-            for(int i: graph[n]){
-                if(color[i]==-1){
-                    color[i]=1-color[n];
-                    q.add(i);
-                }
-                if(color[i]==color[n])
+    public boolean isBipartite(int[][] graph) {
+        int arr[]=new int[graph.length];
+        for(int i=0;i<arr.length;i++)
+        {arr[i]=-1;}
+        for(int i=0;i<graph.length;i++)
+        {
+            if(arr[i]==-1)
+            {
+                if(!helper(graph,i,arr))
+                {
                     return false;
+                }
             }
         }
         return true;
     }
-    public boolean isBipartite(int[][] graph) {
-        int v = graph.length;
-        int[] color = new int[v];
-        Arrays.fill(color,-1);
-        for(int i = 0;i<v;i++){
-            if(color[i]==-1&&!checkBFS(i, graph, color)){
-                    return false;
+    public boolean helper(int [][]graph,int k,int []arr)
+    {
+        Queue<Integer>q=new ArrayDeque<>();
+        q.add(k);
+        arr[k]=1;
+        while(!q.isEmpty())
+        {
+           int c=q.poll();
+            for(int i=0;i<graph[c].length;i++)
+            {
+                if(arr[graph[c][i]]==-1)
+                {
+                    arr[graph[c][i]]=1-arr[c];
+                    q.add(graph[c][i]);
+                }
+               if(arr[c]==arr[graph[c][i]])
+                    {
+                        return false;
+                    }
             }
         }
         return true;
