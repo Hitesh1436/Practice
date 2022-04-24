@@ -1,76 +1,48 @@
 class Solution {
-    
-    public class pair{
-        int i;
-        int j;
-        pair(int x,int y){
-            i=x;
-            j=y;
-        }
-    }
-    int freshOrange=0;
-    static int [][]dir = {{1,0},{0,1},{0,-1},{-1,0}};  // for all 4 directions
-    public int seed(Queue<pair>qu, int[][]grid){
-        int n = grid.length;
-        int m = grid[0].length;
-        for(int i=0;i<n;i++){
-            for(int j=0;j<m;j++){
-                if(grid[i][j]==2){
-                    // rotten orange h 
-                    qu.add(new pair(i,j));
-                }else if(grid[i][j]==1){
-                    // freshOrange h
-                    freshOrange++;
+    public int orangesRotting(int[][] arr) {
+        Queue<int[]> q = new LinkedList<int[]>();
+        int m = arr.length;
+        int n = arr[0].length;
+        boolean[][] visited = new boolean[m][n];
+        for(int i=0; i<m; i++){
+            for(int j=0; j<n; j++){
+                if(arr[i][j] == 2){
+                    visited[i][j] = true;
+                    q.add(new int[]{i, j, 0});
                 }
             }
         }
-        return freshOrange;
-    }
-    
-    public int orangesRotting(int[][] grid) {
-        Queue<pair> qu = new LinkedList<>();
-        freshOrange=seed(qu,grid);   // seeding krai h bas alag funt likh dia clean dikhe
-        
-        if(freshOrange==0){
-            return 0;
-        }
-        
-        int time =0;
-         int n = grid.length;
-         int m = grid[0].length;
-        while(qu.size()!=0){
-            int size = qu.size();
+        int[][] dir = {{1,0},{0,1},{-1,0},{0,-1}};
+        int ans = 0;
+        while(! q.isEmpty()){
+            int[] curr = q.poll();
+            int i=curr[0];
+            int j = curr[1];
+            int time = curr[2];
+            arr[i][j] = 2;
+            ans = time;
             
-            
-            while(size-- > 0){
-                // remove mark work add...
-                pair rem = qu.remove();      
-                int i = rem.i;
-                int j= rem.j;
+            for(int[] it : dir){
+                int row = it[0]+i;
+                int col = it[1]+j;
                 
-                if(grid[i][j]==1){
-                    grid[i][j]=2;
-                    freshOrange--;
+                if(row<0 || col<0 || row>=m || col>=n || visited[row][col]){
+                    continue;
                 }
-                if(freshOrange==0){
-                    return time;
+                if(arr[row][col] == 0){
+                    continue ;
                 }
-                
-                // add ke liye 
-                for(int []d : dir){
-                    int r = i+ d[0];
-                    int c = j+ d[1];
-                    
-                    if(r>=0 && r<n && c>=0 && c<m && grid[r][c]==1){
-                        qu.add(new pair(r,c));
-                    }
-                }
-                
+                q.add(new int[]{row, col, time+1});
+                visited[row][col] = true;
             }
-            time ++;
-     
         }
-        return freshOrange !=0 ? -1:time;
+        for(int i=0; i<m; i++){
+            for(int j=0; j<n; j++){
+                if(arr[i][j] == 1){
+                    return -1;
+                }
+            }
+        }
+        return ans;
     }
-    
 }
