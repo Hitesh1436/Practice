@@ -1,37 +1,32 @@
 class Solution {
-    public boolean validPath(int n, int[][] edges, int source, int destination) {
-        if(edges.length == 0)
-            return true;
+
+ private  boolean hasPath(ArrayList<Integer>[] graph,int src,int dst,boolean[] vis){
+  if(src == dst) return true;
+
+  vis[src] = true;
+
+  for(int nbr : graph[src]){
+     if(vis[nbr] == false){
+         if(hasPath(graph,nbr,dst,vis)==true){
+             return true;
+         }
+     }
         
-        List<List<Integer>> adj = new ArrayList<>();
-        
-        for(int i=0;i<n;i++){
-            adj.add(new ArrayList<Integer>());
-        }
-        
-        for(int[] edge : edges){
-            adj.get(edge[0]).add(edge[1]);
-            adj.get(edge[1]).add(edge[0]);
-        }
-        
-        Queue<Integer> q = new LinkedList<>();
-        q.add(source);
-        
-        boolean[] visited = new boolean[n];
-        
-        while(!q.isEmpty()){
-            int node = q.remove();
-            visited[node] = true;
-            
-            for(Integer l : adj.get(node)){
-                if(l == destination)
-                    return true;
-                if(!visited[l])
-                    q.add(l);
-            }
-            
-        }
-        
-        return false;
+  }
+  return false;
+}
+
+public boolean validPath(int n, int[][] edges, int src, int dest) {
+    ArrayList<Integer>[] graph = new ArrayList[n];
+    for(int i =0 ;i<n;i++){
+        graph[i] = new ArrayList<>();
     }
+    
+    for(int [] edge : edges){
+        graph[edge[0]].add(edge[1]);
+        graph[edge[1]].add(edge[0]);
+    }
+    boolean[] vis = new boolean[n];
+    return hasPath(graph,src,dest,vis);
+}
 }
