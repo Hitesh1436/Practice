@@ -14,28 +14,21 @@
  * }
  */
 class Solution {
-    
-    public void inOrder(TreeNode root, ArrayList<Integer>al){
+    TreeNode newRoot  = null;
+    TreeNode previous = null;
+    public TreeNode increasingBST(TreeNode root) {
         if(root == null){
-            return;
-        }
-        inOrder(root.left,al);
-        al.add(root.val);
-        inOrder(root.right,al);
-    }
-    
-    public TreeNode buildTree(ArrayList<Integer>al){
-        if(al.size()==0){
             return null;
         }
-        TreeNode root = new TreeNode(al.remove(0));
-        root.right= buildTree(al);
-        return root;
-    }
-    
-    public TreeNode increasingBST(TreeNode root) {
-        ArrayList<Integer> al = new ArrayList<>();
-        inOrder(root,al);
-        return buildTree(al);
+        increasingBST(root.left);
+        if(newRoot==null){
+            newRoot = root;
+            previous = root;
+        }else if(previous != null){
+            previous.right = new TreeNode(root.val);
+            previous = previous.right;
+        }
+        increasingBST(root.right);
+        return newRoot;
     }
 }
