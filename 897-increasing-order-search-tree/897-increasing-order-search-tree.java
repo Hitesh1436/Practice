@@ -14,21 +14,15 @@
  * }
  */
 class Solution {
-    TreeNode newRoot  = null;
-    TreeNode previous = null;
+    TreeNode prev=null;
     public TreeNode increasingBST(TreeNode root) {
-        if(root == null){
-            return null;
-        }
-        increasingBST(root.left);
-        if(newRoot==null){
-            newRoot = root;
-            previous = root;
-        }else if(previous != null){
-            previous.right = new TreeNode(root.val);
-            previous = previous.right;
-        }
+        if(root==null)return root;
+        
         increasingBST(root.right);
-        return newRoot;
+        root.right=prev;
+        prev=root;
+        increasingBST(root.left);
+        root.left=null;
+        return prev;
     }
 }
