@@ -1,5 +1,8 @@
 class Solution {
     public int fib(int n) {
+        
+        // T(C) = O(n);
+        // S(C) = O(n);
         if(n<=1){
             return n;
         }
