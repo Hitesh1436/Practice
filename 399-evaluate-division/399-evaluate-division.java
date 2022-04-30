@@ -1,69 +1,45 @@
-class Edge {
-    
-    String v;
-    double value;
-    
-    public Edge (String v, double value) {
-        
-        this.v = v;
-        this.value = value;
-    }
-}
-
 class Solution {
-    
-    public void addEdge (Map<String, List<Edge>> map, String u, String v, double value) {
-        
-        if (!map.containsKey (u)) {
-            map.put (u, new ArrayList<> ());
+    public double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {
+        // build big double direction map
+        HashMap<String, HashMap<String, Double>> map = new HashMap<>();
+        for (int i = 0; i < equations.size(); i++) {
+            String start = equations.get(i).get(0);
+            String end = equations.get(i).get(1);
+            double ratio = values[i];
+            map.putIfAbsent(start, new HashMap<>());
+            map.get(start).put(end, ratio);
+            map.putIfAbsent(end, new HashMap<>());
+            map.get(end).put(start, 1.0 / ratio);
         }
-        
-        map.get (u).add (new Edge (v, value));
-    }
-    
-    public double dfs (Map<String, List<Edge>> map, Set<String> set, String u, String v) {
-        
-        if (!map.containsKey (u) || !map.containsKey (v)) {
-            return -1;
-        }
-        else if (u.equals (v)) {
-            return 1;
-        }
-        
-        for (Edge edge : map.get (u)) {
-            if (set.contains (edge.v)) {
+        // deal with every query
+        double[] res = new double[queries.size()];
+        for (int i = 0; i < queries.size(); i++) {
+            String start = queries.get(i).get(0);
+            String end = queries.get(i).get(1);
+            // first check if start or end exist in big map or not
+            if (!map.containsKey(start) || !map.containsKey(end)) {
+                res[i] = -1.0;
                 continue;
             }
-            else if (edge.v.equals (v)) {
-                return edge.value;
-            }
-            
-            set.add (u);
-            double val = dfs (map, set, edge.v, v);
-            if (val != -1) {
-                return val * edge.value;
-            }
+            // enter dfs loop, for each query, there is a new visited set
+            res[i] = helper(map, start, end, new HashSet<>());
         }
-        
-        return -1;
+        return res;
     }
-    
-    public double[] calcEquation(List<List<String>> equations, double[] values, List<List<String>> queries) {
-        
-        double[] answer = new double[queries.size ()];
-        Map<String, List<Edge>> map = new HashMap<> ();
-        
-        for (int i = 0; i < values.length; i++) {
-            List<String> equation = equations.get (i);
-            addEdge (map, equation.get (0), equation.get (1), values[i]);
-            addEdge (map, equation.get (1), equation.get (0), 1 / values[i]);
+    public double helper(HashMap<String, HashMap<String, Double>> map, String start, String end, HashSet<String> visited) {
+        // actually no need to check quitting condition, because if one can enter this dfs, one must iterate all children
+        // if (!map.containsKey(start)) return -1;
+        if (map.get(start).containsKey(end)) {
+            return map.get(start).get(end);
         }
-        
-        for (int i = 0; i < answer.length; i++) {
-            List<String> query = queries.get (i);
-            answer[i] = dfs (map, new HashSet<> (), query.get (0), query.get (1));
+        // mark visited
+        visited.add(start);
+        for (Map.Entry<String, Double> entry : map.get(start).entrySet()) {
+            if (visited.contains(entry.getKey())) continue;
+            double res = helper(map, entry.getKey(), end, visited);
+            if (res == -1.0) continue;
+            return res * entry.getValue();
         }
-        
-        return answer;
+        return -1.0;
     }
 }
