@@ -14,26 +14,26 @@
  * }
  */
 class Solution {
-    public TreeNode buildTree(int[] inorder, int[] postorder) {
-        return build(inorder,0,inorder.length-1,postorder,0,postorder.length-1);
-    }
     
-    public TreeNode build(int[] inorder, int inS, int inE, int[] postorder, int posS, int posE){
-        if(inS>inE || posS>posE) return  null;
-        
-        TreeNode root = new TreeNode(postorder[posE]);
-        
-        int rootI=0;
-        for(int i=0;i<inorder.length;i++){
-            if(inorder[i]==root.val){
-                rootI = i;
-                break;
-            }
+     public  TreeNode buildTreeHelper( int[] postorder,int posi,int poei,int[] inorder,int isi,int iei){
+        if(isi>iei){
+            return null;
         }
+        int idx = isi;
+        while(inorder[idx]!=postorder[poei])
+        idx++;
         
-        root.left = build(inorder,inS,rootI-1,postorder,posS,posS+rootI-inS-1);
-        root.right = build(inorder,rootI+1,inE,postorder,posS+rootI-inS,posE-1);
+        int tnol = idx-isi;
+        TreeNode ans = new TreeNode(postorder[poei]);
         
-        return root;
+        ans.left = buildTreeHelper(postorder,posi,posi+tnol-1,inorder,isi,idx-1);
+        ans.right = buildTreeHelper(postorder,posi+tnol,poei-1,inorder,idx+1,iei);
+        
+        return ans;
+    }
+
+    public  TreeNode buildTree(int[] inorder, int[] postorder){
+        int n = postorder.length;
+        return buildTreeHelper(postorder,0,n-1,inorder,0,n-1);
     }
 }
