@@ -15,28 +15,25 @@
  */
 class Solution {
     
-    public  TreeNode helperTree(int[] preorder,int psi,int pei, int[] inorder,int isi,int iei){
+    public TreeNode helper(int[] preorder,int psi,int pei, int[] inorder,int isi,int iei) {
         if(isi>iei){
             return null;
         }
-        int idx = isi;   
-        while(inorder[idx]!=preorder[psi]) // mtlb inorder mn travel kro tbtk jbtk preorder ke 
-                                            //psi ki value inorder ke idx ki value ke equal ni hoti
+        int idx = isi;
+        while(inorder[idx]!=preorder[psi])
             idx++;
-            int colse = idx-isi;  // count of  left subtree elements 
-            // jis idx pr same value aai usse phle vale elements left Subtree ka part honge and baki right subtree ka
+            // tnol-> tonal no. of elements
+            int tnol = idx - isi;   // left subtree mn itne honge
             
-            TreeNode node = new TreeNode(preorder[psi]);
+            TreeNode ans = new TreeNode(preorder[psi]);
             
-            node.left = helperTree(preorder,psi+1,psi+colse,inorder,isi,idx-1);
-            node.right = helperTree(preorder,psi+colse+1,pei,inorder,idx+1,iei);
-             return node;
+            ans.left = helper(preorder,psi+1,psi+tnol,inorder,isi,idx-1);
+            ans.right= helper(preorder,psi+tnol+1,pei,inorder,idx+1,iei);
+        return ans;
         
-       
     }
-
-    public  TreeNode buildTree(int[] preorder, int[] inorder){
-        int n = preorder.length;   // ya inorder.length krlo bcz dono same hongi
-        return helperTree(preorder,0,n-1,inorder,0,n-1);
+    public TreeNode buildTree(int[] preorder, int[] inorder) {
+        int n = preorder.length;
+        return helper(preorder,0,n-1,inorder,0,n-1);
     }
 }
