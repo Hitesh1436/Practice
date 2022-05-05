@@ -1,35 +1,41 @@
 class Solution {
-    public int numBusesToDestination(int[][] routes, int source, int target) {
-        ArrayList<Integer>[] graph = new ArrayList[1000000];
-        for(int i = 0 ; i < routes.length ; i++){
-            int[] arr = routes[i];
-            for(int e : arr){
-                if(graph[e] == null) graph[e] = new ArrayList<>();
-                graph[e].add(i);
-            }
-        }
-        
-        boolean[] vis = new boolean[1000000];
-        boolean[] bus_vis = new boolean[routes.length];
-        Queue<int[]> q = new LinkedList<>();
-        q.add(new int[]{source, 0});
+    Map<Integer,List<Integer>> graph=new HashMap<>();
+    
+    public int numBusesToDestination(int[][] routes, int S, int T) {
+        createGraph(routes);
+        HashSet<Integer> visited = new HashSet<>();
+        Queue<Integer> q = new LinkedList<>();
+        q.add(S);
+        int ans=0;
         while(!q.isEmpty()){
-            int[] e = q.remove();
-            int s = e[0];
-            int lev = e[1];
-            if(s == target) return lev;
-            vis[s] = true;
-            for(int bus : graph[s]){
-                if(bus_vis[bus]) continue;
+            int n=q.size();
+            for(int i=0;i<n;i++){
+                int stop =q.poll();
+                //System.out.println(stop);
                 
-                for(int x : routes[bus]){
-                    if(!vis[x]){
-                        q.add(new int[]{x, lev + 1});
+                if(stop==T)return ans;
+                List<Integer> buses = graph.get(stop);
+                for(int bus : buses ){
+                    if(visited.contains(bus)) continue;
+                    visited.add(bus);
+                    for(int j=0;j<routes[bus].length;j++){
+                        q.add(routes[bus][j]);
                     }
                 }
-                bus_vis[bus] = true;
+                
             }
+            ans++;
         }
         return -1;
+    }
+    
+    //create the graph : which stop belong to which bus and tgen we can run the bfs on it 
+    public void createGraph(int[][] routes){
+        for(int i=0;i<routes.length;i++){
+            for(int j=0;j<routes[i].length;j++){
+                graph.putIfAbsent(routes[i][j],new ArrayList<Integer>());
+                graph.get(routes[i][j]).add(i);
+            }
+        }
     }
 }
