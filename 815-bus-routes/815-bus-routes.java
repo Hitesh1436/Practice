@@ -1,52 +1,36 @@
 class Solution {
-    public  int numBusesToDestination(int[][] routes, int S, int T) {
-        int n = routes.length;
-        
-        HashMap<Integer,ArrayList<Integer>>map = new HashMap<>();
-        for(int i=0;i<n;i++){
-            for(int j=0;j<routes[i].length;j++){   // routes[0] ni lena bcz soute size vary krskta hai
-                int busStopNo = routes[i][j];
-                ArrayList<Integer> busNo = map.getOrDefault(busStopNo,new ArrayList<>());
-                busNo.add(i);               // 0,1,2,3 add kia
-                map.put(busStopNo,busNo);  // busStopNo ke corresponding busNo ko put kia h
+    // BFS start with bus first
+    public int numBusesToDestination(int[][] routes, int S, int T) {
+        if (routes == null || routes.length == 0) return -1;
+        if (S == T) return 0;
+        Map<Integer, List<Integer>> map = new HashMap<>(); // stop -> {list bus pass through this stops}
+        for (int i = 0; i < routes.length; i++) {
+            for (int stop : routes[i]) {
+                map.computeIfAbsent(stop, v -> new ArrayList<>()).add(i);
             }
         }
-        
-        LinkedList<Integer> qu = new LinkedList<>();
-        HashSet<Integer> busStopVis = new HashSet<>();
-        HashSet<Integer> busVis = new HashSet<>();
-        int level = 0;
-        
-        qu.addLast(S);     // queue mn source add kia 
-           busStopVis.add(S);  // busStop ke vis array mn bhi source add kia
-        
-        // bfs lgao ab
-        while(qu.size()>0){
-            int size = qu.size();
-            while(size-->0){
-                int rem = qu.removeFirst();
-                
-                if(rem== T){       // jo remove kia h vhi target hua toh vhi level ans hoga
-                    return level;
-                }
-                ArrayList<Integer> buses = map.get(rem); // 
-                for(int bus : buses){
-                    if(busVis.contains(bus)==true){    // dkha agr busVis mn vo bus already h toh continue krdnge
-                        continue;
-                    }
-                    int []arr = routes[bus];      // array bnya remove ki hui ka
-                    for(int busstop : arr){
-                        if(busStopVis.contains(busstop)==true){
-                            continue;
+        Queue<Integer> queue = new LinkedList<>();      // bus queue
+        for (int bus : map.get(S)) queue.offer(bus);
+        Set<Integer> visitedBus = new HashSet<>();
+        Set<Integer> visitedStop = new HashSet<>();
+        visitedStop.add(S);
+        int count = 0;
+        while (!queue.isEmpty()) {
+            int size = queue.size();
+            for (int i = 0; i < size; i++) {
+                int bus = queue.poll();
+                if (!visitedBus.add(bus)) continue;
+                for (int stop : routes[bus]) {
+                    if (stop == T) return count+1;
+                    if (!visitedStop.add(stop)) continue;
+                    for (int nextBus : map.get(stop)) 
+                        if (!visitedBus.contains(nextBus)) {
+                            queue.offer(nextBus);
                         }
-                        qu.addLast(busstop);
-                        busStopVis.add(busstop);
-                    }
-                    busVis.add(bus);
                 }
             }
-            level++;
+            count++;
         }
         return -1;
-  }
+    }
 }
