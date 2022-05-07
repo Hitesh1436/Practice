@@ -1,48 +1,45 @@
-class Bank {
-    long[] balance;
+class Bank
+{
     int n;
-    public Bank(long[] balance) {
-        this.balance=balance;
-        this.n=balance.length;
+    long[] bal;
+    public Bank(long[] balance)
+    {
+        bal = balance.clone();
+        n = balance.length;
     }
-    
-    public boolean transfer(int account1, int account2, long money) {
-        if(!check(account1,money)){
-            return false;
+    public boolean transfer(int account1, int account2, long money)
+    {
+        if(account1 > 0 && account1 <= n && account2 > 0 && account2 <= n)
+        {
+            if(bal[account1-1] >= money)
+            {
+                bal[account1-1] -= money;
+                bal[account2-1] += money;
+                return true;
+            }
         }
-        if(!check(account2)){
-            return false;
-        }
-        balance[account1-1]-=money;
-        balance[account2-1]+=money;
-        return true;
+        return false;
     }
-    
-    public boolean deposit(int account, long money) {
-        if(!check(account)){
-            return false;
+    public boolean deposit(int account, long money)
+    {
+        if(account > 0 && account <= n)
+        {
+            bal[account-1] += money;
+            return true;
         }
-        balance[account-1]+=money;
-        return true;
+        return false;
     }
-    
-    public boolean withdraw(int account, long money) {
-        if(!check(account,money)){
-            return false;
+    public boolean withdraw(int account, long money)
+    {
+        if(account > 0 && account <= n)
+        {
+            if(bal[account-1] >= money)
+            {
+                bal[account-1] -= money;
+                return true;
+            }
         }
-        balance[account-1]-=money;
-        return true;
-    }
-    
-    private boolean check(int acc,long amt){
-        if(!check(acc)){
-            return false;
-        }
-        return balance[acc-1]>=amt;
-    }
-    
-    private boolean check(int acc){
-        return acc>0 && acc<=n;
+        return false;
     }
 }
 
