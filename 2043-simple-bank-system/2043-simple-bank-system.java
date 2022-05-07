@@ -1,34 +1,48 @@
 class Bank {
-    int N;
     long[] balance;
-
+    int n;
     public Bank(long[] balance) {
-        this.N = balance.length;
-        this.balance = balance;
+        this.balance=balance;
+        this.n=balance.length;
     }
     
     public boolean transfer(int account1, int account2, long money) {
-        if(account1<1 || account1>N || account2<1 || account2>N ||balance[account1-1]<money){
+        if(!check(account1,money)){
             return false;
         }
-        balance[account1-1] -= money;
-        balance[account2-1] += money;
+        if(!check(account2)){
+            return false;
+        }
+        balance[account1-1]-=money;
+        balance[account2-1]+=money;
         return true;
     }
     
     public boolean deposit(int account, long money) {
-        if(account<1 || account>N){
+        if(!check(account)){
             return false;
         }
-         balance[account - 1] += money;
+        balance[account-1]+=money;
         return true;
     }
     
     public boolean withdraw(int account, long money) {
-     if(account < 1 || account > N || balance[account - 1] < money)
+        if(!check(account,money)){
             return false;
-        balance[account - 1] -= money;
+        }
+        balance[account-1]-=money;
         return true;
+    }
+    
+    private boolean check(int acc,long amt){
+        if(!check(acc)){
+            return false;
+        }
+        return balance[acc-1]>=amt;
+    }
+    
+    private boolean check(int acc){
+        return acc>0 && acc<=n;
     }
 }
 
