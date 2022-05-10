@@ -1,7 +1,7 @@
 class Solution {
     public List<List<Integer>> combinationSum3(int k, int n) {
         int[] nums = {1,2,3,4,5,6,7,8,9};
-        Set<List<Integer>> set = new HashSet<>();
+        HashSet<List<Integer>> set = new HashSet<>();
         combinationSum3Helper(nums,set,new ArrayList<>(),k,n,0);
 
         return new ArrayList<>(set);
