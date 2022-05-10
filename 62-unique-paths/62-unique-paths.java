@@ -1,23 +1,44 @@
-class Solution {
-   public int uniquePaths(int m, int n) {
-  if (m == 0 || n == 0) {
-    throw new IllegalArgumentException("m or n can't be 0");
-  }
-  int[][] mem = new int[m][n];
-  for (int i = 0; i < m; ++i) { // init
-    for (int j = 0; j < n; ++j) {
-      mem[i][j] = -1;
+ class Solution {
+    
+    public boolean inRange(int i, int j, int n, int m){
+        if(i < 0 || i >= n || j < 0 || j >= m)
+            return false;
+        return true;
     }
-  }
-  return numPaths(m - 1, n - 1, mem);
-}
+    
+    public int mazePathHelper(int sr, int sc, int dr, int dc, int [][] dir, int [][] dp){
+        if(sr == dr && sc == dc){
+            return dp[sr][sc] = 1;
+        }
+        
+        if(dp[sr][sc] != 0){
+            return dp[sr][sc];
+        }
+        
+        int count  = 0;
+        for(int d = 0; d < dir.length; d++){
+            int r = sr + dir[d][0];
+            int c = sc + dir[d][1];
 
-private int numPaths(int i, int j, int[][] mem) {
-  if (i == 0 || j == 0) {
-    return 1;
-  }
-  if (mem[i - 1][j] == -1) mem[i - 1][j] = numPaths(i - 1, j, mem);
-  if (mem[i][j - 1] == -1) mem[i][j - 1] = numPaths(i, j - 1, mem);
-  return mem[i - 1][j] + mem[i][j - 1];
-  }
-}
+            if(inRange(r,c,dr + 1, dc + 1)){
+                count += mazePathHelper(r,c, dr, dc, dir, dp);
+            }
+        }
+        return dp[sr][sc] = count;
+
+    }
+    
+    public int mazePath(int n, int m){
+        
+       
+        int [][] dir = {{0,1}, {1,0}};
+        int [][] dp = new int[n][m];
+        int ans = mazePathHelper(0,0,n-1,m-1,dir,dp);
+        return ans;
+    }
+    
+   
+    public int uniquePaths(int n, int m) {
+        return mazePath(n,m);
+    }
+ }
