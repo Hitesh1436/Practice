@@ -1,20 +1,30 @@
 class Solution {
-    public List<List<Integer>> combinationSum3(int k, int n) {
-       List<List<Integer>> ans = new ArrayList<>();
-        combinationHelper(ans,new ArrayList<Integer>(),k,1,n);
-        return ans;
+   public List<List<Integer>> combinationSum3(int k, int n) {
+  if (k == 0 || n == 0) {
+    return new ArrayList<>();
+  }
+  List<List<Integer>> result = new ArrayList<>();
+  backtracking(1, k, n, new ArrayList<>(), result);
+  return result;
+}
+
+private void backtracking(int num, int k, int n, List<Integer> sol, List<List<Integer>> result) {
+  // reject & accept
+  if (sol.size() == k) {
+    if (n == 0) {
+      result.add(new ArrayList<>(sol));
     }
-    
-    private void combinationHelper(List<List<Integer>> ans, List<Integer> comb, int k,  int start, int n) {
-	if (comb.size() == k && n == 0) {
-		List<Integer> li = new ArrayList<Integer>(comb);
-		ans.add(li);
-		return;
-	}
-	for (int i = start; i <= 9; i++) {
-		comb.add(i);
-		combinationHelper(ans, comb, k, i+1, n-i);
-		comb.remove(comb.size() - 1);
-	}
+    return;
+  }
+  
+  for (int i = num; i <= 9; ++i) { // for number 1 ~ 9
+    int nextTarget = n - i;
+    if (nextTarget < 0) { // consider this line (can we put it into the base case?)
+      break;
     }
+    sol.add(i);
+    backtracking(i + 1, k, nextTarget, sol, result);
+    sol.remove(sol.size() - 1); // restore
+  }
+ }
 }
