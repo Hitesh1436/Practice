@@ -1,30 +1,26 @@
 class Solution {
-   public List<List<Integer>> combinationSum3(int k, int n) {
-  if (k == 0 || n == 0) {
-    return new ArrayList<>();
-  }
-  List<List<Integer>> result = new ArrayList<>();
-  backtracking(1, k, n, new ArrayList<>(), result);
-  return result;
-}
+    public List<List<Integer>> combinationSum3(int k, int n) {
+        int[] nums = {1,2,3,4,5,6,7,8,9};
+        Set<List<Integer>> set = new HashSet<>();
+        combinationSum3Helper(nums,set,new ArrayList<>(),k,n,0);
 
-private void backtracking(int num, int k, int n, List<Integer> sol, List<List<Integer>> result) {
-  // reject & accept
-  if (sol.size() == k) {
-    if (n == 0) {
-      result.add(new ArrayList<>(sol));
+        return new ArrayList<>(set);
     }
-    return;
-  }
-  
-  for (int i = num; i <= 9; ++i) { // for number 1 ~ 9
-    int nextTarget = n - i;
-    if (nextTarget < 0) { // consider this line (can we put it into the base case?)
-      break;
+
+    static private void combinationSum3Helper(int[] nums,Set<List<Integer>> set,List<Integer> list,
+                                              int k,int target,int start){
+        if(target < 0)
+            return;
+        else if(target == 0 && list.size() == k)
+            set.add(new ArrayList<>(list));
+        else{
+            for(int i =start;i<nums.length;i++){
+                if(target - nums[i] < 0) //  Optimisation
+                    break;;
+                list.add(nums[i]);
+                combinationSum3Helper(nums,set,list,k,target - nums[i],i+1);
+                list.remove(list.size()-1);
+            }
+        }
     }
-    sol.add(i);
-    backtracking(i + 1, k, nextTarget, sol, result);
-    sol.remove(sol.size() - 1); // restore
-  }
- }
 }
