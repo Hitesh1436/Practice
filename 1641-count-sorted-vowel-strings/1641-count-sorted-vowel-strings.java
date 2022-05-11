@@ -1,24 +1,15 @@
 class Solution {
-    
-    public int helper(int len , char first){
-        if(len ==0){
-            return 1;
-        }
-        int ans =0;
-        for(char c:ch){
-            if(first>=c){
-                ans+=helper(len-1,c);
-            }
-        }
+    int ans;
+    public int countVowelStrings(int n) {
+       // char[] ch ={'a','e','i','o','u'};
+        ans=0;
+        count(0,n);
         return ans;
     }
-    
-    char []ch = new char[]{'a','e','i','o','u'};
-    public int countVowelStrings(int n) {
-        int ans = 0;
-        for(char c : ch){
-            ans+= helper(n-1,c);
+    void count(int src,int n){
+        if(n==0){ans++;return;}
+        for(int i=src;i<5;i++){
+            count(i,n-1);
         }
-        return ans;
     }
 }
