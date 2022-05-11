@@ -1,18 +1,17 @@
 class Solution {
-    
-    private int solve(int s,int idx ,int n){
-        if(n==0){
-            return 1;
-        }
-        int ans = 0;
-        for(int i=idx;i<s;i++){
-            ans +=solve(s,i,n-1);
-        }
-        return ans;
-    }
-    
     public int countVowelStrings(int n) {
-        String s = "aeiou";
-        return solve(s.length(),0,n);
+        int a = 1;
+        int e = 1;
+        int i = 1;
+        int o = 1;
+        int u = 1;
+        while(n-- > 1){
+            a = a + e + i + o + u;
+            e = e + i + o + u;
+            i = i + o + u;
+            o = o + u;
+            u = u;
+        }
+        return a + e + i + o + u;
     }
 }
