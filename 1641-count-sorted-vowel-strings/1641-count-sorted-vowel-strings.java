@@ -1,17 +1,24 @@
 class Solution {
-    public int countVowelStrings(int n) {
-        int a = 1;
-        int e = 1;
-        int i = 1;
-        int o = 1;
-        int u = 1;
-        while(n-- > 1){
-            a = a + e + i + o + u;
-            e = e + i + o + u;
-            i = i + o + u;
-            o = o + u;
-            u = u;
+    
+    public int helper(int len , char first){
+        if(len ==0){
+            return 1;
         }
-        return a + e + i + o + u;
+        int ans =0;
+        for(char c:ch){
+            if(first>=c){
+                ans+=helper(len-1,c);
+            }
+        }
+        return ans;
+    }
+    
+    char []ch = new char[]{'a','e','i','o','u'};
+    public int countVowelStrings(int n) {
+        int ans = 0;
+        for(char c : ch){
+            ans+= helper(n-1,c);
+        }
+        return ans;
     }
 }
