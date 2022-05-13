@@ -1,24 +1,30 @@
 class Solution {
+     public String[] codes = {"","","abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
     public List<String> letterCombinations(String digits) {
-        String []arr={"","","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
-        List<String> res=new ArrayList<>();
-        helper(digits,0,arr,"",res);
-        return res;
-    }
-    public void helper(String digits, int idx, String []arr, String asf, List<String> res){
         if(digits.length()==0){
-            return;
-        }
-        if(idx==digits.length()){
-            res.add(asf);
-            return;
+            List<String> bcase = new ArrayList<>();
+            return bcase;
         }
         
-        int index=Integer.parseInt(digits.charAt(idx)+"");
-        String curr=arr[index];
-        for(int i=0;i<curr.length();i++){
-            char ch=curr.charAt(i);
-            helper(digits,idx+1,arr,asf+ch,res);
+         else if(digits.length()==1){
+            List<String> bcase = new ArrayList<>();
+              char ch = digits.charAt(0);
+             String strforch = codes[ch -'0'];
+             for(int i=0; i<strforch.length(); i++){
+                 bcase.add(strforch.substring(i,i+1));
+             }
+            return bcase;
         }
+        
+        char ch = digits.charAt(0);
+        List<String> shortans = letterCombinations(digits.substring(1));
+        List<String> ans = new ArrayList<>();
+        String strforch = codes[ch -'0'];
+        for(int i=0; i<strforch.length(); i++){
+            for(int j=0; j<shortans.size(); j++){
+                ans.add(strforch.charAt(i) + shortans.get(j));
+            }
+        }
+       return ans;
     }
 }
