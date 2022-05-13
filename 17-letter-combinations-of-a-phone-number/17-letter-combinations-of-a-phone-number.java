@@ -1,30 +1,20 @@
 class Solution {
-     public String[] codes = {"","","abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"};
     public List<String> letterCombinations(String digits) {
-        if(digits.length()==0){
-            List<String> bcase = new ArrayList<>();
-            return bcase;
+    List<String> result = new ArrayList();                               // Step 1
+    if(digits.length() == 0) return result;                             // Step 1
+    String[] letters = {"abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"}; // Step 2
+    backtrack(0, letters, digits, new StringBuilder(), result);       // Step 3
+    return result; // Step 4
+   }
+    public void backtrack(int idx, String[] letters, String digits, StringBuilder temp, List<String> result){
+    if(temp.length() == digits.length()) result.add(temp.toString()); // Step 1
+    else {
+        char[] letterArr = letters[digits.charAt(idx) - '2'].toCharArray(); // Step 2 & 3
+        for(int j = 0; j < letterArr.length; j++){
+            temp.append(letterArr[j]); // Step 4
+            backtrack(idx + 1, letters, digits, temp, result); // Step 4
+            temp.deleteCharAt(temp.length() - 1); // Step 5
         }
-        
-         else if(digits.length()==1){
-            List<String> bcase = new ArrayList<>();
-              char ch = digits.charAt(0);
-             String strforch = codes[ch -'0'];
-             for(int i=0; i<strforch.length(); i++){
-                 bcase.add(strforch.substring(i,i+1));
-             }
-            return bcase;
-        }
-        
-        char ch = digits.charAt(0);
-        List<String> shortans = letterCombinations(digits.substring(1));
-        List<String> ans = new ArrayList<>();
-        String strforch = codes[ch -'0'];
-        for(int i=0; i<strforch.length(); i++){
-            for(int j=0; j<shortans.size(); j++){
-                ans.add(strforch.charAt(i) + shortans.get(j));
-            }
-        }
-       return ans;
     }
+}
 }
