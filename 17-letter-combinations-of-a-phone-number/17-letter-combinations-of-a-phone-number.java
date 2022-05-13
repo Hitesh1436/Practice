@@ -1,20 +1,19 @@
 class Solution {
     public List<String> letterCombinations(String digits) {
-    List<String> result = new ArrayList();                               // Step 1
-    if(digits.length() == 0) return result;                             // Step 1
-    String[] letters = {"abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz"}; // Step 2
-    backtrack(0, letters, digits, new StringBuilder(), result);       // Step 3
-    return result; // Step 4
-   }
-    public void backtrack(int idx, String[] letters, String digits, StringBuilder temp, List<String> result){
-    if(temp.length() == digits.length()) result.add(temp.toString()); // Step 1
-    else {
-        char[] letterArr = letters[digits.charAt(idx) - '2'].toCharArray(); // Step 2 & 3
-        for(int j = 0; j < letterArr.length; j++){
-            temp.append(letterArr[j]); // Step 4
-            backtrack(idx + 1, letters, digits, temp, result); // Step 4
-            temp.deleteCharAt(temp.length() - 1); // Step 5
+        if (digits.length() == 0) return new ArrayList<>();
+        
+        String[] dict = new String[] {"", "", "abc", "def", "ghi", "jkl", "mno", "pqrs", "tuv", "wxyz" };
+        List<String> combos = new ArrayList<>();
+        backtrack(combos, digits.toCharArray(), "", dict);
+        return combos;
+    }
+    
+    public void backtrack(List<String> combos, char[] digits, String s, String[] dict) {
+        if (s.length() == digits.length) { combos.add(s); return; }
+        int i = s.length();
+        int digit = digits[i] - '0';
+        for (char letter : dict[digit].toCharArray()) {
+            backtrack(combos, digits, s + Character.toString(letter), dict);
         }
     }
-}
 }
