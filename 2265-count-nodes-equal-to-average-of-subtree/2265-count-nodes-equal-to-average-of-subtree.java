@@ -14,31 +14,31 @@
  * }
  */
 class Solution {
-    class Pair{
-        int sum,count;
-        Pair(int _sum,int _count){
-            sum=_sum;
-            count=_count;
+    public class pair{
+        int sum;
+        int count;
+        pair(int sum,int count){
+            this.sum = sum;
+            this.count = count;
         }
     }
-    int ans=0;
-    public Pair averageHelper(TreeNode root)
-    {
-        if(root==null)
-            return new Pair(0,0);
+    int ans = 0;
+    public pair  helper(TreeNode root){
+        if(root == null){
+            return new pair(0,0);
+        }
+        pair left = helper(root.left);
+        pair right = helper(root.right);
         
-        Pair l=averageHelper(root.left);
-        Pair r=averageHelper(root.right);
+        int avg = (int)((left.sum + right.sum + root.val)/(left.count+right.count+1));
         
-        int avg=(int)((l.sum+r.sum+root.val)/(l.count+r.count+1));
-        
-        if(avg==root.val)
-            ans+=1;
-        return new Pair(l.sum+r.sum+root.val,l.count+r.count+1);
-        
+        if(avg == root.val){
+              ans++;
+        }
+        return new pair(left.sum + right.sum + root.val,left.count+right.count+1);
     }
     public int averageOfSubtree(TreeNode root) {
-        Pair x=averageHelper(root);
+        pair avg = helper(root);
         return ans;
     }
 }
