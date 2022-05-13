@@ -1,32 +1,24 @@
 class Solution {
-    HashMap<Character,ArrayList<Character>> hm;
-    ArrayList<String> al=new ArrayList<>();
     public List<String> letterCombinations(String digits) {
-        hm=new HashMap<>();
-        hm.put('2',new ArrayList<>(Arrays.asList('a','b','c')));
-        hm.put('3',new ArrayList<>(Arrays.asList('d','e','f')));
-        hm.put('4',new ArrayList<>(Arrays.asList('g','h','i')));
-        hm.put('5',new ArrayList<>(Arrays.asList('j','k','l')));
-        hm.put('6',new ArrayList<>(Arrays.asList('m','n','o')));
-        hm.put('7',new ArrayList<>(Arrays.asList('p','q','r','s')));
-        hm.put('8',new ArrayList<>(Arrays.asList('t','u','v')));
-        hm.put('9',new ArrayList<>(Arrays.asList('w','x','y','z')));
-        if(digits.equals("")){
-            return al;
-        }
-        helper(digits,"");
-        return al;
+        String []arr={"","","abc","def","ghi","jkl","mno","pqrs","tuv","wxyz"};
+        List<String> res=new ArrayList<>();
+        helper(digits,0,arr,"",res);
+        return res;
     }
-    
-    public void helper(String digits, String ans){
-        if(digits.equals("")){
-            al.add(ans);
+    public void helper(String digits, int idx, String []arr, String asf, List<String> res){
+        if(digits.length()==0){
             return;
         }
-        char ch=digits.charAt(0);
-        String subs=digits.substring(1);
-        for(char n:hm.get(ch)){
-            helper(subs,ans+n);
-        } 
+        if(idx==digits.length()){
+            res.add(asf);
+            return;
+        }
+        
+        int index=Integer.parseInt(digits.charAt(idx)+"");
+        String curr=arr[index];
+        for(int i=0;i<curr.length();i++){
+            char ch=curr.charAt(i);
+            helper(digits,idx+1,arr,asf+ch,res);
+        }
     }
 }
