@@ -123,69 +123,57 @@ class Node{
 }
 */
 
-class Solution
-{
-    //Function to return a list of nodes visible from the top view 
-    //from left to right in Binary Tree.
-    static class Pair {
+class Solution{
+
+    static class Pair{
         Node node;
-        int horiz = 0;
+        int hor =0;
     }
-    //Function to return a list of nodes visible from the top view 
-    //from left to right in Binary Tree.
-    static ArrayList<Integer> topView(Node root)
-    {
-        // add your code
-        ArrayList<Integer> retVal = new ArrayList<>();
+    
+    static ArrayList<Integer> topView(Node root){
+        ArrayList<Integer> ans = new ArrayList<>(); 
         
-        HashMap<Integer, Node> map = new HashMap<>();
+        HashMap<Integer,Node> map = new HashMap<>();
+        int lv = 0, rv = 0;                  // leftVertical , rightVertical
         
-        int lv = 0;
-        int rv = 0;
+        Queue<Pair> qu = new LinkedList<>();
         
-        Queue<Pair> queue = new LinkedList<>();
         Pair p = new Pair();
         p.node = root;
-        p.horiz = 0;
+        p.hor = 0;
         
-        queue.add(p);
+        qu.add(p);
         
-        while(queue.size() > 0){
-            Pair temp = queue.remove();
+        while(qu.size()>0){
+            Pair rem = qu.remove();
             
-            if(temp.horiz < lv){
-                lv = temp.horiz;
+            if(rem.hor<lv){
+                lv = rem.hor;
             }
-            
-            if(temp.horiz > rv){
-                rv = temp.horiz;
+            if(rem.hor>rv){
+                rv = rem.hor;
             }
-            
-            if(map.containsKey(temp.horiz) == false){
-                map.put(temp.horiz, temp.node);
+            if(map.containsKey(rem.hor)==false){
+                map.put(rem.hor,rem.node);
             }
-            
-            if(temp.node.left != null){
+            if(rem.node.left != null){
                 Pair lp = new Pair();
-                lp.node = temp.node.left;
-                lp.horiz = temp.horiz - 1;
+                lp.node = rem.node.left;
+                lp.hor = rem.hor - 1;
                 
-                queue.add(lp);
+                qu.add(lp);
             }
-            
-            if(temp.node.right != null){
+            if(rem.node.right != null){
                 Pair rp = new Pair();
-                rp.node = temp.node.right;
-                rp.horiz = temp.horiz + 1;
+                rp.node = rem.node.right;
+                rp.hor = rem.hor + 1;
                 
-                queue.add(rp);                
+                qu.add(rp);
             }
         }
-        
-        for(int i = lv; i <= rv; i++){
-            retVal.add(map.get(i).data);
-        }
-        
-        return retVal;
+            for(int i=lv;i<=rv;i++){
+                ans.add(map.get(i).data);
+            }
+        return ans;
     }
 }
