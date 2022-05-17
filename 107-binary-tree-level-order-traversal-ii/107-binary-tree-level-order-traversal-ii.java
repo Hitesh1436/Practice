@@ -16,28 +16,41 @@
 
 class Solution {
     public List<List<Integer>> levelOrderBottom(TreeNode root) {
+        Queue<TreeNode> qu = new LinkedList<>();
+        qu.add(root);
+        qu.add(null);
+        List<Integer> al = new ArrayList<>();
+        Stack<List<Integer>> st = new Stack<>();
         
-        Queue<TreeNode>queue=new LinkedList<>();
-        List<List<Integer>>ans=new ArrayList<>();
-        if(root==null)return ans;
-       
-        
-        queue.add(root);
-         
-        while(queue.size()>0){
-            ArrayList<Integer> sans=new ArrayList<>();
-            int c=queue.size();
-            for(int i=0;i<c;i++){
-                TreeNode temp=queue.poll();
-               
-                sans.add(temp.val);
-                if(temp.left!=null)queue.add(temp.left);
-            if(temp.right!=null)queue.add(temp.right);
-                }
-           
-            ans.add(sans);
+        if(root == null){
+            List<List<Integer>> base = new ArrayList<>();
+            return base;
         }
-        Collections. reverse(ans);
+        while(qu.size()>0){
+            TreeNode rem = qu.remove();
+            
+            if(rem != null){
+                al.add(rem.val);
+                
+                if(rem.left != null){
+                    qu.add(rem.left);
+                }
+                
+                if(rem.right != null){
+                    qu.add(rem.right);
+                }
+            }else{
+                if(qu.size()>0){
+                    qu.add(rem);
+                }
+                st.push(al);
+                al = new ArrayList<>();
+            }
+        }
+        List<List<Integer>> ans = new ArrayList<>();
+            while(st.size()>0){
+                ans.add(st.pop());
+            }
         return ans;
     }
 }
