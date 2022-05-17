@@ -21,15 +21,15 @@ class Solution {
         while(qu.size()>0){
             int size=qu.size();
             for(int i=0;i<size;i++){
-                TreeNode node=qu.remove();
+                TreeNode rem=qu.remove();
                 if(i==0){
-                   ans=node.val ;
+                   ans = rem.val ;
                 }
-                if(node.left!=null) {
-                    qu.add(node.left);
+                if(rem.left!=null) {
+                    qu.add(rem.left);
                 }
-                if(node.right!=null) {
-                    qu.add(node.right);
+                if(rem.right!=null) {
+                    qu.add(rem.right);
                 }
             }
         }
