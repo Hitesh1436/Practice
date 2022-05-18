@@ -154,19 +154,19 @@ class Solution{
         }
     }
     
-	ArrayList <Integer> boundary(Node node)
-	{
-	    ArrayList<Integer> list = new ArrayList<>();
+	ArrayList <Integer> boundary(Node node){
+	
+	    ArrayList<Integer> al = new ArrayList<>();
 	    
 	    if(node.left == null && node.right == null){
-	        list.add(node.data);
+	        al.add(node.data);
 	    } else {
-	        list.add(node.data);
-    	    leftWall(node.left, list);
-    	    leaves(node, list);
-    	    rightWall(node.right, list);
+	        al.add(node.data);
+    	    leftWall(node.left, al);
+    	    leaves(node, al);
+    	    rightWall(node.right, al);
 	    }
 	    
-	    return list;
+	    return al;
 	}
 }
