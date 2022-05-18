@@ -121,45 +121,39 @@ class Node{
         right=null;
     }
 }*/
-class Tree
-{
-    static int md = 0;
-    static void traversal(Node root, int diag, HashMap<Integer, ArrayList<Integer>> map){
+class Tree{
+    static int maxDia = 0;
+    void traversal(Node root,int dia,HashMap<Integer,ArrayList<Integer>>map){
         if(root == null){
             return;
         }
-
-        if(diag > md){
-            md = diag;
+        if(dia>maxDia){
+            maxDia = dia;
         }
-
-        if(map.containsKey(diag) == false){
-            map.put(diag, new ArrayList<>());
-            map.get(diag).add(root.data);
-        } else {
-            map.get(diag).add(root.data);
+        if(map.containsKey(dia)== false){
+            map.put(dia,new ArrayList<>());
+            map.get(dia).add(root.data);
+        }else{
+            map.get(dia).add(root.data);
         }
-
-        traversal(root.left, diag + 1, map);
-        traversal(root.right, diag, map);
+        traversal(root.left,dia+1,map);
+        traversal(root.right,dia,map);
     }
-     
-     public ArrayList<Integer> diagonal(Node root)
-      {
-           HashMap<Integer, ArrayList<Integer>> map = new HashMap<>();
-           traversal(root, 0, map);
-
-            ArrayList<Integer> total = new ArrayList<>();
-            for(int d = 0; d <= md; d++){
-                ArrayList<Integer> list = map.get(d);
-                if(list == null){
+    
+     public ArrayList<Integer> diagonal(Node root){
+        HashMap<Integer,ArrayList<Integer>>map = new HashMap<>();
+            traversal(root,0,map);
+            
+            ArrayList<Integer> ans = new ArrayList<>();
+            for(int d=0;d<=maxDia;d++){
+                ArrayList<Integer> al = map.get(d);
+                if(al == null){
                     continue;
                 }
-                for(int item: list){
-                    total.add(item);
+                for(int items : al){
+                    ans.add(items);
                 }
             }
-
-            return total;
+           return ans;
       }
-    }
+}
