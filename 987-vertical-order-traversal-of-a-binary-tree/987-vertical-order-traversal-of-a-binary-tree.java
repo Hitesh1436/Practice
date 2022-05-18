@@ -14,35 +14,69 @@
  * }
  */
 class Solution {
-    class Node {
-        int row;
-        int val;
-        Node(int row, int val) {
-            this.row = row;
-            this.val = val;
+    
+    class Pair implements Comparable<Pair>{
+        TreeNode node;
+        int w;
+        int d;
+        
+        Pair(TreeNode node , int w,int d){
+            this.node = node;
+            this.w= w;
+            this.d = d;
+        }
+        
+        // this - other means increasing
+        // other - this means decreasing
+        public int compareTo(Pair other){
+            if(this.d== other.d){
+                return this.node.val - other.node.val;  // agr depth brabr h toh value ke basis pr sort kro
+            }else{
+                return this.d - other.d;  // agr depth alag h toh depth ke basis pr sort krdo
+            }
         }
     }
     public List<List<Integer>> verticalTraversal(TreeNode root) {
-        TreeMap<Integer, Queue<Node>> map = new TreeMap<>();
-        helper(root, map, 0, 0);
+        Queue<Pair> qu = new LinkedList<>();
+        qu.add(new Pair(root,0,1));
         
-        List<List<Integer>> ret = new ArrayList<>();
-        for (int c : map.keySet()) {
-            List<Integer> list = new ArrayList<>();
-            ret.add(list);
-            Queue<Node> q = map.get(c);
-            while (!q.isEmpty()) {
-                list.add(q.poll().val);
+        int lmw = 0,rmw = 0;   // leftMost width and rightMost Width
+        
+        HashMap<Integer,ArrayList<Pair>> map = new HashMap<>();
+            while(qu.size()>0){
+                Pair rem = qu.remove();
+                
+                if(rem.w < lmw){
+                    lmw = rem.w;
+                }
+                if(rem.w > rmw){
+                    rmw = rem.w;
+                }
+                
+                if(map.containsKey(rem.w)== false){
+                    map.put(rem.w,new ArrayList<>());
+                    map.get(rem.w).add(rem);
+                }else{
+                    map.get(rem.w).add(rem);
+                }
+                if(rem.node.left != null){
+                    qu.add(new Pair(rem.node.left,rem.w-1,rem.d+1));
+                }
+                if(rem.node.right != null){
+                    qu.add(new Pair(rem.node.right,rem.w+1,rem.d+1));
+                }
             }
+        List<List<Integer>> ans = new ArrayList<>();
+        for(int width =lmw ; width<=rmw;width++){
+            ArrayList<Integer>al = new ArrayList<>();
+            ArrayList<Pair> unsortedList = map.get(width);
+            Collections.sort(unsortedList);
+            
+            for(Pair temp : unsortedList){
+                al.add(temp.node.val);
+            }
+            ans.add(al);
         }
-        return ret;
-    }
-    
-    private void helper(TreeNode cur, TreeMap<Integer, Queue<Node>> map, int r, int c) {
-        if (cur == null) return;
-        map.putIfAbsent(c, new PriorityQueue<Node>((a, b) -> a.row != b.row ? a.row - b.row : a.val - b.val));
-        map.get(c).add(new Node(r, cur.val));
-        helper(cur.left, map, r + 1, c - 1);
-        helper(cur.right, map, r + 1, c + 1);
+        return ans;
     }
 }
