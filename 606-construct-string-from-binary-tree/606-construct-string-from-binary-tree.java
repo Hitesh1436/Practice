@@ -14,30 +14,16 @@
  * }
  */
 class Solution {
-    
-    public void helper(TreeNode node,StringBuilder res){
-        if(node == null){
-          return;  
-        }   
-        res.append(node.val);
-        if(node.left != null){
-            res.append("(");
-            helper(node.left,res);
-            res.append(")");
-        }
-        if(node.right != null){
-            if(node.left == null){
-                res.append("()");
-            }
-            res.append("(");
-           helper(node.right,res);
-            res.append(")");
-        }
-    }
-    
     public String tree2str(TreeNode root) {
-        StringBuilder ans = new StringBuilder();
-        helper(root,ans);
-        return ans.toString();
+        if(root == null)
+            return "";
+        if(root.left == null && root.right == null) 
+            return String.valueOf(root.val);
+        else if(root.left != null && root.right != null)
+            return root.val+"("+tree2str(root.left)+")"+"("+tree2str(root.right)+")";
+        else if(root.left != null && root.right == null)
+            return root.val + "("+tree2str(root.left)+")";
+        else 
+            return root.val + "()" +"("+tree2str(root.right)+")";
     }
 }
