@@ -15,14 +15,24 @@
  */
 class Solution {
     public boolean findTarget(TreeNode root, int k) {
-        Set<Integer> set = new HashSet();
-        return solve(root, k, set);
+        List<Integer> nums=new ArrayList<>();
+        inorder(root,nums);
+       int i=0;
+        int j=nums.size()-1;
+        while(j>i){
+            if(nums.get(i)+nums.get(j)==k){
+                return true;
+            }
+            if(nums.get(i)+nums.get(j)>k) j--;
+            else i++;
+        }
+        return false;
     }
-    
-    boolean solve(TreeNode root, int k, Set set) {
-        if(root == null) return false;
-        if(set.contains(root.val)) return true;
-        set.add(k - root.val);
-        return solve(root.left, k, set) || solve(root.right, k, set);
+    void inorder(TreeNode root,List<Integer> nums){
+        if(root==null) return;
+        inorder(root.left,nums);
+        nums.add(root.val);
+        inorder(root.right,nums);
     }
+      
 }
