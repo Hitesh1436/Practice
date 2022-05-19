@@ -25,7 +25,7 @@ class Solution {
         while(qu.size()>0){
                 int size=qu.size();double sum=0.0;int count=0;
             while(size-->0) { 
-                TreeNode rem = qu.removeFirst();
+                TreeNode rem = qu.remove();
                 sum += rem.val;
                 count++;
                 if (rem.left != null){
