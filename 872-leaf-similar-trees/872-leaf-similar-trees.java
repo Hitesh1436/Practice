@@ -28,7 +28,8 @@ class Solution {
         if(root==null) return null;
         
         getVal(root.left,temp);
-        if(root.left==null && root.right==null) temp.add(root.val);
+        if(root.left==null && root.right==null) 
+            temp.add(root.val);
         getVal(root.right,temp);
         
         return temp;
