@@ -7,18 +7,18 @@ class Solution {
     }
     public void recoverTree(TreeNode root) {
         TreeNode prev=null;
-        TreeNode first=null,sec=null;
+        TreeNode n1=null,n2=null;
         
         TreeNode curr=root;
         while(curr!=null){
             TreeNode left=curr.left;
             if(left==null){
-                if(prev!=null && prev.val>curr.val && first==null){
-                first=prev;
-                    sec=curr;
+                if(prev!=null && prev.val>curr.val && n1==null){
+                n1=prev;
+                    n2=curr;
                 }
-                else if(prev!=null && prev.val>curr.val && first!=null){
-                    sec=curr;
+                else if(prev!=null && prev.val>curr.val && n1!=null){
+                    n2=curr;
                 }
                 
                 prev=curr;
@@ -30,12 +30,12 @@ class Solution {
                     curr=curr.left;
                 }else{
                     rightMost.right=null;
-                     if(prev!=null && prev.val>curr.val && first==null){
-                first=prev;
-                    sec=curr;
+                     if(prev!=null && prev.val>curr.val && n1==null){
+                n1=prev;
+                    n2=curr;
                 }
-                else if(prev!=null && prev.val>curr.val && first!=null){
-                    sec=curr;
+                else if(prev!=null && prev.val>curr.val && n1!=null){
+                    n2=curr;
                 }
                 
                 prev=curr;
@@ -43,8 +43,8 @@ class Solution {
                 }
             }
         }
-        int temp=first.val;
-        first.val=sec.val;
-        sec.val=temp;
+        int temp=n1.val;
+        n1.val=n2.val;
+        n2.val=temp;
     }
 }
