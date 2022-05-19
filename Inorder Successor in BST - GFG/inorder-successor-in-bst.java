@@ -124,19 +124,19 @@ class Node{
 */
 class Solution{
 
-	public void helper(Node root , ArrayList<Node>al){
+	public void inorderSuccessorHelper(Node node ,ArrayList<Node>al){
 
-        if(root!=null){
-        helper(root.left , al);
-        al.add(root);
-        helper(root.right,al);
+        if(node!=null){
+        inorderSuccessorHelper(node.left , al);
+        al.add(node);
+        inorderSuccessorHelper(node.right,al);
     }
 }
 
     public Node inorderSuccessor(Node root,Node x){
 
     ArrayList<Node> al = new ArrayList<>();
-    helper(root , al);
+    inorderSuccessorHelper(root , al);
 
     for(int i =0 ; i<al.size()-1; i++){
         if(al.get(i)==x)
