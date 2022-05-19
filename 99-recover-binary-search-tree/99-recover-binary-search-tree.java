@@ -1,6 +1,6 @@
 class Solution {
     public TreeNode getRightMostNode(TreeNode node,TreeNode curr){
-        while(node.right!=null&&node.right!=curr){
+        while(node.right!=null && node.right!=curr){
             node=node.right;
         }
         return node;
@@ -13,11 +13,11 @@ class Solution {
         while(curr!=null){
             TreeNode left=curr.left;
             if(left==null){
-                if(prev!=null&&prev.val>curr.val&& first==null){
+                if(prev!=null && prev.val>curr.val && first==null){
                 first=prev;
                     sec=curr;
                 }
-                else if(prev!=null&&prev.val>curr.val&&first!=null){
+                else if(prev!=null && prev.val>curr.val && first!=null){
                     sec=curr;
                 }
                 
@@ -30,11 +30,11 @@ class Solution {
                     curr=curr.left;
                 }else{
                     rightMost.right=null;
-                     if(prev!=null&&prev.val>curr.val&& first==null){
+                     if(prev!=null && prev.val>curr.val && first==null){
                 first=prev;
                     sec=curr;
                 }
-                else if(prev!=null&&prev.val>curr.val&&first!=null){
+                else if(prev!=null && prev.val>curr.val && first!=null){
                     sec=curr;
                 }
                 
