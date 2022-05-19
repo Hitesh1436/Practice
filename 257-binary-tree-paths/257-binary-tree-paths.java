@@ -23,11 +23,11 @@ public List<String> binaryTreePaths(TreeNode root){
 }
 
 
-void helper(TreeNode node, StringBuilder sb){
+public void helper(TreeNode node, StringBuilder sb){
 
     if(node==null) return;
     
-    int length = sb.length();
+    int len = sb.length();
     sb.append(node.val);
     
     if(node.left == null && node.right == null)
@@ -39,6 +39,6 @@ void helper(TreeNode node, StringBuilder sb){
        helper(node.left, sb);
        helper(node.right, sb);
     }
-    sb.setLength(length);
+    sb.setLength(len);
  }
 }
