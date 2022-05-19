@@ -23,11 +23,11 @@ class Solution {
         LinkedList<TreeNode> qu = new LinkedList<>();
         qu.addLast(root);
         while(qu.size()>0){
-                int size=qu.size();double sm=0.0;int cnt=0;
+                int size=qu.size();double sum=0.0;int count=0;
             while(size-->0) { 
                 TreeNode rem = qu.removeFirst();
-                sm=sm+rem.val;
-                cnt++;
+                sum += rem.val;
+                count++;
                 if (rem.left != null){
                     qu.add(rem.left);
                 } 
@@ -35,7 +35,7 @@ class Solution {
                     qu.add(rem.right);  
                 }    
             }
-            ans.add((double)(sm/cnt));
+            ans.add((double)(sum/count));
         }
         return ans;
     }
