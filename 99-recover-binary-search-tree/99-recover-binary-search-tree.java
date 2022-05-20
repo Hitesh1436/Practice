@@ -1,50 +1,66 @@
+/**
+ * Definition for a binary tree node.
+ * public class TreeNode {
+ *     int val;
+ *     TreeNode left;
+ *     TreeNode right;
+ *     TreeNode() {}
+ *     TreeNode(int val) { this.val = val; }
+ *     TreeNode(int val, TreeNode left, TreeNode right) {
+ *         this.val = val;
+ *         this.left = left;
+ *         this.right = right;
+ *     }
+ * }
+ */
 class Solution {
-    public TreeNode getRightMostNode(TreeNode node,TreeNode curr){
-        while(node.right!=null && node.right!=curr){
-            node=node.right;
-        }
-        return node;
-    }
     public void recoverTree(TreeNode root) {
-        TreeNode prev=null;
-        TreeNode n1=null,n2=null;
+        TreeNode prev = null;
+        TreeNode curr = root;
+        TreeNode n1 = null;
+        TreeNode n2 = null;
         
-        TreeNode curr=root;
-        while(curr!=null){
-            TreeNode left=curr.left;
-            if(left==null){
-                if(prev!=null && prev.val>curr.val && n1==null){
-                n1=prev;
-                    n2=curr;
+        while(curr != null){
+            if(curr.left == null){
+                if(prev!= null){
+                    if(curr.val < prev.val){
+                        if(n1 == null){
+                          n1 = prev;    // yh tb h jb gtl values sth mn thi vo case handle hus
+                          n2 = curr;  
+                        }else{
+                            n2 = curr;
+                        }  
+                    }
                 }
-                else if(prev!=null && prev.val>curr.val && n1!=null){
-                    n2=curr;
-                }
-                
-                prev=curr;
-                curr=curr.right;
+                 prev = curr;
+                curr = curr.right;
             }else{
-                TreeNode rightMost=getRightMostNode(left,curr);
-                if(rightMost.right==null){
-                    rightMost.right=curr;
-                    curr=curr.left;
-                }else{
-                    rightMost.right=null;
-                     if(prev!=null && prev.val>curr.val && n1==null){
-                n1=prev;
-                    n2=curr;
+                TreeNode iop = curr.left;
+                while(iop.right != null && iop.right != curr){
+                    iop = iop.right;
                 }
-                else if(prev!=null && prev.val>curr.val && n1!=null){
-                    n2=curr;
-                }
-                
-                prev=curr;
-                curr=curr.right;
+                if(iop.right == null){
+                    iop.right = curr;
+                    curr = curr.left;
+                }else{   
+                  if(prev!= null){
+                        if(curr.val < prev.val){
+                            if(n1 == null){
+                              n1 = prev;    
+                              n2 = curr;  
+                            }else{
+                                n2 = curr;
+                            }  
+                        }
+                    }
+                    prev = curr;
+                    iop.right = null;
+                    curr = curr.right;
                 }
             }
         }
-        int temp=n1.val;
-        n1.val=n2.val;
-        n2.val=temp;
+        int temp = n1.val;
+        n1.val = n2.val;
+        n2.val = temp;
     }
 }
