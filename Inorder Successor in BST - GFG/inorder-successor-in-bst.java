@@ -122,27 +122,45 @@ class Node{
 	}
 }
 */
-class Solution{
+class Solution
+{
+    // returns the inorder successor of the Node x in BST (rooted at 'root')
+	public Node inorderSuccessor(Node root,Node x) {
+    Node curr = root;
+    Node prev = null;
+    Node succ = null;
+        
+    while(curr != null){
+        if(curr.left == null){
+            if(prev == x){
+                return curr;
+            }
+            prev = curr;
 
-	public void inorderSuccessorHelper(Node node ,ArrayList<Node>al){
+            curr = curr.right;
+        } else {
+            Node iop = curr.left;
+            while(iop.right != null && iop.right != curr){
+                iop = iop.right;
+            }
+            
+            if(iop.right == null){
+                iop.right = curr; // making the thread
+                curr = curr.left;
+            } else {
+                // print
 
-        if(node!=null){
-        inorderSuccessorHelper(node.left , al);
-        al.add(node);
-        inorderSuccessorHelper(node.right,al);
+                if(prev == x){
+                    return curr;
+                }
+                prev = curr;
+                iop.right = null;
+                curr = curr.right;
+            }
+        }
+
+        
     }
+    return succ;
 }
-
-    public Node inorderSuccessor(Node root,Node x){
-
-    ArrayList<Node> al = new ArrayList<>();
-    inorderSuccessorHelper(root , al);
-
-    for(int i =0 ; i<al.size()-1; i++){
-        if(al.get(i)==x)
-        return al.get(i+1);
-    }
-
-        return null;
-    }
 }
