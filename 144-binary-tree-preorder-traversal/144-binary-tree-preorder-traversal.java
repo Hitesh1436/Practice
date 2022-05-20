@@ -15,29 +15,35 @@
  */
 class Solution {
     public List<Integer> preorderTraversal(TreeNode root) {
-        List<Integer> ans = new ArrayList<>(); 
+      List<Integer> ans = new ArrayList<>();
         TreeNode curr = root;
         
         while(curr != null){
-            if(curr.left== null){
+            if(curr.left == null){
+                // print kro mtlb add kroo
                 ans.add(curr.val);
+                // go to right
                 curr = curr.right;
             }else{
-                // iop -> inOrder predecessor i.e hmre left ka rightMost node
                 TreeNode iop = curr.left;
-                while(iop.right!= null  && iop.right != curr){
+                while(iop.right != null && iop.right != curr){
                     iop = iop.right;
                 }
-                if(iop.right == null){  
+                if(iop.right == null){
+                  // if left is not processed
+                // inOrder predecessor.right = node  and go to left
+                    iop.right = curr;
                     ans.add(curr.val);
-                    iop.right = curr;    // making of thread
                     curr = curr.left;
                 }else{
-                    iop.right = null;    // breaking of thread
+                    // left is  processed
+                 // inOrder predecessor.right = null , print and go to right  
+                    iop.right = null;
+                    
                     curr = curr.right;
                 }
             }
         }
-        return ans;
+                    return ans;
     }
 }
