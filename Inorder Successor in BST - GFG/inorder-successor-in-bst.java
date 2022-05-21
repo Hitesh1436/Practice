@@ -127,16 +127,21 @@ class Solution
     // returns the inorder successor of the Node x in BST (rooted at 'root')
 	public Node inorderSuccessor(Node root,Node x) {
     Node curr = root;
-    Node prev = null;
     Node succ = null;
         
+    boolean found = false;
+    
     while(curr != null){
         if(curr.left == null){
-            if(prev == x){
-                return curr;
+            // print
+            if(found == true){
+                succ =  curr;
+                break;
             }
-            prev = curr;
-
+            
+            if(curr == x){
+                found = true;
+            }
             curr = curr.right;
         } else {
             Node iop = curr.left;
@@ -145,22 +150,24 @@ class Solution
             }
             
             if(iop.right == null){
-                iop.right = curr; // making the thread
+                iop.right = curr;       // making the thread
                 curr = curr.left;
             } else {
                 // print
-
-                if(prev == x){
-                    return curr;
-                }
-                prev = curr;
-                iop.right = null;
+                    if(found == true){
+                        succ =  curr;
+                        break;
+                    }
+                    
+                    if(curr == x){
+                        found = true;
+                    }
+                     iop.right = null;
                 curr = curr.right;
+                }
             }
         }
-
-        
+        return succ;
     }
-    return succ;
-}
+    
 }
