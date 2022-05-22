@@ -14,17 +14,22 @@
  * }
  */
 class Solution {
-    TreeNode prev = null;
-    int min = Integer.MAX_VALUE;
+    
+    public void inOrder(TreeNode node ,List<Integer> list){
+        if(node == null)
+            return;
+        inOrder(node.left,list);
+        list.add(node.val);
+         inOrder(node.right,list);
+    }
+    
     public int minDiffInBST(TreeNode root) {
-        if(root == null)
-            return 0;
-        minDiffInBST(root.left);
-        if(prev != null){
-            min = Math.min(min,root.val-prev.val);
+        List<Integer> al = new ArrayList<>();
+        inOrder(root,al);
+        int ans = Integer.MAX_VALUE;
+        for(int i=0;i<al.size()-1;i++){
+            ans = Math.min(ans,al.get(i+1)-al.get(i));
         }
-        prev = root;
-        minDiffInBST(root.right);
-        return min;
+        return ans;
     }
 }
