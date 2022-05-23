@@ -31,6 +31,7 @@ class Solution {
             
             ans.left = helper(preorder,pstart+1,pstart+tnol,inorder,istart,idx-1);
             ans.right= helper(preorder,pstart+tnol+1,pend,inorder,idx+1,iend);
+        
         return ans;
         
     }
