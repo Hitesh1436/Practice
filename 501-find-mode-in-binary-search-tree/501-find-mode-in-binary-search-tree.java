@@ -14,43 +14,35 @@
  * }
  */
 class Solution {
-        Integer prev = null;
-        int count = 1;
-        int max =0;
-    private void inOrder(TreeNode node,List<Integer>retVal){
-        if(node == null){
-            return;
-        }
-        
-        inOrder(node.left,retVal);
-        // work hoga
-        if(prev != null){
-            //check if value is equal to the current value and increment count
-            if(prev == node.val){
-                count++;
-            }else{
-                count =1;
-            }
-        }
-        if(count > max){
-            max = count;
-            retVal.clear();
-            retVal.add(node.val);
-        }else if(count == max){
-            retVal.add(node.val);
-        }
-        //to store the previous node and later compare it to the next node
-        prev = node.val;
-        inOrder(node.right,retVal);
-    }
+    int maxCount = 1;
     
     public int[] findMode(TreeNode root) {
-        List<Integer> al = new ArrayList<>();
-            inOrder(root,al);
-        int [] ans = new int[al.size()];
-        for(int i=0;i<ans.length;i++){
-            ans[i] = al.get(i);
+        Map<Integer, Integer> map = new HashMap<>();
+        findMode(root, map);
+        
+        int[] result = new int[map.size()];
+        int index = 0;
+        for(Integer key: map.keySet()){
+            if(map.get(key) == maxCount){
+                result[index++] = key;
+            }
         }
-        return ans;
+        
+        return Arrays.copyOf(result, index);
+    }
+    
+    private void findMode(TreeNode root, Map<Integer, Integer> map){
+        if(root == null) {
+            return;
+        } else if(map.containsKey(root.val)) {
+            int count = map.get(root.val)+1;
+            map.put(root.val, count);
+            maxCount = Math.max(maxCount, count);
+        } else {
+            map.put(root.val, 1);
+        }
+        
+        findMode(root.left, map);
+        findMode(root.right, map);
     }
 }
