@@ -17,20 +17,20 @@
 
 // psi = pre start index,pei= pre end index,isi = in statr index, iei = in end index
 class Solution {
-    public TreeNode helper(int[] preorder,int psi,int pei, int[] inorder,int isi,int iei) {
-        if(isi>iei){
+    public TreeNode helper(int[] preorder,int pstart,int pend, int[] inorder,int istart,int iend) {
+        if(istart>iend){
             return null;
         }
-        int idx = isi;
-        while(inorder[idx]!=preorder[psi])
+        int idx = istart;
+        while(inorder[idx]!=preorder[pstart])
             idx++;
             // tnol-> tonal no. of elements
-            int tnol = idx - isi;   // left subtree mn itne honge
+            int tnol = idx - istart;   // left subtree mn itne honge
             
-            TreeNode ans = new TreeNode(preorder[psi]);
+            TreeNode ans = new TreeNode(preorder[pstart]);
             
-            ans.left = helper(preorder,psi+1,psi+tnol,inorder,isi,idx-1);
-            ans.right= helper(preorder,psi+tnol+1,pei,inorder,idx+1,iei);
+            ans.left = helper(preorder,pstart+1,pstart+tnol,inorder,istart,idx-1);
+            ans.right= helper(preorder,pstart+tnol+1,pend,inorder,idx+1,iend);
         return ans;
         
     }
