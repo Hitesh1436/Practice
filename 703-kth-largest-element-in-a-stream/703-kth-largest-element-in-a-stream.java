@@ -1,19 +1,27 @@
 class KthLargest {
-    PriorityQueue<Integer> pq;
-    int k=0;
+   //minHeap 
+   PriorityQueue<Integer> pq;
+    int k;
     public KthLargest(int k, int[] nums) {
+        ///initialise k and priorityQueue
         this.k = k;
-        pq = new PriorityQueue<>();
-        for(int i: nums) {
-            this.add(i); // call class's own function, instead of repeating yourself
+        //size of PQ is k+1 so that it can hold k+1 element and whenever the size 
+        //reaches k+1 we will poll() the smallest element to make the size as k
+        pq = new PriorityQueue<>(k+1);
+        for (int i = 0; i < nums.length; i++) {
+            pq.add(nums[i]);
+            if (pq.size() > k)
+                pq.poll();
         }
     }
-    
+
     public int add(int val) {
         pq.add(val);
-        if(pq.size()>k) { // remove elements ONLY when heap size is too big
-            pq.remove();
-        }
+        
+        if (pq.size() > k)
+            //if the size reached k+1 remove the minimum element
+            pq.poll();
+        
         return pq.peek();
     }
 }
