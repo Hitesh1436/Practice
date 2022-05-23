@@ -14,32 +14,28 @@
  * }
  */
 class Solution {
+    TreeNode xParent = null, yParent = null;
+    int xDepth = 0, yDepth =0;
     public boolean isCousins(TreeNode root, int x, int y) {
-        //depth of x and y should be same and they should have different parents
-       
-       List<Integer> alx =  findans(root,x);
-       List<Integer> aly =  findans(root,y);
-        if(alx.size() == aly.size() && alx.get(1) != aly.get(1)) return true;
-        return false;
+        if(root == null){
+            return false;
+        }
+        helper(root,x,y,0,null);
+        return xParent != yParent && xDepth == yDepth;
     }
-    
-    private List<Integer> findans(TreeNode root,int tar){
-       if(root == null) return new ArrayList<>();
-       if(root.val == tar){
-           List<Integer> ans = new ArrayList<>();
-           ans.add(root.val);
-           return ans;
-       }
-        List<Integer> left = findans(root.left,tar);
-        if(left.size() > 0){
-            left.add(root.val);
-            return left;
+    public void helper(TreeNode root,int x,int y,int depth,TreeNode parent){
+        if(root == null){
+            return;
         }
-        List<Integer> right = findans(root.right,tar);
-        if(right.size() > 0){
-            right.add(root.val);
-            return right;
+        if(root.val == x){
+            xParent = parent;
+            xDepth = depth;
         }
-       return new ArrayList<>();  
+        if(root.val == y){
+            yParent = parent;
+            yDepth = depth;
+        }
+        helper(root.left,x,y,depth+1,root);
+        helper(root.right,x,y,depth+1,root);
     }
 }
