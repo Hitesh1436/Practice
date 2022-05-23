@@ -13,8 +13,10 @@
  *     }
  * }
  */
+
+
+// psi = pre start index,pei= pre end index,isi = in statr index, iei = in end index
 class Solution {
-    
     public TreeNode helper(int[] preorder,int psi,int pei, int[] inorder,int isi,int iei) {
         if(isi>iei){
             return null;
