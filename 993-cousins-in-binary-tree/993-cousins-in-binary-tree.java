@@ -21,7 +21,11 @@ class Solution {
             return false;
         }
         helper(root,x,y,0,null);
-        return xParent != yParent && xDepth == yDepth;
+        if(xParent != yParent && xDepth == yDepth){
+            return true;
+        }else{
+            return false;
+        }
     }
     public void helper(TreeNode root,int x,int y,int depth,TreeNode parent){
         if(root == null){
