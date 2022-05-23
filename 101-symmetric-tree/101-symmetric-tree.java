@@ -14,19 +14,16 @@
  * }
  */
 class Solution {
+    
+    private boolean mirror(TreeNode r1,TreeNode r2){
+        if(r1== null && r2 == null) return true;
+        if(r1==null || r2== null ) return false;
+        if(r1.val!= r2.val) return false;
+         return mirror(r1.left,r2.right) && mirror(r1.right,r2.left);
+    }
+    
     public boolean isSymmetric(TreeNode root) {
-  if (root == null) { // required
-    return true;
-  }
-  return isMirror(root.left, root.right); // so t1 and t2 are different trees
-  }
-    private boolean isMirror(TreeNode t1, TreeNode t2) {
-  // base case
-  if (t1 == null && t2 == null) return true;
-  if (t1 == null || t2 == null) return false;
-  // check values
-  if (t1.val != t2.val) return false;
-  // check left subtree and right subtree
-  return isMirror(t1.right, t2.left) && isMirror(t1.left, t2.right);
-}
+        if(root == null) return true;
+        return mirror(root.left,root.right);
+    }
 }
