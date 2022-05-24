@@ -15,25 +15,26 @@
  */
 class Solution {
     
-     public  TreeNode buildTreeHelper( int[] postorder,int posi,int poei,int[] inorder,int isi,int iei){
-        if(isi>iei){
+    private TreeNode helper(int[] inorder,int iStart,int iEnd, int[] postorder,int poStart,int poEnd){
+        if(iStart > iEnd || poStart> poEnd){
             return null;
         }
-        int idx = isi;
-        while(inorder[idx]!=postorder[poei])
-        idx++;
+        int idx = iStart;
+        while(inorder[idx] != postorder[poEnd]){
+            idx++;
+        }
+        // tnol = total number of elements
+        int tnol = idx - iStart;
+        TreeNode ans = new TreeNode(postorder[poEnd]);
         
-        int tnol = idx-isi;
-        TreeNode ans = new TreeNode(postorder[poei]);
-        
-        ans.left = buildTreeHelper(postorder,posi,posi+tnol-1,inorder,isi,idx-1);
-        ans.right = buildTreeHelper(postorder,posi+tnol,poei-1,inorder,idx+1,iei);
+        ans.left = helper(inorder,iStart,idx-1,postorder,poStart,poStart+tnol-1);
+        ans.right= helper(inorder,idx+1,iEnd,postorder,poStart+tnol,poEnd-1);
         
         return ans;
     }
-
-    public  TreeNode buildTree(int[] inorder, int[] postorder){
+    
+    public TreeNode buildTree(int[] inorder, int[] postorder) {
         int n = postorder.length;
-        return buildTreeHelper(postorder,0,n-1,inorder,0,n-1);
+        return helper(inorder,0,n-1,postorder,0,n-1);
     }
 }
