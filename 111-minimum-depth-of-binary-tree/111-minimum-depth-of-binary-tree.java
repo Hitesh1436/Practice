@@ -15,15 +15,23 @@
  */
 class Solution {
     public int minDepth(TreeNode root) {
-        if(root==null){
-            return 0;
+        if (root == null) return 0;
+        ArrayDeque<TreeNode> queue = new ArrayDeque<>();
+        queue.add(root);
+        
+        int count = 0;
+        while (!queue.isEmpty()) {
+            int n = queue.size();
+            count++;
+            
+            for (int i = 0; i < n; i++) {
+                TreeNode node = queue.poll();
+                if (node.left == null && node.right == null) return count;
+                if (node.left != null) queue.add(node.left);
+                if (node.right != null) queue.add(node.right);
+            }
         }
         
-        int left=minDepth(root.left);
-        int right=minDepth(root.right);
-        if (left == 0 || right == 0) {
-			return 1 + left + right;
-		}
-        return Math.min(left,right)+1;
+        return count;
     }
 }
