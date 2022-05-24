@@ -14,26 +14,26 @@
  * }
  */
 class Solution {
-    PriorityQueue<Integer> pq = new PriorityQueue<>();
-    
     public int findSecondMinimumValue(TreeNode root) {
-       inOrder(root);
-        if(pq.size()<=1){
-            return -1;
-        }else{
-            pq.remove();
-            return pq.remove();
-        }
+         HashSet<Integer> list=new HashSet<>();
+          helper(root,list);
+           List<Integer> al = new ArrayList<>(list);
+        Collections.sort(al);
+
+          if(list.size()<2){
+              return -1;
+          }
+        return al.get(1);
     }
     
-    private void inOrder(TreeNode node){
-        if(node == null) return;
-        
-        inOrder(node.left);
-        
-        if(!pq.contains(node.val)){
-            pq.add(node.val);
+    private void helper(TreeNode root,HashSet list){
+        if(root==null){
+            return;
         }
-        inOrder(node.right);
+        helper(root.left,list);
+        list.add(root.val);
+        
+        helper(root.right,list);
+        list.add(root.val);
     }
 }
