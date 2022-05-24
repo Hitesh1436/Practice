@@ -14,21 +14,26 @@
  * }
  */
 class Solution {
+    int maxHeight = Integer.MIN_VALUE;
+    int height = 0;
+    int maxSum = 0;
     public int deepestLeavesSum(TreeNode root) {
-         int sum =0;
-        Queue<TreeNode> qu = new LinkedList<>();
-        qu.add(root);
-        
-        while(qu.size()>0){
-            int size = qu.size();
-            sum =0;
-            for(int i=0;i<size;i++){
-                TreeNode rem = qu.remove();
-                sum += rem.val;
-                if(rem.left != null) qu.add(rem.left);
-                if(rem.right != null) qu.add(rem.right);
+        inorderDFS(root,height);
+        return maxSum;
+    }
+    public void inorderDFS(TreeNode root, int height){
+        if(root == null) return;
+        height += 1;
+        inorderDFS(root.left,height);
+        if(root.left == null && root.right==null){ // Node is leaf
+            if(maxHeight < height){
+                maxHeight = height;
+                maxSum = root.val;
+            }
+            else if(maxHeight == height){
+                maxSum = maxSum + root.val;
             }
         }
-        return sum;
+        inorderDFS(root.right,height);
     }
 }
