@@ -114,8 +114,9 @@ class Solution{
 
     public static int maxPathSum(Node root){
         if(root == null) return 0;
-        
-        return Math.max(root.data + maxPathSum(root.left),root.data + maxPathSum(root.right));
+        int leftSide = root.data + maxPathSum(root.left);
+        int rightSide = root.data + maxPathSum(root.right);
+        return Math.max(leftSide,rightSide);
         
     }
 }
