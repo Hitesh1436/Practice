@@ -20,7 +20,7 @@ class Solution {
         if (root == null) return false;
 		
         // if root vals are equal, then make sure rest of subtree is equal
-        if (root.val == subRoot.val && equals(root, subRoot)) return true;
+        if (root.val == subRoot.val && helper(root, subRoot)) return true;
         
 		// there can still be duplicate vals in the tree, so we need to keep
 		// checking deeper for top root val then dive into the equals method
@@ -28,13 +28,13 @@ class Solution {
         return isSubtree(root.left, subRoot) || isSubtree(root.right, subRoot);
     }
     
-    private boolean equals(TreeNode root, TreeNode subRoot) {
+    private boolean helper(TreeNode root, TreeNode subRoot) {
 		// base case, both nodes are null return true
         if (root == null && subRoot == null) return true;
 		// now if one node is null, trees are not equal, also check for root val equivalence
         if (root == null || subRoot == null || root.val != subRoot.val) return false;
 
 		// check entire depth of both subtrees
-        return equals(root.left, subRoot.left) && equals(root.right, subRoot.right);
+        return helper(root.left, subRoot.left) && helper(root.right, subRoot.right);
     }
 }
