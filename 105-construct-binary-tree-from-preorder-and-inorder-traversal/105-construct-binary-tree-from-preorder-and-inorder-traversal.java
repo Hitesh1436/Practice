@@ -13,45 +13,24 @@
  *     }
  * }
  */
-
-
-// psi = pre start index,pei= pre end index,isi = in statr index, iei = in end index
 class Solution {
-     private  HashMap<Integer,Integer> hm = new HashMap<>() ;
-    public TreeNode buildTree(int[] preorder, int[] inorder) {
-        
-        for(int i = 0 ; i < inorder.length ; i = i + 1)
-        {
-            hm.put(inorder[i],i) ;
+     public TreeNode buildTree(int[] preorder, int[] inorder) {
+        int n = inorder.length;
+        return helper(preorder,0,n-1,inorder,0,n-1);
+    }
+    private TreeNode helper(int[] preorder,int pStart,int pEnd,int[] inorder,int iStart,int iEnd){
+        if(iStart> iEnd){
+            return null;
         }
-        return Construct(0,preorder.length-1,0,inorder.length-1,preorder ) ; 
-    }
-
-    private TreeNode Construct(int pLo,int pHi , int inL , int inHi ,int pre[]  )
-    {
-        if(pLo>pHi  ||  inL > inHi)
-        {
-            return null ;
+        int idx = iStart;
+        while(inorder[idx]!= preorder[pStart]){
+            idx++;
         }
-        TreeNode node = new TreeNode(pre[pLo]) ;
-
-        int pos = findInInorder(pre[pLo] ) ;
-
-        int diffL =  pos - inL ;
-         
-        node.left = Construct( pLo+1, pLo+diffL, inL,pos-1,pre ) ;
-        node.right = Construct( pLo+diffL+1, pHi, pos+1,inHi,pre ) ;
-
-        return node ;
+         int tnol = idx-iStart;
+        TreeNode ans = new TreeNode(preorder[pStart]);
+      
+        ans.left = helper(preorder,pStart+1,pStart+tnol,inorder,iStart,idx-1);
+        ans.right = helper(preorder, pStart+tnol+1,pEnd,inorder,idx+1,iEnd);
+        return ans;
     }
-
-    private int findInInorder(int val  )
-    {
-         if(hm.containsKey(val))
-         {
-             return hm.get(val) ;
-         }
-
-        return - 1;
-    }
-} 
+}
