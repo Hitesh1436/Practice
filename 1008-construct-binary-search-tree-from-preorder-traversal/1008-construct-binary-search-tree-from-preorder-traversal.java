@@ -14,16 +14,43 @@
  * }
  */
 class Solution {
-int i = 0;
-    public TreeNode bstFromPreorder(int[] arr) {
-        return helper(arr, Integer.MAX_VALUE);
-    }
-
-    public TreeNode helper(int[] arr, int bound) {
-        if (i == arr.length || arr[i] > bound) return null;
-        TreeNode root = new TreeNode(arr[i++]);
-        root.left = helper(arr, root.val);
-        root.right = helper(arr, bound);
+    public TreeNode bstFromPreorder(int[] preorder) {
+        
+        if(preorder == null){
+            return null;
+        }
+        int size = preorder.length;
+        if(size==0){
+            return null;
+        }
+        TreeNode root = new TreeNode(preorder[0]);
+		
+        for(int i=1;i<size;i++){
+             generateBST(preorder[i],root);
+        }
         return root;
+    }
+    
+    public void generateBST(int target, TreeNode tree){
+        TreeNode root = tree;
+        TreeNode node = new TreeNode(target);
+            while(root!=null){
+                if(target<root.val){
+                    if(root.left==null){
+                        root.left = node;
+                        break;
+                    }
+                    else{
+                         root=root.left;
+                    }
+                }else{
+                    if(root.right==null){
+                        root.right=node;
+                        break;
+                    }else{
+                        root=root.right;
+                    }
+                }
+            }
       }
 }
