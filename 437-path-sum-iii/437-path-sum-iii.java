@@ -14,24 +14,27 @@
  * }
  */
 class Solution {
-    int count =0;
-    public int pathSum(TreeNode root, int tar) {
-        if(root == null) return 0;
-        
-        helper(root,tar,0);
-        pathSum(root.left,tar);
-        pathSum(root.right,tar);
-        
-        return count;
+    private HashMap<Integer, Integer> map;
+    private int target;
+    
+    public int pathSum(TreeNode root, int targetSum) {
+        map = new HashMap<>();
+        map.put(0, 1);
+        target = targetSum;
+        return dfs(root, 0);
     }
     
-    public void helper(TreeNode node,int tar,int currSum){
-        if(node == null) return;
-        currSum +=node.val;
-        if(currSum == tar){
-            count++;
+    private int dfs(TreeNode node, int preSum) {
+        if (node == null) {
+            return 0;
         }
-        helper(node.left,tar,currSum);
-        helper(node.right,tar,currSum);
+        int ans = 0;
+        preSum += node.val;
+        ans += map.getOrDefault(preSum - target, 0);
+        map.put(preSum, map.getOrDefault(preSum, 0) + 1);
+        ans += dfs(node.left, preSum);
+        ans += dfs(node.right, preSum);
+        map.put(preSum, map.get(preSum) - 1);
+        return ans;
     }
 }
