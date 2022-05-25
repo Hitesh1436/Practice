@@ -111,15 +111,25 @@ class Tree {
 //User function Template for Java
 
 class Solution{
-
-    public static int maxPathSum(Node root) {
-        if(root == null) return Integer.MIN_VALUE;
-        if(root.left == null && root.right == null){
-            return root.data;
+    static int maxSum = Integer.MIN_VALUE;
+    public static int maxPathSum(Node root){
+        maxSum = Integer.MIN_VALUE;
+        helper(root,0);
+        return maxSum;
+    }
+    
+    public static void helper(Node node ,int sum){
+        if(node == null){
+            return;
         }
-        int left = maxPathSum(root.left);
-        int right = maxPathSum(root.right);
-        
-        return Math.max(left,right) + root.data;
+        if(node.left == null && node.right == null){
+            sum += node.data;
+            if(sum>maxSum){
+                maxSum = sum;
+            }
+            return;
+        }
+        helper(node.left,sum + node.data);
+        helper(node.right,sum + node.data);
     }
 }
