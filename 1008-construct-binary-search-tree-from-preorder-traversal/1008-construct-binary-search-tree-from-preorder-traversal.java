@@ -14,22 +14,22 @@
  * }
  */
 class Solution {
+    int nodeIndex;
     public TreeNode bstFromPreorder(int[] preorder) {
-     return helper(preorder, 0, preorder.length - 1);   
-    }
-    
-    private TreeNode helper(int[] preorder, int start, int end) {
-        if(start > end) return null;
-        
-        TreeNode node = new TreeNode(preorder[start]);
-        int i;
-        for(i=start;i<=end;i++) {
-        if(preorder[i] > node.val)
-            break;
+        if(preorder == null) {
+            return null;
         }
-        
-        node.left = helper(preorder, start+1, i-1);
-        node.right = helper(preorder, i, end);
+        nodeIndex = 0;
+        return bstHelper(preorder, Integer.MIN_VALUE , Integer.MAX_VALUE);
+    }
+    private TreeNode bstHelper(int[] preorder, int start, int end) {
+        if(nodeIndex == preorder.length || preorder[nodeIndex]<start || preorder[nodeIndex]>end) {
+            return null;
+        }
+        int val = preorder[nodeIndex++];
+        TreeNode node = new TreeNode(val);
+        node.left = bstHelper(preorder, start, val);
+        node.right = bstHelper(preorder, val, end);
         return node;   
     }   
-}
+} 
