@@ -14,28 +14,24 @@
  * }
  */
 class Solution {
-    int count = 0;
-    public int pathSum(TreeNode root, int sum) {
-
-        if (root == null) return 0;
-
-        pathSumHelper(root, sum, 0);
-        pathSum(root.left, sum);
-        pathSum(root.right, sum);
-
+    int count =0;
+    public int pathSum(TreeNode root, int tar) {
+        if(root == null) return 0;
+        
+        helper(root,tar,0);
+        pathSum(root.left,tar);
+        pathSum(root.right,tar);
+        
         return count;
-
     }
-
-    void pathSumHelper(TreeNode root, int sum, int currentSum) {
-        if (root == null) {
-            return;
-        }
-        currentSum += root.val;
-        if (currentSum == sum) {
+    
+    public void helper(TreeNode node,int tar,int currSum){
+        if(node == null) return;
+        currSum +=node.val;
+        if(currSum == tar){
             count++;
         }
-        pathSumHelper(root.left, sum, currentSum);
-        pathSumHelper(root.right, sum, currentSum);
-    } 
+        helper(node.left,tar,currSum);
+        helper(node.right,tar,currSum);
+    }
 }
