@@ -14,26 +14,42 @@
  * }
  */
 class Solution {
-    HashMap<Integer,Integer> map;
-    int tar;
+    int count = 0;
     public int pathSum(TreeNode root, int targetSum) {
-        map = new HashMap<>();
+        if(root == null){
+            return 0;
+        }
+        HashMap<Integer,Integer> map = new HashMap<>();
         map.put(0,1);
-        tar = targetSum;
-        return helper(root,0);
-    }
-    
-    private int helper(TreeNode node,int preSum){
-        if(node == null) return 0;
-        
-        int count =0;
-        preSum += node.val;
-        count +=map.getOrDefault(preSum - tar, 0);
-        map.put(preSum,map.getOrDefault(preSum,0)+1);
-        count += helper(node.left,preSum);
-        count += helper(node.right,preSum);
-        map.put(preSum,map.get(preSum)-1);
-        
+        // root ,jhn jarhe h vo val,targetSum,map pass krdia helper mn
+        helper(root,root.val,targetSum,map);
         return count;
+    }
+    // psum = prefix sum, 
+    private void helper(TreeNode node,int psum,int tar,HashMap<Integer,Integer> map){
+        
+        if(map.containsKey(psum - tar)== true){
+            count += map.get(psum-tar);
+        }
+        
+        if(map.containsKey(psum)== false){ // age vo key ni h toh daldo and uske against 1 dldo 
+            map.put(psum,1);
+        }else{
+            map.put(psum,map.get(psum)+1);// age vo key h toh daldo and usko +1 krdo
+        }
+        
+        if(node.left != null){
+            helper(node.left,psum + node.left.val,tar,map);
+        }
+        if(node.right != null){
+            helper(node.right,psum + node.right.val,tar,map);
+        }
+        
+        // calls
+        if(map.get(psum)==1){  // agr 1 h toh remove krdo
+            map.remove(psum);
+        }else{
+            map.put(psum,map.get(psum)-1);  // agr 1 se jyda h toh -1 krdo
+        }
     }
 }
