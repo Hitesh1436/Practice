@@ -1,18 +1,17 @@
-class Solution {
-    int count =0;
-    int preSum=0;
-    public int subarraySum(int[] arr, int k) {
-        int n = arr.length;
-        HashMap<Integer,Integer> map = new HashMap<>();
-        map.put(0,1);
-        
-        for(int i=0;i<n;i++){
-            preSum += arr[i];
-            if(map.containsKey(preSum -k)){
-                count += map.get(preSum - k);
+// ---------------------T(C) = O(n^2)-----------------
+public class Solution {
+    public int subarraySum(int[] nums, int k) {
+        int count = 0;
+        int[] sum = new int[nums.length + 1];
+        sum[0] = 0;
+        for (int i = 1; i <= nums.length; i++)
+            sum[i] = sum[i - 1] + nums[i - 1];
+        for (int start = 0; start < nums.length; start++) {
+            for (int end = start + 1; end <= nums.length; end++) {
+                if (sum[end] - sum[start] == k)
+                    count++;
             }
-            map.put(preSum,map.getOrDefault(preSum,0)+1);
         }
         return count;
-    }   
+    }
 }
