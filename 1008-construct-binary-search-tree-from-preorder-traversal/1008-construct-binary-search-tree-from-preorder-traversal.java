@@ -16,17 +16,17 @@
 class Solution {
     int index =0;
     public TreeNode bstFromPreorder(int[] preorder) {
-        return construct(preorder,Integer.MIN_VALUE,Integer.MAX_VALUE);
+        return construct(preorder,Integer.MAX_VALUE);
     }
-    private TreeNode construct(int []pre , int min,int max){
+    private TreeNode construct(int []pre ,int max){
         if(index == pre.length){
             return null;
-        }else if(pre[index]>min && pre[index]<max){
+        }else if(pre[index]<max){
             TreeNode ans = new TreeNode(pre[index]);
             index++;
             
-            ans.left = construct(pre,min,ans.val);
-            ans.right = construct(pre,ans.val,max);
+            ans.left = construct(pre,ans.val);
+            ans.right = construct(pre,max);
             
             return ans;
         }else{
