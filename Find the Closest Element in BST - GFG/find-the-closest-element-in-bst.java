@@ -98,12 +98,10 @@ class GFG
 //User function Template for Java
 
 class Solution{
-    static int minDiff(Node  root, int K) 
-    { 
-        // Write your code here
+    static  int min = Integer.MAX_VALUE;
+    static int minDiff(Node  root, int K){
         int min = Integer.MAX_VALUE;
-        
-        while(root != null){
+            while(root != null){
             if(root.data < K){
                 min = Math.min(min, Math.abs(K - root.data));
                 root = root.right;
