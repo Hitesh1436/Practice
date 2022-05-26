@@ -111,19 +111,19 @@ class Node{
 }
  */
  class Solution {
-     long ans =0;
+     long ans = 0;
      long mod = 1000000007;
-     public void helper(Node n1,Node n2){
+     public void imgMultiplyHelper(Node n1,Node n2){
          if(n1 == null || n2 == null) return;
-            ans +=(n1.data*n2.data)%mod;
-            helper(n1.left,n2.right);
-            helper(n1.right,n2.left);
+            ans =(ans + n1.data*n2.data)%mod;
+            imgMultiplyHelper(n1.left,n2.right);
+            imgMultiplyHelper(n1.right,n2.left);
      }
      
     public long imgMultiply(Node root){
         ans = (root.data*root.data)%mod;
-        helper(root.left,root.right);
-        return ans%mod;
+        imgMultiplyHelper(root.left,root.right);
+        return ans; 
         
     }
 }
