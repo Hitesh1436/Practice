@@ -115,55 +115,36 @@ class GFG {
         left = right = null;
     }
 } */
-class Solution
-{
-    // Global variables
-    int gmax = Integer.MIN_VALUE;
-    
-    Node mainroot;
-    
-    private int rec(Node root, Node parent)
-    {
-        /*Root can also be considered as a leaf node 
-        as it satisfies the definition given in the question.*/
-        if(root==null && parent == mainroot) return 0;
-        
-        //If node is null, return a very small value so as to not consider it.
-        if(root==null) return -1000000;
-        
-        //If node is a leaf node then return its data.
-        if(root.left==null && root.right==null) return root.data;
-        
-        //Get the left tree's sum.
-        int left = rec(root.left, root);
-        
-        //Get the right tree's sum.
-        int right = rec(root.right, root);
-        
-        int sum = left+right+root.data;
-        
-        //Update global maximum sum.
-        gmax = Math.max(gmax, sum);
-        
-        /*Return the max of left sum and the right
-        sum added with current node's data.*/
-        return Math.max(left+root.data, right+root.data);
-        
-    }
-    
-    
-    int maxPathSum(Node root)
-    {
-        //Initialize gmax with Integer.MIN_VALUE;
-        gmax = Integer.MIN_VALUE;
-        
-        /*Global pointer to root node to
-        check if root is a leaf node or not
-        in the recursive function.*/
-        mainroot = root;
-        
-        rec(root, root);
-        
-        return gmax;
+class Solution{
+    int max;        // maximum of leaf to leaf dega yeh
+    int maxPathSum(Node root){
+       max = Integer.MIN_VALUE;
+       if(root.left == null || root.right == null){
+           int val = helper(root);
+           return Math.max(max,val);
+       }else{
+            helper(root);
+            return max;
+       }
+      
     } 
+    
+    int helper(Node node){
+        if(node.left!=null && node.right!=null){
+            int left = helper(node.left);
+            int right = helper(node.right);
+            
+            max = Math.max(max,left + node.data + right);
+            
+            return Math.max(left,right) + node.data;
+        }else if(node.left != null){
+             int left = helper(node.left);
+            return node.data + left;
+        }else if(node.right != null){
+            int right = helper(node.right);
+            return node.data + right;
+        }else{
+            return node.data;
+        }
+    }
 }
