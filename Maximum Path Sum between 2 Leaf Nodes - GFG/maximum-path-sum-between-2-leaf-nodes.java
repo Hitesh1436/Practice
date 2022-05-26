@@ -119,13 +119,13 @@ class Solution{
     int max;        // maximum of leaf to leaf dega yeh
     int maxPathSum(Node root){
        max = Integer.MIN_VALUE;
-       if(root.left == null || root.right == null){
-           int val = helper(root);
-           return Math.max(max,val);
-       }else{
-            helper(root);
-            return max;
-       }
+      if(root.left != null && root.right != null){
+          helper(root);
+          return max;
+      }else{
+          int val = helper(root);
+          return Math.max(max,val);
+      }
       
     } 
     
