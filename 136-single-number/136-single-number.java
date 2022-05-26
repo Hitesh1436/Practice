@@ -1,10 +1,19 @@
 class Solution {
     public int singleNumber(int[] nums) {
-        Arrays.sort(nums);                          //Sort the array
-        for(int i=0 ; i<nums.length-1; i+=2){       
-            if(nums[i]!=nums[i+1])                  //Check pairwise values in array
-                return nums[i];                     //if any pairwise values are different, then it is answer
+        HashMap<Integer,Integer> map = new HashMap<>();
+            for(int i=0;i<nums.length;i++){
+                if(map.containsKey(nums[i])){
+                    map.put(nums[i],map.get(nums[i])+1);
+                }else{
+                    map.put(nums[i],1);
+                }
+            }
+        int ans = 0;
+        for(int i : map.keySet()){
+            if(map.get(i)==1){
+                ans = i;
+            }
         }
-        return nums[nums.length - 1];       //if answer is largest value, then it will not be detected in above loop hence return it here
-   }
+        return ans;
+    }
 }
