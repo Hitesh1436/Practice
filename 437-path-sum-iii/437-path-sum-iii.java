@@ -14,7 +14,7 @@
  * }
  */
 class Solution {
-    int count = 0;
+
     public int pathSum(TreeNode root, int targetSum) {
         if(root == null){
             return 0;
@@ -22,14 +22,13 @@ class Solution {
         HashMap<Integer,Integer> map = new HashMap<>();
         map.put(0,1);
         // root ,jhn jarhe h vo val,targetSum,map pass krdia helper mn
-        helper(root,root.val,targetSum,map);
-        return count;
+        return helper(root,root.val,targetSum,map);
     }
     // psum = prefix sum, 
-    private void helper(TreeNode node,int psum,int tar,HashMap<Integer,Integer> map){
-        
+    private int helper(TreeNode node,int psum,int tar,HashMap<Integer,Integer> map){
+        int ans =0;
         if(map.containsKey(psum - tar)== true){
-            count += map.get(psum-tar);
+            ans += map.get(psum-tar);
         }
         
         if(map.containsKey(psum)== false){ // age vo key ni h toh daldo and uske against 1 dldo 
@@ -39,10 +38,12 @@ class Solution {
         }
         
         if(node.left != null){
-            helper(node.left,psum + node.left.val,tar,map);
+           int left =  helper(node.left,psum + node.left.val,tar,map);
+           ans += left;
         }
         if(node.right != null){
-            helper(node.right,psum + node.right.val,tar,map);
+           int right= helper(node.right,psum + node.right.val,tar,map);
+           ans +=right;
         }
         
         // calls
@@ -51,5 +52,6 @@ class Solution {
         }else{
             map.put(psum,map.get(psum)-1);  // agr 1 se jyda h toh -1 krdo
         }
+        return ans;
     }
 }
