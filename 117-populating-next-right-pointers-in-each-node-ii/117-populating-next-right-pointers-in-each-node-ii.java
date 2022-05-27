@@ -22,40 +22,30 @@ class Node {
 */
 
 class Solution {
-    public Node connect(Node root) {
-        if (root == null) {
-            return null;
-        }
-        if (root.left != null) {
-            if (root.right != null) {
-                root.left.next = root.right;
-            } else {
-                Node nxt = findNext(root.next);
-                root.left.next = nxt;
+   public Node connect(Node root) {
+        if (root == null)
+            return root;
+        
+        Node t = root;
+        Node dummy = new Node();
+        
+        while (t != null) {
+            Node current = dummy;
+            while (t != null) {
+                if (t.left != null) {
+                    current.next = t.left;
+                    current = current.next;
+                }
+                if (t.right != null) {
+                    current.next = t.right;
+                    current = current.next;
+                }
+                t = t.next;
             }
+            t = dummy.next;
+            dummy.next = null;
         }
-        if (root.right != null) {
-            Node nxt = findNext(root.next);
-            root.right.next = nxt;
-        }
-		// this is a key: build the connection from right to left.
-		// you can change it from left to right, see what will happend. lol 
-        connect(root.right);
-        connect(root.left);
-        return root;
-    }
-    
-	//this helper function likes to operate a linkedlist
-    private Node findNext(Node root) {
-        while (root != null) {
-            if (root.left != null) {
-                return root.left;
-            }
-            if (root.right != null) {
-                return root.right;
-            }
-            root = root.next;
-        }
+        
         return root;
     }
 }
