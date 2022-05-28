@@ -1,15 +1,19 @@
 class Solution {
     public int missingNumber(int[] nums) {
-        Arrays.sort(nums);      // 0,1,3
-        
-        int n = nums.length;   // 3
-        int i=0;
-        for(int j=0;j<n;j++){
-            if(i != nums[j]){
-                return i;
+        // sort krdii
+     Arrays.sort(nums);
+     int n = nums.length;
+            if(nums[n-1]==0){
+                return 1;
             }
-            i++;
+        for(int i=0;i<n-1;i++){
+            if(nums[i]+1 != nums[i+1]){
+                return nums[i]+1;
+            }
+            if(nums[n-1]+1 == n){
+                return n;
+            }
         }
-        return i;
+        return 0;
     }
 }
