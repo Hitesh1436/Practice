@@ -1,17 +1,12 @@
 class Solution {
     public int singleNumber(int[] nums) {
-        if (nums.length == 1) {  // if the array has only one element it will return the first element itself
-            return nums[0];
+        
+        HashSet<Integer> set=new HashSet<Integer>();
+        for(int i:nums){
+            if(!set.add(i)) 
+                set.remove(i);
         }
-        Arrays.sort(nums);
-        for (int i = 0 ; i < nums.length ; i = i+2) {
-            if (i == nums.length-1) {  // if i is at the last index return the last index
-                return nums[nums.length -1];
-            }
-            if(nums[i] != nums[i+1]) { 
-                return nums[i];
-            }
-        }
-        return 0;
+        Iterator<Integer> it = set.iterator();
+        return it.next();
     }
 }
