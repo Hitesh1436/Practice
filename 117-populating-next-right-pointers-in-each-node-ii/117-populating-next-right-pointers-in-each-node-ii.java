@@ -26,24 +26,21 @@ class Solution {
 		if(null == root) {
 			return null;
 		}
-
-		if (root.left != null && root.right != null) {
-			root.left.next = root.right;
-			root.right.next = findNext(root.next);
+          if (root.left != null && root.right != null) {
+             root.left.next = root.right;
+             root.right.next = findNext(root.next);
 		} else if (root.left != null) {
 			root.left.next = findNext(root.next);
 		} else if (root.right != null) {
 			root.right.next = findNext(root.next);
 		}
-
-		/**right first*/
-		connect(root.right);
-		connect(root.left);
-		return root;
+		    /**right first*/
+            connect(root.right);
+            connect(root.left);
+            return root;
 	}
-
 	private Node findNext(Node root) {
-		if (null == root) {
+		if (root == null) {
 			return null;
 		} else if (null != root.left) {
 			return root.left;
