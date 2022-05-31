@@ -130,27 +130,43 @@ class Tree{
 	}
 }*/
 class Solution{
-   public void solve(Tree root, HashMap<Tree, Tree> hm) {
-        if (root == null) return;
-        hm.put(root, new Tree(root.data));
-        solve(root.left, hm);
-        solve(root.right, hm);
+    
+    private Tree rec(Tree node, HashMap<Integer, Tree> map) {
+        if(node==null) return null;
+        Tree root;
+        if(map.containsKey(node.data)){
+            //The node already exists so we don't create a new node.
+            root = map.get(node.data);
+        }
+        else{
+            //The node does not exist so we create a new node and add it to the HashMap.
+            root = new Tree(node.data);
+            map.put(root.data, root);
+        }
+        if(node.random!=null){
+        //If the node's random pointer is not null
+            if(map.containsKey(node.random.data)){
+            
+                //If the map contains node.random
+                root.random = map.get(node.random.data);
+            }
+            else{
+            //Else create a new node and add it to the map.
+                root.random = new Tree(node.random.data);
+                map.put(root.random.data, root.random);
+            }
+        }
+        
+        //Recursively travel left and right;
+        root.left = rec(node.left, map);
+        root.right = rec(node.right, map);
+        
+        //Return the root;
+        return root;
     }
     
-    public void solveTree(Tree root, HashMap<Tree, Tree> hm) {
-        if (root == null) return;
-        Tree node = hm.get(root);
-        node.left = hm.get(root.left);
-        node.right = hm.get(root.right);
-        node.random = hm.get(root.random);
-        solveTree(root.left, hm);
-        solveTree(root.right, hm);
-    }
     public Tree cloneTree(Tree tree){
-       // add code here.
-       HashMap<Tree, Tree> hm = new HashMap<>();
-       solve(tree, hm);
-       solveTree(tree, hm);
-       return hm.get(tree);
-     }
+        Tree root = rec(tree, new HashMap<>());
+        return root;
+    }
 }
