@@ -42,9 +42,9 @@ class Solution {
 	private Node findNext(Node root) {
 		if (root == null) {
 			return null;
-		} else if (null != root.left) {
+		} else if (root.left != null) {
 			return root.left;
-		} else if (null != root.right) {
+		} else if (root.right != null) {
 			return root.right;
 		}
 		return findNext(root.next);
