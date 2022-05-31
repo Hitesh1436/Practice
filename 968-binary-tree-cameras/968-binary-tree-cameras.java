@@ -14,11 +14,11 @@
  * }
  */
 class Solution {
-    int camera = 0;
+    int cameraCount = 0;
     public int minCameraCover(TreeNode root) {
         if(getCamera(root)==-1)     //if camera is required at root
-            camera++;
-        return camera;
+            cameraCount++;
+        return cameraCount;
     }
     
     
@@ -33,7 +33,7 @@ class Solution {
         if(left==0 && right == 0) 
             return -1;
         if(left == -1 || right == -1){
-            camera++;
+            cameraCount++;
             return 1;
         }
         return 0;
