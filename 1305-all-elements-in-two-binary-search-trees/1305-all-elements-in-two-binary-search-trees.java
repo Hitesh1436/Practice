@@ -14,40 +14,40 @@
  * }
  */
 class Solution {
+    
     public List<Integer> getAllElements(TreeNode root1, TreeNode root2) {
+        Queue<Integer> q1 = new LinkedList<>();
+        Queue<Integer> q2 = new LinkedList<>();
         List<Integer> ans = new ArrayList<>();
-        List<Integer> a = new ArrayList<>();
-        List<Integer> b = new ArrayList<>();
-        inorder(root1,a);
-        inorder(root2,b);
-        System.out.print(a);
-        System.out.print(b);
-        mergeLists(a,b,ans);
-        return ans; 
-    }
-    // O(n)
-    private void inorder(TreeNode node,List<Integer>al){
-        if(node == null) return;
-        inorder(node.left,al);
-        al.add(node.val);
-        inorder(node.right,al);
-    }
-    // O(m+n)
-    private void mergeLists(List<Integer>l1,List<Integer>l2,List<Integer>res){
-        int n = l1.size(),m=l2.size();
-        int i=0,j=0;
-        while(i<n && j<m){
-            if(l1.get(i)<=l2.get(j)){
-                res.add(l1.get(i++));
-            }else{
-                res.add(l2.get(j++));    
+        
+        inorder(root1, q1);
+        inorder(root2, q2);
+        
+        while (!q1.isEmpty() && !q2.isEmpty()) {
+            if (q1.peek() < q2.peek()) {
+                ans.add(q1.poll());
+            } else {
+                ans.add(q2.poll());
             }
         }
-         while(i<n){
-                res.add(l1.get(i++));
-            }
-            while(j<m){
-                res.add(l2.get(j++));
-      }
-   }
+        
+        while (!q1.isEmpty()) {
+            ans.add(q1.poll());
+        }
+        
+        while (!q2.isEmpty()) {
+            ans.add(q2.poll());
+        }
+        
+        return ans;
+    }
+    
+    private void inorder(TreeNode node, Queue<Integer> q) {
+        if (node == null) {
+            return;
+        }
+        inorder(node.left, q);
+        q.offer(node.val);
+        inorder(node.right, q);
+    }
 }
