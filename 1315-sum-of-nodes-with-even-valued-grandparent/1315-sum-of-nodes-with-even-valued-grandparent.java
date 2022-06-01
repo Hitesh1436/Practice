@@ -20,7 +20,7 @@ class Solution {
             return ans;
     }
      public void traverse(TreeNode node, TreeNode parent, TreeNode grand){       
-        if( node == null )  return  ;
+        if( node == null )  return;
         if( grand != null &&  grand.val % 2 == 0 ){
             ans += node.val ;
         }
