@@ -42,13 +42,12 @@ class Solution {
             }else{
                 res.add(l2.get(j++));    
             }
-         
         }
          while(i<n){
                 res.add(l1.get(i++));
             }
             while(j<m){
                 res.add(l2.get(j++));
-    }
-    }
+      }
+   }
 }
