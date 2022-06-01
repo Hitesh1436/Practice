@@ -14,33 +14,27 @@
  * }
  */
 class Solution {
-    List<Integer> al = new ArrayList<>();
-    private void inOrder(TreeNode node){
-        // BST of inorder is always sorted
-        if(node == null) return;
-        inOrder(node.left);
-        al.add(node.val);
-        inOrder(node.right);
+   public TreeNode balanceBST(TreeNode root) {
+    List<TreeNode> list=new ArrayList<>();
+    inorder(root,list);
+    return buildTree(list,0,list.size()-1);     
+}
+public TreeNode buildTree(List<TreeNode> list,int start,int end){ 
+    if(start>end){
+        return null;
+    }
+    int mid=start+(end-start)/2;
+    TreeNode root=list.get(mid);
+    root.left=buildTree(list,start,mid-1);
+    root.right=buildTree(list,mid+1,end); 
+    return root;
+}
+public void inorder(TreeNode root,List<TreeNode> list){
+    if(root==null){
         return;
     }
-    private TreeNode createBST(int min,int max){
-//postorder, bottom up approach is used because we want to know the child first then the parent       
-        if(min > max) return null;
-        int mid = min + (max-min)/2;
-        int val = al.get(mid);
-        
-        TreeNode left = createBST(min,mid-1);
-        TreeNode right = createBST(mid+1,max);
-        
-        TreeNode ans = new TreeNode(val,left,right);
-        return ans;
-    }
-    
-    public TreeNode balanceBST(TreeNode root) {
-        TreeNode  newRoot = null;
-        if(root == null) return newRoot;
-        inOrder(root);
-        newRoot = createBST(0,al.size()-1);
-        return newRoot;
-    }
+    inorder(root.left,list);
+    list.add(root);
+    inorder(root.right,list);
+  }
 }
