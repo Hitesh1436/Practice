@@ -15,25 +15,26 @@
  */
 class Solution {
     public TreeNode constructMaximumBinaryTree(int[] nums) {
-        if (nums.length == 0) return null;
+            int n = nums.length;
+        if(n==0) return null;
         int index = maxIndex(nums);
-        TreeNode node = new TreeNode(nums[index]);
-        node.left = constructMaximumBinaryTree(Arrays.copyOfRange(nums, 0, index)); // pass the the left subarray of nums and pass it to the left node
-        node.right = constructMaximumBinaryTree(Arrays.copyOfRange(nums, index + 1, nums.length)); //split the other subarray of nums and pass it to the right right to the node
-        return node;
-
+        TreeNode ans = new TreeNode(nums[index]);
+        // pass the the left subarray of nums and pass it to the left node
+        ans.left = constructMaximumBinaryTree(Arrays.copyOfRange(nums,0,index));
+        //split the other subarray of nums and pass it to the right right to the node
+        ans.right = constructMaximumBinaryTree(Arrays.copyOfRange(nums,index+1,nums.length));
+        return ans;
     }
-//search for the max of the index
-    public int maxIndex(int[] nums) {
+    //searching for the max of the index
+    private int maxIndex(int []arr){
         int max = Integer.MIN_VALUE;
-        int index = 0;
-        for (int i = 0; i < nums.length; i++) {
-            if (nums[i] > max) {
-                max = nums[i];
-                index = i;
+        int idx = 0;
+        for(int i=0;i<arr.length;i++){
+            if(arr[i]>max){
+                max = arr[i];
+                idx = i;
             }
         }
-        return index;
-
+        return idx;
     }
 }
