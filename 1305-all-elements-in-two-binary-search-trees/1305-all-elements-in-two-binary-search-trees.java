@@ -16,37 +16,36 @@
 class Solution {
     public List<Integer> getAllElements(TreeNode root1, TreeNode root2) {
         List<Integer> ans = new ArrayList<>();
-        Stack<TreeNode> st1 = new Stack<>();
-        Stack<TreeNode> st2 = new Stack<>();
-
-        while (root1 != null || root2 != null || st1.size() > 0 || st2.size() > 0) {
-            // make left calls
-            while (root1 != null) {
-                st1.push(root1);
-                root1 = root1.left;
-            }
-
-            while (root2 != null) {
-                st2.push(root2);
-                root2 = root2.left;
-            }
-
-            // Perform operation in inoredr area : compare  values from bith the stacks and make right
-            // calls according to the comparison condition
-
-            if (st2.isEmpty() || (!st1.isEmpty() && st1.peek().val <= st2.peek().val)) {
-                root1 = st1.pop();
-                ans.add(root1.val);
-                // right calls
-                root1 = root1.right;
-            } else {
-                root2 = st2.pop();
-                ans.add(root2.val);
-                // right call
-                root2 = root2.right;
+        List<Integer> a = new ArrayList<>();
+        List<Integer> b = new ArrayList<>();
+        inorder(root1,a);
+        inorder(root2,b);
+        mergeLists(a,b,ans);
+        return ans; 
+    }
+    // O(n)
+    private void inorder(TreeNode node,List<Integer>al){
+        if(node == null) return;
+        inorder(node.left,al);
+        al.add(node.val);
+        inorder(node.right,al);
+    }
+    // O(m+n)
+    private void mergeLists(List<Integer>l1,List<Integer>l2,List<Integer>res){
+        int n = l1.size(),m=l2.size();
+        int i=0,j=0;
+        while(i<n && j<m){
+            if(l1.get(i)<=l2.get(j)){
+                res.add(l1.get(i++));
+            }else{
+                res.add(l2.get(j++));    
             }
         }
-
-        return ans;
-    }
+         while(i<n){
+                res.add(l1.get(i++));
+            }
+            while(j<m){
+                res.add(l2.get(j++));
+      }
+   }
 }
