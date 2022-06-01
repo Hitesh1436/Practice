@@ -14,28 +14,30 @@
  * }
  */
 class Solution {
-    int cameraCount = 0;
+    int count=0;
+    final int cam = 1;
+    final int mon = 2;
+    final int non = 3;
     public int minCameraCover(TreeNode root) {
-        if(getCamera(root)==-1)     //if camera is required at root
-            cameraCount++;
-        return cameraCount;
-    }
-    
-    
-    // return value of -1 means i need a camera.
-    // return value of 1 means i am a camera.
-    // return value of 0 means i am been looked by a camera.
-    public int getCamera(TreeNode root){ 
-        if(root == null)
-            return 0;
-        int left = getCamera(root.left);
-        int right = getCamera(root.right);
-        if(left==0 && right == 0) 
-            return -1;
-        if(left == -1 || right == -1){
-            cameraCount++;
-            return 1;
+        int val = getCamera(root);
+        if(val == non){
+            count++;
         }
-        return 0;
+            return count;
+    }
+    private int getCamera(TreeNode node){
+        if(node == null) return mon;
+        // post order mn krrhe hn 
+        int left = getCamera(node.left);
+        int right = getCamera(node.right);
+        
+        if(left == non || right == non){
+            count++;
+            return cam;
+        }else if(left == cam || right == cam){
+            return mon;
+        }else{
+            return non;
+        }
     }
 }
