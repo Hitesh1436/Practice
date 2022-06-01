@@ -22,31 +22,38 @@ class Node {
 */
 
 class Solution {
-	public Node connect(Node root) {
-		if(null == root) {
-			return null;
-		}
-          if (root.left != null && root.right != null) {
-             root.left.next = root.right;
-             root.right.next = findNext(root.next);
-		} else if (root.left != null) {
-			root.left.next = findNext(root.next);
-		} else if (root.right != null) {
-			root.right.next = findNext(root.next);
-		}
-		    /**right first*/
-            connect(root.right);
-            connect(root.left);
-            return root;
-	}
-	private Node findNext(Node root) {
-		if (root == null) {
-			return null;
-		} else if (root.left != null) {
-			return root.left;
-		} else if (root.right != null) {
-			return root.right;
-		}
-		return findNext(root.next);
-	}
+    public Node connect(Node root) {
+        Node curr = root;
+        Node head = null;
+        Node tail = null;
+        // yh mtlb jse hi hum niche travel krenge curr null hotey hi tree pura hogya hoga..
+        while(curr != null){
+            while(curr != null){
+                // yh h ek level ko pura krne ke liye null hoty hi dusre level pr jaoo
+                if(curr.left != null){
+                    if(head == null){
+                        head = curr.left;
+                        tail = curr.left;
+                    }else{
+                        tail.next = curr.left;
+                        tail = curr.left;
+                    }
+                }
+                if(curr.right!= null){
+                    if(head == null){
+                        head = curr.right;
+                        tail = curr.right;
+                    }else{
+                        tail.next = curr.right;
+                        tail = curr.right;
+                }
+            }
+                curr = curr.next;
+        }
+            curr = head;
+            head = null;
+            tail = null;
+    }
+        return root;
+  }
 }
