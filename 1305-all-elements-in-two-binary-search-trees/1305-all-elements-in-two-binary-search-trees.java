@@ -14,40 +14,39 @@
  * }
  */
 class Solution {
-    
     public List<Integer> getAllElements(TreeNode root1, TreeNode root2) {
-        Queue<Integer> q1 = new LinkedList<>();
-        Queue<Integer> q2 = new LinkedList<>();
         List<Integer> ans = new ArrayList<>();
-        
-        inorder(root1, q1);
-        inorder(root2, q2);
-        
-        while (!q1.isEmpty() && !q2.isEmpty()) {
-            if (q1.peek() < q2.peek()) {
-                ans.add(q1.poll());
+        Stack<TreeNode> st1 = new Stack<>();
+        Stack<TreeNode> st2 = new Stack<>();
+
+        while (root1 != null || root2 != null || st1.size() > 0 || st2.size() > 0) {
+            // make left calls
+            while (root1 != null) {
+                st1.push(root1);
+                root1 = root1.left;
+            }
+
+            while (root2 != null) {
+                st2.push(root2);
+                root2 = root2.left;
+            }
+
+            // Perform operation in inoredr area : compare  values from bith the stacks and make right
+            // calls according to the comparison condition
+
+            if (st2.isEmpty() || (!st1.isEmpty() && st1.peek().val <= st2.peek().val)) {
+                root1 = st1.pop();
+                ans.add(root1.val);
+                // right calls
+                root1 = root1.right;
             } else {
-                ans.add(q2.poll());
+                root2 = st2.pop();
+                ans.add(root2.val);
+                // right call
+                root2 = root2.right;
             }
         }
-        
-        while (!q1.isEmpty()) {
-            ans.add(q1.poll());
-        }
-        
-        while (!q2.isEmpty()) {
-            ans.add(q2.poll());
-        }
-        
+
         return ans;
-    }
-    
-    private void inorder(TreeNode node, Queue<Integer> q) {
-        if (node == null) {
-            return;
-        }
-        inorder(node.left, q);
-        q.offer(node.val);
-        inorder(node.right, q);
     }
 }
