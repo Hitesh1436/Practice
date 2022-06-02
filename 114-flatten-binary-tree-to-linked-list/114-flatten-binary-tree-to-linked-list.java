@@ -14,20 +14,22 @@
  * }
  */
 class Solution {
+    Queue<TreeNode> qu = new LinkedList<>();
     public void flatten(TreeNode root) {
-        if (root == null) return;
-        
-        TreeNode left = root.left;
-        TreeNode right = root.right;
-        
-        root.left = null;
-        
-        flatten(left);
-        flatten(right);
-        
-        root.right = left;
-        TreeNode cur = root;
-        while (cur.right != null) cur = cur.right;
-        cur.right = right;
+        if(root == null) return;
+        preorder(root);
+        qu.remove();
+        TreeNode tmp = root;
+        while(!qu.isEmpty()){
+            tmp.right = qu.remove();
+            tmp.left = null;
+            tmp = tmp.right;
+        } 
+    }
+    private void preorder(TreeNode node){
+        if(node == null)return;
+        qu.add(node);
+        preorder(node.left);
+        preorder(node.right);
     }
 }
