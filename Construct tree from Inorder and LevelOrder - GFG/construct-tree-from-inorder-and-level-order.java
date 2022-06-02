@@ -71,11 +71,10 @@ you need to write your solution in the form of Function(s) only.
 Driver Code to call/invoke your function is mentioned above.*/
 
 /*Complete the function below*/
-class GfG
-{
-    Node buildTree(int inord[], int level[])
-   {
-       //your code here
+class GfG{
+
+    Node buildTree(int inord[], int level[]){
+   
        Node root = null;
        return buildTreeUtil(root, inord, level, 0, inord.length - 1);
    }
@@ -103,8 +102,4 @@ class GfG
        root.setRight(buildTreeUtil(root, inorder, level, index + 1, inEnd));
        return root;
    }
-    
-   
 }
-
-
