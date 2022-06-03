@@ -74,32 +74,30 @@ Driver Code to call/invoke your function is mentioned above.*/
 class GfG{
 
     Node buildTree(int inord[], int level[]){
-   
-       Node root = null;
-       return buildTreeUtil(root, inord, level, 0, inord.length - 1);
-   }
-   static Node buildTreeUtil(Node root, int[] inorder, int[] level, int inStart, int inEnd){
-       if(inStart > inEnd)
-           return null;
-       boolean found = false;
-       int index=0;
-       if(inStart == inEnd)
-           return new Node(inorder[inStart]);
-       for(int i=0; i<level.length - 1; i++){
-           int data = level[i];
-           for(int j=inStart; j<inEnd; j++){
-               if(inorder[j] == data){
-                   root = new Node(data);
-                   index = j;
-                   found = true;
-                   break;
-               }
-           }
-           if(found)
-               break;
-       }
-       root.setLeft(buildTreeUtil(root, inorder, level, inStart, index - 1));
-       root.setRight(buildTreeUtil(root, inorder, level, index + 1, inEnd));
-       return root;
-   }
+        HashMap<Integer,Integer> map = new HashMap<>();
+        for(int i=0;i<level.length;i++){
+            map.put(level[i],i);
+        }
+        // helper mn dala inord, map inord ka start idx and inord ka end index
+        Node ans = helper(inord,map,0,inord.length-1);
+        return ans;
+    }
+    private Node helper(int []inord,HashMap<Integer,Integer>map,int lo,int hi){
+        if(lo>hi){
+            return null;
+        }
+        int minidx = lo;    // assume krlia ki low of inorder has least index in level-Order 
+        for(int i=lo+1;i<=hi;i++){
+            if(map.get(inord[i]) < map.get(inord[minidx])){
+                minidx = i;
+            }
+        }        
+        Node node = new Node(inord[minidx]);
+        node.left = helper(inord,map,lo,minidx-1);
+        node.right = helper(inord,map,minidx+1,hi);
+        
+        return node;
+    }
 }
+
+
