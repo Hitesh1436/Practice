@@ -1,16 +1,44 @@
 class NumMatrix {
-    long[][] dp;
+    private int[][] mat;
+    public NumMatrix(int[][] matrix) {
+        int m=matrix.length;
+        int n=matrix[0].length;
+        
+        mat=new int[m][n];
+        
+        mat[0][0]=matrix[0][0];
+        
+        int j=0;
+        for(int i=1;i<m;i++)
+            mat[i][j]=matrix[i][j]+mat[i-1][j];
+        
+        int i=0;
+        
+        for(j=1;j<n;j++)
+            mat[i][j]=matrix[i][j]+mat[i][j-1];
+        
+        for(i=1;i<m;i++)
+        {
+            for(j=1;j<n;j++)
+            {
+                mat[i][j]=mat[i][j-1]+mat[i-1][j]-mat[i-1][j-1]+matrix[i][j];       
+            }
+        }
     
-    public NumMatrix(int[][] M) {
-        int ylen = M.length + 1, xlen = M[0].length + 1;
-        dp = new long[ylen][xlen];
-        for (int i = 1; i < ylen; i++)
-            for (int j = 1; j < xlen; j++)
-                dp[i][j] = M[i-1][j-1] + dp[i-1][j] + dp[i][j-1] - dp[i-1][j-1];
+                
     }
     
-    public int sumRegion(int R1, int C1, int R2, int C2) {
-        return (int)(dp[R2+1][C2+1] - dp[R2+1][C1] - dp[R1][C2+1] + dp[R1][C1]);
+    public int sumRegion(int row1, int col1, int row2, int col2) {
+        
+        
+        if (row1==0 && col1==0)
+            return mat[row2][col2];
+        else if (row1==0)
+            return mat[row2][col2]-mat[row2][col1-1];
+        else if(col1==0)
+            return mat[row2][col2]-mat[row1-1][col2];
+        else
+            return mat[row2][col2] +mat[row1-1][col1-1]-mat[row2][col1-1]-mat[row1-1][col2];
     }
 }
 
