@@ -1,42 +1,44 @@
 class Solution {
-     public int[] sumOfDistancesInTree(int n, int[][] edges) {
-        // build graph and declare results
-        final ArrayList<Integer>[] graph = new ArrayList[n];
-        final int[] count = new int[n];
-        Arrays.fill(count, 1);
-        final int[] answer = new int[n];
-        for (int i = 0; i < graph.length; i++) {
+    public int[] sumOfDistancesInTree(int n, int[][] edges) {
+        ArrayList<Integer>[] graph = new ArrayList[n];
+        for(int i = 0; i < graph.length; i++){
             graph[i] = new ArrayList<>();
         }
-        for (int[] edge : edges) {
-            graph[edge[0]].add(edge[1]);
-            graph[edge[1]].add(edge[0]);
+
+        for(int i = 0; i < edges.length; i++){
+            int u = edges[i][0];
+            int v = edges[i][1];
+
+            graph[u].add(v);
+            graph[v].add(u);
         }
 
-        postOrder(0, -1, graph, count, answer);
-        // after postOrder, only answer[root] is correct, so do preOrder to update answer
-        preOrder(0, -1, graph, count, answer, n);
+        int[] nodes = new int[n];
+        int[] res = new int[n];
+        helper1(graph, nodes, res, 0, -1);
+        helper2(graph, nodes, res, 0, -1);
 
-        return answer;
+        return res;   
     }
 
-    // set count et subTreeSum, here use answer[]
-    private void postOrder(int node, int parent, ArrayList<Integer>[] graph, int[] count, int[] answer) {
-        for (int child : graph[node]) {
-            if (child != parent) {
-                postOrder(child, node, graph, count, answer);
-                count[node] += count[child];
-                answer[node] += answer[child] + count[child];
+    public void helper1(ArrayList<Integer>[] graph, int[] nodes, int[] res, int src, int par){
+        for(int nbr: graph[src]){
+            if(nbr != par){
+                helper1(graph, nodes, res, nbr, src);
+                nodes[src] += nodes[nbr];
+                res[src] += nodes[nbr] + res[nbr];
             }
         }
+
+        nodes[src]++;
     }
 
-    private void preOrder(int node, int parent, ArrayList<Integer>[] graph, int[] count, int[] answer, int n) {
-        for (int child : graph[node]) {
-            if (child != parent) {
-                answer[child] = answer[node] + (n - count[child]) - count[child];
-                preOrder(child, node, graph, count, answer, n);
+    public void helper2(ArrayList<Integer>[] graph, int[] nodes, int[] res, int src, int par){
+        for(int nbr: graph[src]){
+            if(nbr != par){
+                res[nbr] = res[src] + (nodes.length - nodes[nbr]) - (nodes[nbr]);
+                helper2(graph, nodes, res, nbr, src);
             }
         }
-    }
+    }   
 }
