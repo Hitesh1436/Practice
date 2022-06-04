@@ -14,27 +14,20 @@
  * }
  */
 class Solution {
-    class Pair{
-        int nodes;
-        int coins;
+    private int helper(TreeNode root)
+    {
+        if(root==null)
+            return 0;
+        int left=helper(root.left);
+        int right=helper(root.right);
+        int excessOrDeficit=(left+right+root.val)-1;
+        ans+=Math.abs(excessOrDeficit);
+        return excessOrDeficit;
     }
-    int moves = 0;
+    int ans=0;
     public int distributeCoins(TreeNode root) {
+        ans=0;
         helper(root);
-        return moves;
-    }
-    private Pair helper(TreeNode node){
-        if(node == null) return new Pair();
-        
-        Pair lp = helper(node.left);
-        Pair rp = helper(node.right);
-        
-        Pair mp = new Pair();
-        mp.nodes = lp.nodes + rp.nodes + 1;
-        mp.coins = lp.coins + rp.coins + node.val;
-        
-        moves += Math.abs(mp.nodes - mp.coins);
-        
-        return mp;
+        return ans;
     }
 }
