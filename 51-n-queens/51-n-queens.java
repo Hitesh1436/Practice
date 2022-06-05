@@ -1,60 +1,47 @@
 class Solution {
     public List<List<String>> solveNQueens(int n) {
-        return queens(new boolean[n][n],0);
-    }
-    private List<List<String>>  queens(boolean[][] board,int row){
-        if (row == board.length) {
-            List<List<String>> list = new ArrayList<>();
-          list.add(display(board));
-          return list;
-        }
-            List<List<String>> ans = new ArrayList<>();
-            for (int col = 0; col < board.length; col++) {
-                if(ifSafe(board,row,col)){
-                    board[row][col] = true;
-                    ans.addAll(queens(board,row+1));
-                    board[row][col]= false;
-                }
-            }
-        return ans;
-    }
-    private  boolean ifSafe(boolean[][] board,int row,int col){
-        //chek for vertically
-        for (int i = 0; i < row; i++) {
-            if (board[i][col]){
-                return false;
-            }
-        }
-        //check for diagonal left
-        int maxleft = Math.min(row,col);
-        for (int i = 1 ; i <=maxleft ; i++) {
-            if (board[row-i][col-i]){
-                return false;
-            }
-        }
-        // diagonal right check
-        int maxright = Math.min(row, board.length-1-col);
-        for (int i = 1; i <=maxright ; i++) {
-            if (board[row-i][col+i]){
-                return false;
-            }
-        }
-        return true;
-    }
-    private  List<String> display(boolean[][] board){
-        List<String> list = new ArrayList<>();
-                String p ="";
-        for(boolean[] arr:board){
-            for (boolean element:arr){
-                if (element == true){
-                   p =p+"Q";
-                }else {
-                    p+=".";
-                }
-            }
-            list.add(p);
-            p="";
-        }
-        return list;
-    }
+        int chess[][] = new int[n][n];
+		List<List<String>> result = new ArrayList<>();
+		findWays(chess, new ArrayList<String>(), result, 0);
+		return result;
+	}
+	public static void findWays(int[][] chess, List<String> temp, List<List<String>> result, int row) {
+		if(row == chess.length) {
+			result.add(new ArrayList<>(temp));
+			return;
+		}
+		
+		for(int col = 0 ; col < chess.length ; col++) {
+			if(isQueenSafe(chess, row, col)) {
+				chess[row][col] = 1;
+				String str = "";
+				for(int i = 0 ; i < chess.length ; i++) {
+					if(i == col) {
+						str+='Q';
+					}else {
+						str+='.';
+					}
+				}
+				temp.add(str);
+				findWays(chess, temp, result, row+1);
+				temp.remove(str);
+				chess[row][col] = 0;
+			}
+		}
+	}
+	public static boolean isQueenSafe(int[][] chess, int row, int col) {
+		for(int i = row-1 , j = col ; i >= 0 ; i--) {
+			if(chess[i][j] == 1)
+				return false;
+		}
+		for(int i = row-1 , j = col-1 ; i>=0 && j>=0 ; i--, j--) {
+			if(chess[i][j] == 1)
+				return false;
+		}
+		for(int i = row-1 , j = col+1 ; i>=0 && j<chess.length ; i--, j++) {
+			if(chess[i][j] == 1)
+				return false;
+		}
+		return true;
+	}
 }
