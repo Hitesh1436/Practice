@@ -9,13 +9,15 @@
 class Solution {
         public void deleteNode(ListNode node) {
            if(node != null && node.next != null){
-        // putting the value of next node into our current node
         node.val = node.next.val;
-        
-        // our list looks like:
-        // 4->1->1->9->null
-        
-        // connecting node to 9, deleting the mid 1
+        //  Given 4 -> 5 -> 1-> 9
+        // Node to delete = 5
+
+        // step 1 :  4 -> 1 -> 1-> 9
+        // step 2 :  4 -> 1 -> 9
+
+        // step 1 :  4 -> 1 -> 1 -> 9
+        // we delete this------^
         node.next = node.next.next;
     }
   }
