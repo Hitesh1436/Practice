@@ -21,8 +21,10 @@ public class Solution {
 					
 			// If fast.next is null, then we cannot move fast pointer by 2 nodes, hence end
 			// If we check this in while loop's contition, then runtime error when fast == null
-			if (fast.next == null)
+			if (fast.next == null){
+                
 				return false;
+            }
 			
 			slow = slow.next;
 			fast = fast.next.next;
