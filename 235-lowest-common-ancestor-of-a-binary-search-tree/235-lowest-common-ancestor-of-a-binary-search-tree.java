@@ -10,8 +10,18 @@
 
 class Solution {
     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-    if (p.val > root.val && q.val > root.val) return lowestCommonAncestor(root.right, p, q);
-    else if (p.val < root.val && q.val < root.val) return lowestCommonAncestor(root.left, p, q);
-    else return root;
- }
+        TreeNode curr = root;
+        while(curr!=null){
+            if(p.val<curr.val && q.val<curr.val){
+                // left chlo
+                curr = curr.left;
+            }else if(p.val>curr.val && q.val>curr.val){
+                curr = curr.right;
+            }else{
+                // intersection node dega yh 
+                return curr;
+            }
+        }
+        return null;
+    }
 }
