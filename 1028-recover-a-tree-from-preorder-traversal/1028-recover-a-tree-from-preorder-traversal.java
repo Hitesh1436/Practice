@@ -14,50 +14,38 @@
  * }
  */
 class Solution {
-    private int index;
     public TreeNode recoverFromPreorder(String traversal) {
-        if(traversal == null || traversal.length() == 0) return null;
-        
-        index = 0;
-        return buildIt(traversal, 0); 
-    }
-    
-    private TreeNode buildIt(String data, int level){
-        if(index >= data.length()) return null; // end of string
-        
-        // get level
-        int dashs = getDashs(data);
-        if(dashs < level) return null; 
-        
-        // correct level, adjust index
-        index += dashs;
-        
-        // get number
-        int val = getNumber(data);
-        
-        TreeNode root = new TreeNode(val);
-        
-        root.left = buildIt(data, level+1);
-        root.right = buildIt(data, level+1); 
-        
-        return root; 
-    }
-    
-    // do not move index, we need to know first if the 
-    // level is correct.
-    private int getDashs(String s){
-        int dashs = 0;
-        while(s.charAt(index+dashs) == '-'){
-            dashs++;
+        if (traversal == null || traversal.isEmpty()) return null;
+        final int L = traversal.length();
+        TreeNode root = null;
+        Deque<TreeNode> stack = new ArrayDeque<>();
+        int idx = 0;
+        while (idx < L) {
+            int depth = 0;
+            while (idx < L && traversal.charAt(idx) == '-') {
+                idx++;
+                depth++;
+            }
+            int val = 0;
+            while (idx < L && traversal.charAt(idx) != '-') {
+                val = traversal.charAt(idx) - '0' + val * 10;
+                idx++;
+            }
+            while (stack.size() > depth) { // Pop the nodes at same level or below.
+                stack.pop();
+            }
+            TreeNode node = new TreeNode(val);
+            if (!stack.isEmpty()) {
+                TreeNode parent = stack.peek();
+                if (parent.left == null) {
+                    parent.left = node;
+                } else {
+                    parent.right = node;
+                }
+            }
+            stack.push(node);
+            if (root == null) root = node;
         }
-        return dashs;
-    }
-    
-    private int getNumber(String s){
-        StringBuilder sb = new StringBuilder();
-        while(index < s.length() && s.charAt(index) != '-'){
-            sb.append(s.charAt(index++));
-        }
-        return Integer.parseInt(sb.toString()); 
+        return root;
     }
 }
