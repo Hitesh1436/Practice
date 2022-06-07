@@ -8,20 +8,17 @@
  * }
  */
 
-class Solution {
-    public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
-        TreeNode curr = root;
-        while(curr!=null){
-            if(p.val<curr.val && q.val<curr.val){
-                // left chlo
-                curr = curr.left;
-            }else if(p.val>curr.val && q.val>curr.val){
-                curr = curr.right;
-            }else{
-                // intersection node dega yh 
-                return curr;
-            }
-        }
-        return null;
-    }
-}
+ class Solution {
+     public TreeNode lowestCommonAncestor(TreeNode root, TreeNode p, TreeNode q) {
+     if(p!=null && q!=null && root!=null){
+    
+      if((q.val>=root.val&&p.val<=root.val)||(q.val<=root.val&&p.val>=root.val))
+          return root;
+      if(p.val > root.val && q.val > root.val)
+          return lowestCommonAncestor(root.right, p, q);
+      if(p.val < root.val && q.val < root.val)
+          return lowestCommonAncestor(root.left, p, q);
+      }
+          return null;
+      }
+ }
