@@ -14,38 +14,36 @@
  * }
  */
 class Solution {
-    public TreeNode recoverFromPreorder(String traversal) {
-        if (traversal == null || traversal.isEmpty()) return null;
-        final int L = traversal.length();
-        TreeNode root = null;
-        Deque<TreeNode> stack = new ArrayDeque<>();
-        int idx = 0;
-        while (idx < L) {
-            int depth = 0;
-            while (idx < L && traversal.charAt(idx) == '-') {
-                idx++;
-                depth++;
+    // Require a Static Integer Because Left Node is Easily Identified But to Identify the Right Node.
+    public static int index;
+    public TreeNode construct(String traversal,int steps)
+    {
+        if(index>=traversal.length()){return null;}
+        else
+        {
+            for(int i=index;i<index+steps;i++)
+            {
+                //If Any where in Between we get a value !='-' then It Coresponds to Higher Level Not The Child Node so simply return null.
+                if(traversal.charAt(i)!='-'){return null;}
             }
-            int val = 0;
-            while (idx < L && traversal.charAt(idx) != '-') {
-                val = traversal.charAt(idx) - '0' + val * 10;
-                idx++;
+            index=index+steps;
+            int val=0;
+            // Extracting out the Value of The Current Node
+            while(index<traversal.length() && traversal.charAt(index)!='-')
+            {
+                val=val*10+(traversal.charAt(index)-48);
+                index++;
             }
-            while (stack.size() > depth) { // Pop the nodes at same level or below.
-                stack.pop();
-            }
-            TreeNode node = new TreeNode(val);
-            if (!stack.isEmpty()) {
-                TreeNode parent = stack.peek();
-                if (parent.left == null) {
-                    parent.left = node;
-                } else {
-                    parent.right = node;
-                }
-            }
-            stack.push(node);
-            if (root == null) root = node;
+            TreeNode root=new TreeNode(val);
+            //Next Child Should be Found after steps+1 Dashes in The String
+            root.left=construct(traversal,steps+1);
+            root.right=construct(traversal,steps+1);
+            return root;
         }
-        return root;
+    }
+    public TreeNode recoverFromPreorder(String traversal) 
+    {
+        index=0;
+        return construct(traversal,0);   
     }
 }
