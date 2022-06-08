@@ -16,6 +16,7 @@
 class Solution {
     int sum =0;    
     public TreeNode convertBST(TreeNode root) {
+        sum =0;
         travel(root);
         return root;
     }
