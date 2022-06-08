@@ -118,29 +118,30 @@ class Node
     }
 }*/
 
-class Solution{
-
+class Solution
+{
     //Function to return the lowest common ancestor in a Binary Tree.
 	Node lca(Node root, int n1,int n2){
-	 if(root == null){
-	     return null;
-	 }
-     if(root.data == n1||root.data == n2){
-         return root;
-     }
-     Node leftLca  = lca(root.left,n1,n2);
-     Node rightLca = lca(root.right,n1,n2);
-
-     if(leftLca != null && rightLca != null){
-         return root;
-         
-     }
-     if(leftLca != null){
-         return leftLca;
-     }
-     else{
-         return rightLca;
-     }
-   } 
+	
+	Node lca = helper(root,n1,n2);
+	return lca;
+	}
+	Node helper(Node node,int n1,int n2){
+	    if(node == null){
+	        return null;
+	    }
+	    Node left  = helper(node.left,n1,n2);
+	    Node right = helper(node.right,n1,n2);
+	    
+	    if(node.data == n1 || node.data == n2){
+	        return node;
+	    }else if(left != null && right != null){
+	        return node;
+	    }else if(left != null || right != null){
+	        return left != null ? left : right;
+	    }else{
+	        return null;
+	    }
+	}
 }
 
