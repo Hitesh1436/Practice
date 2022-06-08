@@ -14,36 +14,31 @@
  * }
  */
 class Solution {
-    // Require a Static Integer Because Left Node is Easily Identified But to Identify the Right Node.
-    public static int index;
-    public TreeNode construct(String traversal,int steps)
-    {
-        if(index>=traversal.length()){return null;}
-        else
-        {
-            for(int i=index;i<index+steps;i++)
-            {
-                //If Any where in Between we get a value !='-' then It Coresponds to Higher Level Not The Child Node so simply return null.
-                if(traversal.charAt(i)!='-'){return null;}
-            }
-            index=index+steps;
-            int val=0;
-            // Extracting out the Value of The Current Node
-            while(index<traversal.length() && traversal.charAt(index)!='-')
-            {
-                val=val*10+(traversal.charAt(index)-48);
-                index++;
-            }
-            TreeNode root=new TreeNode(val);
-            //Next Child Should be Found after steps+1 Dashes in The String
-            root.left=construct(traversal,steps+1);
-            root.right=construct(traversal,steps+1);
-            return root;
-        }
+    int i=0;
+    public TreeNode recoverFromPreorder(String traversal) {
+        return helper(traversal,0);
     }
-    public TreeNode recoverFromPreorder(String traversal) 
-    {
-        index=0;
-        return construct(traversal,0);   
+    private TreeNode helper(String str,int depth){
+        int d=0;   // d -> dashes 
+        while(i+d<str.length() && str.charAt(i+d)== '-'){
+            d++;
+        }
+        if(d != depth){
+            return null;
+        }
+        //  nd -> non-dashes
+        int nd =0;
+        while(i+d+nd < str.length()&& str.charAt(i+d+nd)!='-'){
+            nd++;
+        }
+        int val = Integer.parseInt(str.substring(i+d,i+d+nd));  // node ki value bnai h 
+        i = i+d+nd;  // bnne ke baad i ko next node bnne ke liye move krwa dia
+        
+        
+        TreeNode node = new TreeNode(val);
+        node.left = helper(str,depth+1);
+        node.right = helper(str,depth+1);
+        
+        return node;
     }
 }
