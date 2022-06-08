@@ -14,7 +14,11 @@
  * }
  */
 class Solution {
-    int sum =0;
+    int sum =0;    
+    public TreeNode convertBST(TreeNode root) {
+        travel(root);
+        return root;
+    }
     private void travel(TreeNode node){
         if(node == null){
             return;
@@ -23,10 +27,5 @@ class Solution {
         sum = sum + node.val;
         node.val = sum;
         travel(node.left);
-    }
-    
-    public TreeNode convertBST(TreeNode root) {
-        travel(root);
-        return root;
     }
 }
