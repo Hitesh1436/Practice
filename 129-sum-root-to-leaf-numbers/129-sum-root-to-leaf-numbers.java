@@ -14,21 +14,21 @@
  * }
  */
 class Solution {
-    int total =0;
+    int sum =0;
     public int sumNumbers(TreeNode root) {
-        total =0;
+        sum =0;
         helper(root,0);
-        return total;
+        return sum;
     }
-    private void helper(TreeNode node,int sum){
+    private void helper(TreeNode node,int num){
         if(node == null) return;
         
-        sum = sum * 10 + node.val;
+        helper(node.left,num * 10 + node.val);
+        helper(node.right,num * 10 + node.val);
+        
         if(node.left == null && node.right == null){
-            total = total + sum;
-            return;
+            num = num * 10 + node.val;
+            sum += num;
         }
-        helper(node.left,sum);
-        helper(node.right,sum);
     }
 }
