@@ -14,27 +14,38 @@
  * }
  */
 class Solution {
+    class Pair{
+        long min;
+        long max;
+    }
+    long maxWidth = 0;
     public int widthOfBinaryTree(TreeNode root) {
-        if(root == null) return 0;
-
-        int result = Integer.MIN_VALUE;
-
-        ArrayDeque<Pair<TreeNode, Integer>> q = new ArrayDeque<Pair<TreeNode, Integer>>();
-        q.add(new Pair<>(root, 0));
-
-        while(!q.isEmpty()) {
-            int size = q.size();
-            result = Math.max(result, (q.getLast().getValue() - q.getFirst().getValue() + 1));
-
-            for(int i = 0; i < size; i++) {
-                Pair<TreeNode, Integer> pair = q.poll();
-                TreeNode item = pair.getKey();
-                int index = pair.getValue();
-
-                if(item.left != null) q.add(new Pair<>(item.left, 2*index+1));
-                if(item.right != null) q.add(new Pair<>(item.right, 2*index+2));
-            }
+        HashMap<Integer,Pair> map = new HashMap<>();
+        maxWidth = 0;
+        helper(root,1,1,map);
+        return (int)maxWidth;
+    }
+    private void helper(TreeNode node,int level,long idx,HashMap<Integer,Pair> map){
+        if(node == null){
+            return;
         }
-        return result;
+        helper(node.left,level + 1, 2*idx,map);
+        helper(node.right,level + 1, 2*idx+1,map);
+        
+        Pair p = null;
+        if(map.containsKey(level)){
+            p = map.get(level);
+            p.min = Math.min(p.min,idx);
+            p.max = Math.max(p.max,idx);
+        }else{
+            p = new Pair();
+            p.min = idx;
+            p.max = idx;
+            map.put(level,p);
+        }
+        long width = (int)(p.max - p.min) + 1;
+        if(width > maxWidth){
+            maxWidth = width;
+        }
     }
 }
