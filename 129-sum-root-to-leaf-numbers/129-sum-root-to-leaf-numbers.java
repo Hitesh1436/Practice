@@ -13,22 +13,22 @@
  *     }
  * }
  */
-public class Solution {
-    int ans;
+class Solution {
+    int total =0;
     public int sumNumbers(TreeNode root) {
-        ans = 0;
-        helper(root, 0);
-        return ans;
+        total =0;
+        helper(root,0);
+        return total;
     }
-    
-    void helper(TreeNode root, int sum) {
-        if (root == null) return;
-        sum = sum * 10 + root.val;
-        if (root.left == null && root.right == null) {
-            ans += sum;
+    private void helper(TreeNode node,int sum){
+        if(node == null) return;
+        
+        sum = sum * 10 + node.val;
+        if(node.left == null && node.right == null){
+            total = total + sum;
             return;
         }
-        helper(root.left, sum);
-        helper(root.right, sum);
+        helper(node.left,sum);
+        helper(node.right,sum);
     }
 }
