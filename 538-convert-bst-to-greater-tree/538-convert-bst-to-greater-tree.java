@@ -25,8 +25,8 @@ class Solution {
             return;
         }
          helper(node.right);
-         sum += node.val;
-        node.val = sum;
+         node.val += sum;
+        sum = node.val;
         helper(node.left);
     }
 }
