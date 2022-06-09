@@ -14,30 +14,30 @@
  * }
  */
 class Solution {
-    public List<TreeNode> allPossibleFBT(int n) {
-        List<TreeNode> ans = new ArrayList<>();
-        if(n == 0 || n % 2 == 0){
-            return ans;
-        }
+
+Map<Integer , List<TreeNode>> map = new HashMap<>();
+public List<TreeNode> allPossibleFBT(int n) {
+    
+    if(!map.containsKey(n)){
+        List<TreeNode> res = new ArrayList<>();
+
         if(n == 1){
-            ans.add(new TreeNode(0));
-            return ans;
-        }
-        for(int i=1;i<n;i+=2){
-            // left ke liye call
-            List<TreeNode> left = allPossibleFBT(i);
-            // right ke bche hue ke liye call
-             List<TreeNode> right = allPossibleFBT(n-i-1);
-            
-            for(TreeNode lt : left){
-                for(TreeNode rt : right){
-                    TreeNode node = new TreeNode(0);
-                        node.left = lt;
-                    node.right = rt;
-                    ans.add(node);
+            res.add(new TreeNode(0,null,null));
+        } else {
+            for(int i = 1 ; i < n ; i += 2){
+                List<TreeNode> leftSubtree = allPossibleFBT(i);
+                List<TreeNode> rightSubtree = allPossibleFBT(n - i - 1);
+
+                for(TreeNode left : leftSubtree){
+                    for(TreeNode right : rightSubtree){
+                        res.add(new TreeNode(0,left,right));
+                    }
                 }
             }
         }
-        return ans;
+        map.put(n , res);
     }
+    
+    return map.get(n);
+ }
 }
