@@ -14,19 +14,19 @@
  * }
  */
 class Solution {
-    int sum =0;    
+    int sum =0;
     public TreeNode convertBST(TreeNode root) {
         sum =0;
-        travel(root);
+        helper(root);
         return root;
     }
-    private void travel(TreeNode node){
+    private void helper(TreeNode node){
         if(node == null){
             return;
         }
-        travel(node.right);
-        sum = sum + node.val;
+         helper(node.right);
+         sum += node.val;
         node.val = sum;
-        travel(node.left);
+        helper(node.left);
     }
 }
