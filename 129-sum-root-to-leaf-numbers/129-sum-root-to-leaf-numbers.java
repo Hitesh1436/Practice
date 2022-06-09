@@ -17,18 +17,20 @@ class Solution {
     int sum =0;
     public int sumNumbers(TreeNode root) {
         sum =0;
-        helper(root,0);
+        helper(root,new StringBuilder());
         return sum;
     }
-    private void helper(TreeNode node,int num){
+    private void helper(TreeNode node,StringBuilder sb){
         if(node == null) return;
         
-        helper(node.left,num * 10 + node.val);
-        helper(node.right,num * 10 + node.val);
+        sb.append(node.val);
+        helper(node.left,sb);
+        helper(node.right,sb);
         
         if(node.left == null && node.right == null){
-            num = num * 10 + node.val;
+           int num = Integer.parseInt(sb.toString());
             sum += num;
         }
+        sb.deleteCharAt(sb.length()-1);
     }
 }
