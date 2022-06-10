@@ -1,22 +1,28 @@
 // Using Sliding Window Concept
 class Solution {
     public int lengthOfLongestSubstring(String s) {
-        int left = 0;  // start of window
-        int right =0;  // end of window
-        int ans =0;
-        HashSet<Character> set = new HashSet<>();
-        while(right<s.length()){
-            if(!set.contains(s.charAt(right))){
-                set.add(s.charAt(right));
-                 ans = Math.max(ans,set.size());
-                right++;
-            }else{
-                left++;
-                right = left;
-                set.clear();
-            }
+        if (s == null) {
+            throw new IllegalArgumentException("Input string is null");
         }
-        return ans;
+
+        int len = s.length();
+        if (len <= 1) {
+            return len;
+        }
+
+        HashMap<Character, Integer> map = new HashMap<>();
+        int start = 0;
+        int maxLen = 0;
+
+        for (int end = 0; end < len; end++) {
+            char eChar = s.charAt(end);
+            if (map.containsKey(eChar)) {
+                start = Math.max(start, map.get(eChar) + 1);
+            }
+            map.put(eChar, end);
+            maxLen = Math.max(maxLen, end - start + 1);
+        }
+        return maxLen;
     }
 }
 
