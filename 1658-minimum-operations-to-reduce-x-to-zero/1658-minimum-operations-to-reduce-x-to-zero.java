@@ -1,23 +1,29 @@
 class Solution {
     public int minOperations(int[] nums, int x) {
-        int total = 0;
-        for(int num : nums){
-            total += num;
-        }
         int n = nums.length;
-        int max = -1;
-        int lt = 0;
-        int curr = 0;
-        for(int rt=0;rt<n;rt++){
-            curr +=nums[rt];
-            while(curr > total-x && lt <= rt){
-                curr -=nums[lt];
-                lt ++;
-            }
-            if(curr == total -x){
-                max = Math.max(max,rt-lt +1);
-            }
+        
+        int sum = 0;
+        for (int i = 0; i < n; i++) 
+            sum += nums[i];
+        int target = sum - x;
+        
+        if (target < 0)
+            return -1;
+        if (target == 0)
+            return n;
+        
+        int left = 0, right = 0;
+        int maximum = 0;
+        while (right < n) {
+            target -= nums[right++];
+            
+            while (target < 0)
+                target += nums[left++];
+            
+            if (target == 0)
+                maximum = Math.max(maximum, right - left);
         }
-        return max != -1 ? n - max : -1;
+        
+        return maximum == 0 ? -1 : nums.length - maximum;
     }
 }
