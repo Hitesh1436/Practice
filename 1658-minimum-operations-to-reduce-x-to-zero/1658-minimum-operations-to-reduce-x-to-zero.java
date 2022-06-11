@@ -1,7 +1,6 @@
 class Solution {
     public int minOperations(int[] nums, int x) {
-        int n = nums.length;
-        
+        int n = nums.length;   
         int sum = 0;
         for (int i = 0; i < n; i++) 
             sum += nums[i];
@@ -13,7 +12,7 @@ class Solution {
             return n;
         
         int left = 0, right = 0;
-        int maximum = 0;
+        int max = 0;
         while (right < n) {
             target -= nums[right++];
             
@@ -21,9 +20,8 @@ class Solution {
                 target += nums[left++];
             
             if (target == 0)
-                maximum = Math.max(maximum, right - left);
+                max = Math.max(max, right - left);
         }
-        
-        return maximum == 0 ? -1 : nums.length - maximum;
+        return max == 0 ? -1 : nums.length - max;
     }
 }
