@@ -16,9 +16,10 @@ class Solution {
         while (right < n) {
             target -= nums[right++];
             
-            while (target < 0)
+            while (target < 0){
                 target += nums[left++];
-            
+            }
+                
             if (target == 0)
                 max = Math.max(max, right - left);
         }
