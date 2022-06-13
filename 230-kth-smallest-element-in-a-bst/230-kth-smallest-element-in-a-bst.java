@@ -15,7 +15,8 @@
  */
 class Solution {
     public int kthSmallest(TreeNode root, int k) {
-     TreeNode curr = root;
+        // using Morris Traversal
+        TreeNode curr = root;
         int count =0;
         while(curr != null){
             if(curr.left == null){
@@ -25,18 +26,19 @@ class Solution {
                 }
                 curr = curr.right;
             }else{
+                // iop - inOrder predecessor
                 TreeNode iop = curr.left;
                 while(iop.right != null && iop.right != curr){
                     iop = iop.right;
                 }
                 if(iop.right == null){
-                    iop.right = curr;   // thread bnadia
+                    iop.right = curr;
                     curr = curr.left;
                 }else{
                     iop.right = null;
-                    count ++;
+                    count++;
                     if(count == k){
-                        return curr.val;
+                            return curr.val;
                     }
                     curr = curr.right;
                 }
