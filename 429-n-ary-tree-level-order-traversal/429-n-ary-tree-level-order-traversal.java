@@ -18,22 +18,27 @@ class Node {
 */
 
 class Solution {
+    private List<List<Integer>> levels;
     public List<List<Integer>> levelOrder(Node root) {
-         List<List<Integer>> ans = new ArrayList<>();
-        if(root == null) return ans;
-        Queue<Node> qu = new LinkedList<>();
-        qu.add(root);
-        while(qu.size()>0){
-            int size = qu.size();
-            List<Integer>al = new ArrayList<>();
-            for(int i=0;i<size;i++){
-                for(Node x : qu.peek().children){
-                    qu.add(x);
-                }
-                al.add(qu.remove().val);
-            }
-            ans.add(al);
+        levels = new ArrayList<>();
+        search(root, 0);
+        return levels;
+    }
+
+    private void search(Node root, int currentLevel) {
+        if (root == null) return;
+
+        if (levels.size() <= currentLevel) {
+            List<Integer> newLevel = new ArrayList<>();
+            newLevel.add(root.val);
+            levels.add(newLevel);
         }
-        return ans;
+        else  {
+            levels.get(currentLevel).add(root.val);
+        }
+
+        for (Node child : root.children) {
+            search(child, currentLevel + 1);
+        }
     }
 }
