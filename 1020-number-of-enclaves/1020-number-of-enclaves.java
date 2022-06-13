@@ -1,40 +1,35 @@
 class Solution {
-    int len =0;
-    boolean flag = true;
-    public int numEnclaves(int[][] grid) {
-        int n = grid.length;
-        int m = grid[0].length;
-        boolean [][]vis = new boolean[n][m];
-        int count=0;
-        for(int i=0;i<n;i++){
-            for(int j=0;j<m;j++){
-                if(vis[i][j]== false && grid[i][j]==1){
-                    flag = true;
-                    len =0;
-                    traverse(grid,vis,i,j);
-                    if(flag == true){
-                         count+= len;
-                    }
+    public int numEnclaves(int[][] arr) {
+//    first of all we will remove zeros from the corners of the matrix
+        for(int i=0;i<arr.length;i++){
+            for(int j =0;j<arr[0].length;j++){
+                if(i==0 ||j==0 ||i==arr.length-1 || j==arr[0].length-1){
+                    DFS(arr,i,j);
                 }
             }
         }
-        return count;
+        
+        int count=0;
+    for(int i=0;i<arr.length;i++){
+        for(int j=0;j<arr[i].length;j++){
+            if(arr[i][j]==1){
+                count++;
+            }
+        }
     }
-    private void traverse(int[][] grid,boolean [][]vis,int i,int j){
-        if(i<0 || j<0 || i>=grid.length || j>=grid[0].length){
-            flag = false;
-            return;
-        }else if(vis[i][j]== true){
-            return;
-        }else if(grid[i][j]==0){
-            return;
+    
+    return count;
+    }
+    
+    public void DFS(int [][] arr,int i ,int j ){
+        if(i<0 || j<0 ||i>=arr.length || j>=arr[0].length || arr[i][j]==0){
+            return ;
         }
         
-        vis[i][j] = true;
-        len++;
-        traverse(grid,vis,i,j+1);
-        traverse(grid,vis,i,j-1);
-        traverse(grid,vis,i+1,j);
-        traverse(grid,vis,i-1,j);
+        arr[i][j]=0;
+      DFS(arr,i-1,j);//up
+      DFS(arr,i,j+1);//right
+      DFS(arr,i+1,j);//down
+      DFS(arr,i,j-1);//left
     }
 }
