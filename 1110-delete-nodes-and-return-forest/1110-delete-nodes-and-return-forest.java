@@ -13,6 +13,9 @@
  *     }
  * }
  */
+
+//1. When and from where to remove the node?? I knew that if I have to delete any node I have to assign it to null. But how could I do that the same time I am checking if the node has to be deleted or not. We can't do that. What we have to do is to get to know if the leftNode/rightNode is deleted or not. If yes then assign the current node's left/right node to null.
+//2. When to add the node?? We have to add the node only when the current node is going to be deleted. So if the left node is not deleted add it to the list. Same is the scenario for right node.
 class Solution {
     List<TreeNode> ans = new ArrayList<>();
     HashSet<Integer> set = new HashSet<>();
@@ -43,6 +46,5 @@ class Solution {
             return null;
         }
         return node;
-    }
-    
+    }  
 }
