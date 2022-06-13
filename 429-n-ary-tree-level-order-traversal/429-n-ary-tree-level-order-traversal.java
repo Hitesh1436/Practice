@@ -26,14 +26,14 @@ class Solution {
 		Queue<Node> qu = new LinkedList<>();
 		qu.add(root);       //start by adding the root
 		while (qu.size()>0) {
-			List<Integer> current = new ArrayList<>();  // inorder to store the current level items
+			List<Integer> al = new ArrayList<>();  // inorder to store the current level items
 			int size = qu.size();
 			for (int i=0; i<size; i++) {
 				Node temp = qu.remove(); // pop out the first element from the queue.
-				current.add(temp.val);   // add the element into current list.
+				al.add(temp.val);   // add the element into current list.
 				qu.addAll(temp.children); // add all the children of the node to the queue.
 			}
-			ans.add(current);  // we have all the elements of current level and add it into the final result
+			ans.add(al);  // we have all the elements of current level and add it into the final result
 		}
 		return ans;
     }
