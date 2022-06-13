@@ -1,3 +1,16 @@
+class Solution {
+    public int minimumTotal(List<List<Integer>> triangle) {
+        int n = triangle.size();
+        int [][]dp = new int[n+1][n+1];
+            for(int i=n-1;i>=0;i--){
+                for(int j=0;j<=i;j++){
+                    dp[i][j] = Math.min(dp[i+1][j],dp[i+1][j+1]) + triangle.get(i).get(j);
+                }
+            }
+        return dp[0][0];
+    }
+}
+
 // 1. Recursion
 // Time complexity: O(2^N)
 // Space complexity: O(N)
@@ -89,24 +102,24 @@
 // Time complexity: O(N^2)
 // Space complexity: O(N)
 
-class Solution {
-    public int minimumTotal(List<List<Integer>> triangle) {
-        // create dp table with size of the largest column (which is number of rows)
-        int[] table = new int[triangle.size() + 1];
-        Arrays.fill(table, 0);
+// class Solution {
+//     public int minimumTotal(List<List<Integer>> triangle) {
+//         // create dp table with size of the largest column (which is number of rows)
+//         int[] table = new int[triangle.size() + 1];
+//         Arrays.fill(table, 0);
                 
-        // iterate over the entire triangle from bottom to top
-        for (int row = triangle.size() - 1; row >= 0; row--) {
-            for (int col = 0; col <= row; col++) {
-                // either go to [row + 1, col] or [row + 1, col + 1]
-                int remain = Math.min(table[col],table[col + 1]);
+//         // iterate over the entire triangle from bottom to top
+//         for (int row = triangle.size() - 1; row >= 0; row--) {
+//             for (int col = 0; col <= row; col++) {
+//                 // either go to [row + 1, col] or [row + 1, col + 1]
+//                 int remain = Math.min(table[col],table[col + 1]);
                 
-                // combine answer with current value
-                table[col] = triangle.get(row).get(col) + remain;
-            }
-        }
+//                 // combine answer with current value
+//                 table[col] = triangle.get(row).get(col) + remain;
+//             }
+//         }
         
-        return table[0];
-    }
-}
+//         return table[0];
+//     }
+// }
 
