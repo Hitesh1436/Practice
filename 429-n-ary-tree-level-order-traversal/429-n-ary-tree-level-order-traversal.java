@@ -24,12 +24,12 @@ class Solution {
 			return ans;
 		// 2. Initialize queue for BFS
 		Queue<Node> qu = new LinkedList<>();
-		qu.add(root); //start by adding the root
-		while (!qu.isEmpty()) {
-			List<Integer> current = new ArrayList<>(); // inorder to store the current level items
+		qu.add(root);       //start by adding the root
+		while (qu.size()>0) {
+			List<Integer> current = new ArrayList<>();  // inorder to store the current level items
 			int size = qu.size();
 			for (int i=0; i<size; i++) {
-				Node temp = qu.poll(); // pop out the first element from the queue.
+				Node temp = qu.remove(); // pop out the first element from the queue.
 				current.add(temp.val);   // add the element into current list.
 				qu.addAll(temp.children); // add all the children of the node to the queue.
 			}
