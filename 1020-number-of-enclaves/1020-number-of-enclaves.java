@@ -1,10 +1,10 @@
 class Solution {
     public int numEnclaves(int[][] arr) {
-//    first of all we will remove zeros from the corners of the matrix
+// first of all we will remove zeros from the corners of the matrix
         for(int i=0;i<arr.length;i++){
             for(int j =0;j<arr[0].length;j++){
                 if(i==0 ||j==0 ||i==arr.length-1 || j==arr[0].length-1){
-                    DFS(arr,i,j);
+                    dfsTraversal(arr,i,j);
                 }
             }
         }
@@ -17,19 +17,17 @@ class Solution {
             }
         }
     }
-    
     return count;
-    }
-    
-    public void DFS(int [][] arr,int i ,int j ){
+}
+    public void dfsTraversal(int [][] arr,int i ,int j ){
         if(i<0 || j<0 ||i>=arr.length || j>=arr[0].length || arr[i][j]==0){
             return ;
         }
         
         arr[i][j]=0;
-      DFS(arr,i-1,j);//up
-      DFS(arr,i,j+1);//right
-      DFS(arr,i+1,j);//down
-      DFS(arr,i,j-1);//left
+      dfsTraversal(arr,i-1,j);//up
+      dfsTraversal(arr,i,j+1);//right
+      dfsTraversal(arr,i+1,j);//down
+      dfsTraversal(arr,i,j-1);//left
     }
 }
