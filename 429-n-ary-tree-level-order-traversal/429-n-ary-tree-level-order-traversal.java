@@ -19,23 +19,22 @@ class Node {
 
 class Solution {
     public List<List<Integer>> levelOrder(Node root) {
-        // 1. initialise our result holding variable
-		List<List<Integer>> result = new ArrayList<>();
+		List<List<Integer>> ans = new ArrayList<>();
 		if (root == null)
-			return result;
+			return ans;
 		// 2. Initialize queue for BFS
-		Queue<Node> queue = new LinkedList<>();
-		queue.offer(root); //start by adding the root
-		while (!queue.isEmpty()) {
+		Queue<Node> qu = new LinkedList<>();
+		qu.add(root); //start by adding the root
+		while (!qu.isEmpty()) {
 			List<Integer> current = new ArrayList<>(); // inorder to store the current level items
-			int size = queue.size();
+			int size = qu.size();
 			for (int i=0; i<size; i++) {
-				Node temp = queue.poll(); // pop out the first element from the queue.
+				Node temp = qu.poll(); // pop out the first element from the queue.
 				current.add(temp.val);   // add the element into current list.
-				queue.addAll(temp.children); // add all the children of the node to the queue.
+				qu.addAll(temp.children); // add all the children of the node to the queue.
 			}
-			result.add(current);  // we have all the elements of current level and add it into the final result
+			ans.add(current);  // we have all the elements of current level and add it into the final result
 		}
-		return result;
+		return ans;
     }
 }
