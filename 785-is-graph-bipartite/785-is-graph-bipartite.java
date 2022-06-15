@@ -1,65 +1,48 @@
 class Solution {
-    
-     /*
-   -1  ->unvis
-    1  ->blue
-    0  ->red
-    
-    */
-    
-    public class pair{
-        int vertex;
-        int color;
-        pair(int vertex,int color){
-            this.vertex = vertex;
-            this.color=color;
+    public boolean isBipartite(int[][] graph) {
+         int [] vis = new int [graph.length];
+        
+        for(int v=0;v<graph.length;v++){
+            if(vis[v] == 0){
+                boolean isBip =  traverseBFS(graph,vis,v);
+                if(isBip == false){
+                    return false;
+                }
+            }
+        }
+        return true;
+    }
+    class Pair{
+        int v;
+        int clr;
+        
+        Pair(int v,int clr){
+            this.v = v;
+            this.clr = clr;
         }
     }
-    
-    public boolean isBipartite(int[][] graph) {
-        int n = graph.length;
-        int [] vis = new int[n];
-        Arrays.fill(vis,-1); // initially bhrdi vis array -1 se mns unvisited hn sab
+    private boolean traverseBFS(int[][]graph,int []vis,int v){
+        ArrayDeque<Pair> qu = new ArrayDeque<>();
         
-        
-        // graph components mn hoskts h toh sbhi components ko dkha pdega 
-        
-        for(int v=0;v<n;v++){
-            if(vis[v]==-1){
-                // unvisited hn toh 
-                // BFS mtlb Remove Mark/Work and Add
-                
-                Queue<pair> qu = new LinkedList<>();
-                // seeding 
-                qu.add(new pair(v,0));
-                
-                
-                while(qu.size()>0){
-                    int size = qu.size();
-                    while(size-- >0){
-                        // remove
-                        pair rem = qu.remove();
-                        
-                        if(vis[rem.vertex]!=-1){
-                            // visited
-                            if(vis[rem.vertex]== rem.color){
-                                // mtlb agr remove vale ka color and iska color same h                                    toh koi dikkt ni hogi
-                                continue;
-                            }else{
-                                return false;
-                            }
-                        }
-                        // agr vis ni h toh ab mark kro
-                        vis[rem.vertex] = rem.color;
-                        int src = rem.vertex;
-                        for(int e : graph[src]){
-                            if(vis[e]==-1){
-                                // add krao
-                                qu.add(new pair(e,1-rem.color));
-                                // 0 dega mtlb red 1 toh blue 
-                            }
-                        }
-                    }
+        qu.add(new Pair(v,1));  // 1 mns red and -1 mns green 
+        while(qu.size()>0){
+            // r
+            Pair rem = qu.remove();
+            // m*
+            if(vis[rem.v] != 0){
+                int oldClr = vis[rem.v];
+                int newClr = rem.clr;
+                if(oldClr == newClr){
+                    continue;
+                }else{
+                    return false;
+                }
+            }
+            vis[rem.v] = rem.clr;
+            
+            for(int nbr : graph[rem.v]){
+                if(vis[nbr] == 0){
+                    qu.add(new Pair(nbr,rem.clr * -1));
                 }
             }
         }
