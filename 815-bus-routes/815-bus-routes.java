@@ -13,11 +13,11 @@ class Solution {
             return 0;
         }
         // yh hai stop , buses ke liye ki konse stop pr kon konsi bus jati hn
-        HashMap<Integer,HashSet<Integer>> map = new HashMap<>();
+        HashMap<Integer,ArrayList<Integer>> map = new HashMap<>();
         for(int bus =0;bus<routes.length;bus++){
             for(int stop : routes[bus]){
                 if(map.containsKey(stop) == false){
-                    map.put(stop,new HashSet<>());
+                    map.put(stop,new ArrayList<>());
                 }
                 map.get(stop).add(bus);
             }
@@ -38,9 +38,9 @@ class Solution {
                     return rem.csf;
                 }
             }
-            for(int rstop : routes[rem.bus]){
-                for(int bus : map.get(rstop)){
-                    if(vis[bus] == false){
+            for(int rstop : routes[rem.bus]){  // yh btarha h ki bus konse stop pr jati h
+                for(int bus : map.get(rstop)){ // yh btarha h ki un stops pr konsi bus ati h
+                    if(vis[bus] == false){  // unc=visited h toh add krdo 
                         qu.add(new Pair(bus,rem.csf + 1));
                     }
                 }
