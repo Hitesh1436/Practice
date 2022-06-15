@@ -1,41 +1,51 @@
 class Solution {
-    Map<Integer,List<Integer>> graph=new HashMap<>();
-    
-    public int numBusesToDestination(int[][] routes, int S, int T) {
-        createGraph(routes);
-        HashSet<Integer> visited = new HashSet<>();
-        Queue<Integer> q = new LinkedList<>();
-        q.add(S);
-        int ans=0;
-        while(!q.isEmpty()){
-            int n=q.size();
-            for(int i=0;i<n;i++){
-                int stop =q.poll();
-                //System.out.println(stop);
-                
-                if(stop==T)return ans;
-                List<Integer> buses = graph.get(stop);
-                for(int bus : buses ){
-                    if(visited.contains(bus)) continue;
-                    visited.add(bus);
-                    for(int j=0;j<routes[bus].length;j++){
-                        q.add(routes[bus][j]);
+    class Pair{
+        int bus;
+        int csf;  // csf -> count so far
+        
+        Pair(int bus,int csf){
+            this.bus = bus;
+            this.csf = csf;
+        }
+    }
+    public int numBusesToDestination(int[][] routes, int source, int target) {
+        if(source == target){
+            return 0;
+        }
+        // yh hai stop , buses ke liye ki konse stop pr kon konsi bus jati hn
+        HashMap<Integer,HashSet<Integer>> map = new HashMap<>();
+        for(int bus =0;bus<routes.length;bus++){
+            for(int stop : routes[bus]){
+                if(map.containsKey(stop) == false){
+                    map.put(stop,new HashSet<>());
+                }
+                map.get(stop).add(bus);
+            }
+        }
+        ArrayDeque<Pair> qu = new ArrayDeque<>();
+        for(int bsrc : map.get(source)){
+            qu.add(new Pair(bsrc,1));   // bsrc -> bus source
+        }
+        boolean []vis = new boolean[routes.length];
+        while(qu.size()>0){
+            Pair rem = qu.remove();
+            if(vis[rem.bus] == true){
+                continue;
+            }
+            vis[rem.bus] = true;
+            for(int rstop : routes[rem.bus]){
+                if(rstop == target){
+                    return rem.csf;
+                }
+            }
+            for(int rstop : routes[rem.bus]){
+                for(int bus : map.get(rstop)){
+                    if(vis[bus] == false){
+                        qu.add(new Pair(bus,rem.csf + 1));
                     }
                 }
-                
             }
-            ans++;
         }
         return -1;
-    }
-    
-    //create the graph : which stop belong to which bus and tgen we can run the bfs on it 
-    public void createGraph(int[][] routes){
-        for(int i=0;i<routes.length;i++){
-            for(int j=0;j<routes[i].length;j++){
-                graph.putIfAbsent(routes[i][j],new ArrayList<Integer>());
-                graph.get(routes[i][j]).add(i);
-            }
-        }
     }
 }
