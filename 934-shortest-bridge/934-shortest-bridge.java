@@ -1,74 +1,35 @@
 class Solution {
-    public class Pair{
-        int x;
-        int y;
-        Pair(int x,int y){
-            this.x=x;
-            this.y=y;
-        }
-    }
-    
-    int [][] dirs={{1,0},{0,1},{-1,0},{0,-1}};
-    public int shortestBridge(int[][] grid) {
-         ArrayDeque<Pair> q=new ArrayDeque<>();
-    boolean flag=false;//as we are going to stop by the time we find first whole island
-    boolean [][] visited=new boolean[grid.length][grid[0].length];
-    // Now search for first island and when we find first island using DFS then we will find the level using BFS
-    for(int i=0;i<grid.length  && flag==false;i++){
-        for(int j =0;j<grid[i].length && flag==false;j++){
-            if(grid[i][j]==1){//by the time we find first 1 we will apply DFS and it will fill all 1 adjacent to it i.e its neighbour
-                DFS(grid,i,j,visited,q);
-                flag=true;
+    int row, col;
+    public int shortestBridge(int[][] a) {
+        row = a.length;
+        col = a[0].length;
+        Queue<int[]> q = new LinkedList();
+        for (int i = 0; i < row && q.isEmpty(); i++) {
+            for (int j = 0; j < col && q.isEmpty(); j++) {
+                if (a[i][j]==1) dfs(i, j, q, a);
             }
         }
-    }
-    
-    // after apply DFS queue will be filled with all the islands with 1 and now we will apply bfs
-    
-    int level=-1;//it is which we are going to return as  after finding the island we are going to make a bridge so that 2 island can connect
-    
-    while(q.size()!=0){
-        int size=q.size();
-        level++;
-        
-        // now this(following one) loop we do BFS
-        while(size-->0){
-            Pair rem=q.removeFirst();
-            
-            // Now after removing check for 0 then mark them as visited and by the time when we will find a unvisited 1 then that means we have reached the land and will return the value of level
-             for(int i =0;i<dirs.length;i++){
-          int newrow=rem.x+dirs[i][0];
-            int newcol=rem.y+dirs[i][1];
-            
-              if(newrow>=0 && newcol>=0 && newrow<grid.length && newcol<grid[0].length && visited[newrow][newcol]==false ){
-                  if(grid[newrow][newcol]==1){
-                      return level;
-                  }
-                  
-                  q.add(new Pair(newrow,newcol));
-                  visited[newrow][newcol]=true;//not to come back again it this
+        int[][] dirs = new int[][]{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
+        while (q.isEmpty()==false) {
+            int[] cur = q.poll();
+            for (int[] dir : dirs) {
+                int i = cur[0] + dir[0], j = cur[1] + dir[1];
+                if (i < 0 || i == row || j < 0 || j == col || a[i][j]==-1) continue;
+                if (a[i][j]==1) return cur[2];
+                a[i][j] = -1;
+                q.add(new int[]{i, j, cur[2]+1});       //increase distance
             }
         }
+        return -1;
     }
-    }
-    return -1;//if 1 is not found then i.e bridge cannot be made as there is no land
-    }
-    
-    
-    
-    public void DFS(int [][] grid,int row,int col,boolean [][] visited,ArrayDeque<Pair> q){
-             visited[row][col]=true;
-      q.add(new Pair(row,col));//add row and coloum to the queue of the island
-      
-      for(int i =0;i<dirs.length;i++){
-          int newrow=row+dirs[i][0];
-            int newcol=col+dirs[i][1];
-            
-            // DFS will be only call if newrow and coloum are 1 and they are not visited.
-            if(newrow>=0 && newcol>=0 && newrow<grid.length && newcol<grid[0].length && visited[newrow][newcol]==false && grid[newrow][newcol]==1){
-                DFS(grid,newrow,newcol,visited,q);
-            }
-      }
-  
+    public void dfs(int i, int j, Queue<int[]> q, int[][] a) {
+        if (i < 0 || i == row || j < 0 || j == col || a[i][j]!=1) return;
+        //a value is 1
+        a[i][j] = -1;
+        q.add(new int[]{i, j, 0});//0 distance travelled
+        dfs(i+1, j, q, a);
+        dfs(i-1, j, q, a);
+        dfs(i, j+1, q, a);
+        dfs(i, j-1, q, a);
     }
 }
