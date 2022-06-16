@@ -1,73 +1,37 @@
 class Solution {
-    public int[][] colorBorder(int[][] grid, int row, int col, int color) {
-        ArrayDeque<Pair> q=new ArrayDeque<>();
-        q.add(new Pair(row,col));
-        int originalColor = grid[row][col];
-        boolean [][]border=new boolean[grid.length][grid[0].length];
-        while(!q.isEmpty()){
-            Pair curr=q.remove();
-            if(grid[curr.row][curr.col]>0){
-                grid[curr.row][curr.col]=-grid[curr.row][curr.col];
-                
-                int [][]dir={{0,1},{1,0},{0,-1},{-1,0}};
-                int count=0;
-                for(int i=0;i<4;i++){
-                    int r=curr.row+dir[i][0];
-                    int c=curr.col+dir[i][1];
-                   
-                    if(isValid(r,c,grid)){
-                        
-                        if(originalColor==Math.abs(grid[r][c])){
-                            
-                            count++;
-                        }
-                        
-                        if(originalColor==grid[r][c]){
-                            q.add(new Pair(r,c));
-                        }
-                    }
-                }
-                
-                if(count<4){
-                    border[curr.row][curr.col]=true;
-                }
-            }   
-        }
-        
-        for(int i=0;i<grid.length;i++){
-            for(int j=0;j<grid[0].length;j++){
-                if(grid[i][j]<0){
-                    grid[i][j]=Math.abs(grid[i][j]);
-                }
-                
-                if(border[i][j]){
-                    grid[i][j]=color;
-                }
-            }
-        }
-        
-        return grid;
-    }
+    int[][] dir = {{0,1}, {1,0}, {0,-1}, {-1,0}};
+    boolean[][] visited;
     
-    public boolean isValid(int row, int col, int [][]grid){
-        if(row<0 || row>=grid.length || col<0 || col>=grid[0].length){
-            return false;
-        }
-        
-        return true;
-    }
-}
+    private void dfs(int[][] grid, int r0, int c0, int origColor, int newColor, int n, int m) {       
 
-class Pair{
-    int row;
-    int col;
-    
-    public Pair(int row, int col){
-        this.row=row;
-        this.col=col;
+		visited[r0][c0] = true;
+        for(int[] d: dir) {
+            int x = r0 + d[0];
+            int y = c0 + d[1];
+            
+			// if next cell is either boundary OR of diff color but not previously visited
+            if(x>=n || x<0 || y>=m || y<0 || (!visited[x][y] && grid[x][y]!=origColor)) {
+                grid[r0][c0] = newColor;
+                continue;
+            }
+            
+			// continue if previously visited
+            if(visited[x][y])
+                continue;
+            
+            dfs(grid, x, y, origColor, newColor, n, m);
+        }
     }
     
-    public String toString(){
-        return row+" "+col;
+    public int[][] colorBorder(int[][] grid, int r0, int c0, int color) {
+        if(grid[r0][c0] == color)
+            return grid;
+        
+        int n = grid.length;
+        int m = grid[0].length;
+        visited = new boolean[n][m];
+        
+        dfs(grid, r0, c0, grid[r0][c0], color, n, m);
+        return grid;
     }
 }
