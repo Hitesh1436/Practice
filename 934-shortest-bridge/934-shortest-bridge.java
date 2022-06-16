@@ -6,12 +6,14 @@ class Solution {
         Queue<int[]> q = new LinkedList();
         for (int i = 0; i < row && q.isEmpty(); i++) {
             for (int j = 0; j < col && q.isEmpty(); j++) {
-                if (a[i][j]==1) dfs(i, j, q, a);
+                if (a[i][j]==1) {
+                    dfs(i, j, q, a);   
+                }
             }
         }
         int[][] dirs = new int[][]{{0, 1}, {0, -1}, {1, 0}, {-1, 0}};
-        while (q.isEmpty()==false) {
-            int[] cur = q.poll();
+        while (q.size()>0) {
+            int[] cur = q.remove();
             for (int[] dir : dirs) {
                 int i = cur[0] + dir[0], j = cur[1] + dir[1];
                 if (i < 0 || i == row || j < 0 || j == col || a[i][j]==-1) continue;
