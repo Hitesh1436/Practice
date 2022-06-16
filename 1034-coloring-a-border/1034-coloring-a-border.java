@@ -1,15 +1,11 @@
 class Solution {
     public int[][] colorBorder(int[][] grid, int row, int col, int color) {
-        Queue<Pair> q=new LinkedList<>();
-        
+        ArrayDeque<Pair> q=new ArrayDeque<>();
         q.add(new Pair(row,col));
-        
-        int originalColor=grid[row][col];
-
+        int originalColor = grid[row][col];
         boolean [][]border=new boolean[grid.length][grid[0].length];
         while(!q.isEmpty()){
             Pair curr=q.remove();
-            
             if(grid[curr.row][curr.col]>0){
                 grid[curr.row][curr.col]=-grid[curr.row][curr.col];
                 
