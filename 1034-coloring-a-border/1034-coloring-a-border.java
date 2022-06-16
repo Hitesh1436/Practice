@@ -1,37 +1,37 @@
 class Solution {
-    int[][] dir = {{0,1}, {1,0}, {0,-1}, {-1,0}};
-    boolean[][] visited;
-    
-    private void dfs(int[][] grid, int r0, int c0, int origColor, int newColor, int n, int m) {       
-
-		visited[r0][c0] = true;
-        for(int[] d: dir) {
-            int x = r0 + d[0];
-            int y = c0 + d[1];
-            
-			// if next cell is either boundary OR of diff color but not previously visited
-            if(x>=n || x<0 || y>=m || y<0 || (!visited[x][y] && grid[x][y]!=origColor)) {
-                grid[r0][c0] = newColor;
-                continue;
+     public int[][] colorBorder(int[][] grid, int row, int col, int color) {
+        dfs(grid,row,col,grid[row][col]);
+          for(int i=0;i<grid.length;i++){
+            for(int j=0;j<grid[0].length;j++){
+                if(grid[i][j]<0){
+                    grid[i][j]= color;
+                }
             }
-            
-			// continue if previously visited
-            if(visited[x][y])
-                continue;
-            
-            dfs(grid, x, y, origColor, newColor, n, m);
         }
+        return grid;
+      
     }
     
-    public int[][] colorBorder(int[][] grid, int r0, int c0, int color) {
-        if(grid[r0][c0] == color)
-            return grid;
-        
-        int n = grid.length;
-        int m = grid[0].length;
-        visited = new boolean[n][m];
-        
-        dfs(grid, r0, c0, grid[r0][c0], color, n, m);
-        return grid;
+    int [][]dir = {{0,1},{1,0},{0,-1},{-1,0}};
+    public void dfs(int [][]grid,int row,int col,int clr){
+       grid[row][col]= -clr;    // mark krdia 
+       int count = 0;
+       
+       for(int i=0;i<4;i++){
+           int r = row + dir[i][0];
+           int c = col + dir[i][1];
+           
+           if(r<0 || c<0 || r>=grid.length || c>=grid[0].length || Math.abs(grid[r][c])!=clr){
+               continue;
+           }
+           count++;   // mtlb shi jgh h toh count ko bdhaoo 
+           
+           if(grid[r][c] == clr){
+               dfs(grid,r,c,clr);
+           }
+       }
+       if(count ==4){
+           grid[row][col] = clr;
+       }
     }
 }
