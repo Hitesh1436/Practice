@@ -24,7 +24,9 @@ class Solution {
             }
             vis[rem.i][rem.j] = true;
             
-            res.add(rem);
+            if(rem.border == true){
+                res.add(rem);
+            }
             
             addN(rem.i-1,rem.j,grid,vis,qu,ogc);
             addN(rem.i+1,rem.j,grid,vis,qu,ogc);
@@ -32,9 +34,7 @@ class Solution {
             addN(rem.i,rem.j+1,grid,vis,qu,ogc);
         }
         for(Pair ans : res){   // isme humne AL bnai usme dkha agr border h toh jo color kha h usse mark krdia
-            if(ans.border == true){
                 grid[ans.i][ans.j] = color;
-            }
         }
         return grid;
     }
