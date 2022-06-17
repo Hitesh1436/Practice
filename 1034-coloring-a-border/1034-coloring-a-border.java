@@ -1,37 +1,29 @@
 class Solution {
-     public int[][] colorBorder(int[][] grid, int row, int col, int color) {
-        dfs(grid,row,col,grid[row][col]);
-          for(int i=0;i<grid.length;i++){
+    public int[][] colorBorder(int[][] grid, int row, int col, int color) {
+        int ogc = grid[row][col];  // ogc = original color
+         dfsTravel(grid,row,col,ogc);
+        for(int i=0;i<grid.length;i++){
             for(int j=0;j<grid[0].length;j++){
-                if(grid[i][j]<0){
-                    grid[i][j]= color;
+                if(grid[i][j] == -ogc){
+                    grid[i][j] = color; 
                 }
             }
         }
         return grid;
-      
     }
-    
-    int [][]dir = {{0,1},{1,0},{0,-1},{-1,0}};
-    public void dfs(int [][]grid,int row,int col,int clr){
-       grid[row][col]= -clr;    // mark krdia 
-       int count = 0;
-       
-       for(int i=0;i<4;i++){
-           int r = row + dir[i][0];
-           int c = col + dir[i][1];
-           
-           if(r<0 || c<0 || r>=grid.length || c>=grid[0].length || Math.abs(grid[r][c])!=clr){
-               continue;
-           }
-           count++;   // mtlb shi jgh h toh count ko bdhaoo 
-           
-           if(grid[r][c] == clr){
-               dfs(grid,r,c,clr);
-           }
-       }
-       if(count ==4){
-           grid[row][col] = clr;
-       }
+    private void dfsTravel(int [][]grid,int r,int c,int ogc){
+        if(r<0 || c<0 || r>=grid.length || c>= grid[0].length || grid[r][c]!=ogc){
+            return;
+        }
+        grid[r][c] = -ogc;    // ek trke se mrk krdia humne 
+        
+         dfsTravel(grid,r-1,c,ogc);
+         dfsTravel(grid,r+1,c,ogc);
+         dfsTravel(grid,r,c-1,ogc);
+         dfsTravel(grid,r,c+1,ogc);
+        
+        if(r>0 && c>0 && r<grid.length-1 && c<grid[0].length-1 && Math.abs(grid[r-1][c]) == ogc && Math.abs(grid[r][c+1]) == ogc && Math.abs(grid[r+1][c]) == ogc && Math.abs(grid[r][c-1]) == ogc){
+            grid[r][c] = ogc;
+        }
     }
 }
