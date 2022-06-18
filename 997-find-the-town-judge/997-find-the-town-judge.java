@@ -1,15 +1,18 @@
 class Solution {
     public int findJudge(int n, int[][] trust) {
-        int arr[] = new int[n + 1]; // Define an array of length n+1
-        
-        for(int i = 0; i < trust.length; i++){ // loop through the 'trust' array
-            arr[trust[i][0]]--; // if a given person trust someone then decrement the count of his index
-            arr[trust[i][1]]++; // increment the count of the index whom he trusts
-            
+        int [] trusted = new int[n+1];
+        int [] trusting = new int[n+1];
+        for(int []arr : trust){
+            int p1 = arr[0];
+            int p2 = arr[1];
+            // p1 trusting p2
+            trusted[p2]++;
+            trusting[p1]++;
         }
-        // In last, check the 'arr' array that if there is any index having count equals to n-1
-        for(int i = 1; i < arr.length; i++){
-            if(arr[i] == n - 1) return i; // person doesnt trust anybody but everyone else trust him. Return their index
+        for(int i=n;i>=0;i--){
+            if(trusted[i] == n-1 && trusting[i] == 0){
+                return i;
+            }
         }
         return -1;
     }
