@@ -11,26 +11,26 @@ class Solution {
     public int getImportance(List<Employee> employees, int id) {
         int ans = 0;
         //Map of id vs Employee
-        Map<Integer, Employee> emp = new HashMap<>();
+        Map<Integer, Employee> map = new HashMap<>();
         for(Employee e : employees)
-            emp.put(e.id, e);
+            map.put(e.id, e);
         
-        if(emp.get(id) == null)
+        if(map.get(id) == null)
             return ans;
         
         //if no suboridnates
-        if(emp.get(id).subordinates == null || emp.get(id).subordinates.size() == 0)
-            return emp.get(id).importance;
+        if(map.get(id).subordinates == null || map.get(id).subordinates.size() == 0)
+            return map.get(id).importance;
         
         //bfs
         Queue<Employee> q = new LinkedList<>();
-        q.add(emp.get(id));
+        q.add(map.get(id));
         while(!q.isEmpty()) {
-            Employee e = q.poll();
+            Employee e = q.remove();
             ans += e.importance;
 			//add all subordinates
             for(int i : e.subordinates)
-                q.add(emp.get(i));
+                q.add(map.get(i));
         }
         
         return ans;
