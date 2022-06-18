@@ -25,11 +25,11 @@ class Solution {
         //bfs
         Queue<Employee> q = new LinkedList<>();
         q.add(map.get(id));
-        while(!q.isEmpty()) {
-            Employee e = q.remove();
-            ans += e.importance;
+        while(q.size()>0) {
+            Employee rem = q.remove();
+            ans += rem.importance;
 			//add all subordinates
-            for(int i : e.subordinates)
+            for(int i : rem.subordinates)
                 q.add(map.get(i));
         }
         
