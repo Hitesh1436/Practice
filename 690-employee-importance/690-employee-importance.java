@@ -8,26 +8,31 @@ class Employee {
 */
 
 class Solution {
-	public int getImportance(List<Employee> employees, int id) {
-		// Do some preprocessing to avoid the search time complexity for each ID, so make a HasMap of [ID -> Employee]
-		HashMap<Integer,Employee> map=new HashMap<>();
-		for(int i=0;i<employees.size();i++){
-			map.put(employees.get(i).id,employees.get(i)); // ID->Emp
-		}
-		return getans(map,id);
-	}
-	public int getans(HashMap<Integer, Employee> map,int id){
-		// Recursively get the ans for each id
-		Employee rp=map.get(id); 
-		if(rp.subordinates.size()==0){ // base case !
-			return rp.importance;
-		}
-		int ans=0;
-		List<Integer> child=rp.subordinates;
-		for(int i=0;i<child.size();i++){
-			ans+=getans(map,child.get(i)); // get ans for child IDs
-		}
-
-		return rp.importance+ans; // Add my importance to child IDs
-	}
+    public int getImportance(List<Employee> employees, int id) {
+        int ans = 0;
+        //Map of id vs Employee
+        Map<Integer, Employee> emp = new HashMap<>();
+        for(Employee e : employees)
+            emp.put(e.id, e);
+        
+        if(emp.get(id) == null)
+            return ans;
+        
+        //if no suboridnates
+        if(emp.get(id).subordinates == null || emp.get(id).subordinates.size() == 0)
+            return emp.get(id).importance;
+        
+        //bfs
+        Queue<Employee> q = new LinkedList<>();
+        q.add(emp.get(id));
+        while(!q.isEmpty()) {
+            Employee e = q.poll();
+            ans += e.importance;
+			//add all subordinates
+            for(int i : e.subordinates)
+                q.add(emp.get(i));
+        }
+        
+        return ans;
+    }
 }
