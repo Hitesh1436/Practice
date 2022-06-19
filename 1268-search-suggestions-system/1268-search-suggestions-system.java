@@ -1,33 +1,38 @@
 class Solution {
-    public List<List<String>> suggestedProducts(String[] products, String searchWord) {
-        Map<String, List<String>> map = new HashMap<>();
-        List<List<String>> result = new ArrayList<>();
-        
-        for(String product : products){
-            String key = "";
-            for(int i=0;i<product.length();i++){
-                key += product.charAt(i);
-                if(map.get(key) == null){
-                    map.put(key, new ArrayList<>());
+     public List<List<String>> suggestedProducts(String[] products, String searchWord) {
+        List<List<String>> ans = new ArrayList<>();
+
+        //sort products lexicographically
+        Arrays.sort(products);
+
+        for (int i = 0; i < searchWord.length(); i++) {
+            String prefix = searchWord.substring(0, i + 1);
+
+            // Note: binary search returns the index of the first element if it is present,
+            // otherwise returns (-)insertion point for the element.
+            int index = Arrays.binarySearch(products, prefix);
+
+            // no prefix in products
+            // take the next word greater than the prefix.
+            if (index < 0) {
+                index = -index - 1;
+            }
+
+            List<String> suggestions = new ArrayList<>();
+            int max = index + 3;
+            for (int j = index; j < products.length; j++) {
+                if (j == max){ // if we have reached the max number of suggestions
+                    break;
                 }
-                map.get(key).add(product);
+
+                if (products[j].startsWith(prefix)) { // if the product starts with the prefix
+                    suggestions.add(products[j]);
+                }
             }
+
+            ans.add(suggestions);
         }
-        String key = "";
-        for(int i=0;i<searchWord.length();i++){
-            key += searchWord.charAt(i);
-            List<String> wordsWithPrefix = map.get(key);
-            if(wordsWithPrefix == null){
-                result.add(new ArrayList<>());
-                continue;
-            }
-            Collections.sort(wordsWithPrefix);
-            List<String> curr = new ArrayList<>();
-            for(int j=0;j<3 && j<wordsWithPrefix.size();j++){
-                curr.add(wordsWithPrefix.get(j));  
-            }
-            result.add(curr);    
-        }
-        return result;        
+
+        return ans;
     }
 }
