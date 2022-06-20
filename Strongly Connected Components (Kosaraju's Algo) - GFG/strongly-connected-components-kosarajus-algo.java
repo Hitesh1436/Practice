@@ -48,66 +48,51 @@ class Solution
     //Function to find number of strongly connected components in the graph.
     public int kosaraju(int V, ArrayList<ArrayList<Integer>> adj)
     {
-       //procedure 
-       /*
-       1. Traverse the graph normally in dfs fashion and store the result in stack
-       2. Reverse the edgees
-       3. using the stack again do dfs traversal while stack is not empty
-       */
-       
-       Stack<Integer> st = new Stack<>();
-       boolean[] visited = new boolean[V];
-       
-       Arrays.fill(visited, false);
-       
-       for(int i = 0; i<V; i++){
-           if(!visited[i])
-            dfs(i, visited, st, adj);
-       }
-       ArrayList<ArrayList<Integer>> transposeAdj = new ArrayList<>();
-       transposeGraph(V, adj, transposeAdj);
-       
-       int componentCount = 0;
-       Arrays.fill(visited, false);
-       while(!st.isEmpty()){
-           int u = st.peek();
-           st.pop();
-           if(!visited[u]){
-            componentCount++;
-            dfs(u, visited, transposeAdj);
-           }
-       }
-       return componentCount;
-    }
-    static void dfs(int u, boolean[] visited, Stack<Integer>st,  ArrayList<ArrayList<Integer>> adj){
-        visited[u] = true;
-        for(int v : adj.get(u)){
-            if(visited[v] == false)
-                dfs(v, visited, st, adj);
+        // code here
+        // topological sort
+        Stack<Integer> stack=new Stack<>();
+        boolean[] vis=new boolean[V];
+        for(int i=0;i<V;i++) {
+            if(!vis[i])
+                topSort(adj,stack,i,vis);
         }
-        st.push(u);
-    }
-    static void transposeGraph(int V, ArrayList<ArrayList<Integer>> adj,
-    ArrayList<ArrayList<Integer>> transposeAdj){
-        for(int i = 0; i<V; i++){
-            transposeAdj.add(new ArrayList<Integer>());
+        // reverse list items
+        ArrayList<ArrayList<Integer>> newAdj=new ArrayList<ArrayList<Integer>>(); 
+        for(int i=0;i<V;i++) {
+            newAdj.add(new ArrayList<Integer>());
         }
-        
-        for(int i = 0; i<V;i++){
-            for(int v: adj.get(i)){
-                transposeAdj.get(v).add(i);
+        for(int i=0;i<V;i++) {
+            for(int x:adj.get(i)) {
+                newAdj.get(x).add(i);
             }
         }
-    }
-    //overloading concept
-    static void dfs(int u, boolean[] visited, ArrayList<ArrayList<Integer>> adj){
-        visited[u] = true;
-        for(int v : adj.get(u)){
-            if(visited[v] == false)
-            {
-                dfs(v, visited, adj);
+        // dfs search on topologically sorted items
+        Arrays.fill(vis,false);
+        int res=0;
+        while(!stack.isEmpty()) {
+            int i=stack.pop();
+            if(!vis[i]) {
+               dfs(newAdj,i,vis);
+               res++;
             }
+        }
+        return res;
+    }
+    
+    public void topSort(ArrayList<ArrayList<Integer>> adj,Stack<Integer> stack,int u,boolean[] vis) {
+        vis[u]=true;
+        for(int v:adj.get(u)) {
+            if(!vis[v])
+                topSort(adj,stack,v,vis);
+        }
+        stack.push(u);
+    }
+    
+    public void dfs(ArrayList<ArrayList<Integer>> adj,int u,boolean[] vis) {
+        vis[u]=true;
+        for(int v:adj.get(u)) {
+            if(!vis[v])
+                dfs(adj,v,vis);
         }
     }
 }
-
