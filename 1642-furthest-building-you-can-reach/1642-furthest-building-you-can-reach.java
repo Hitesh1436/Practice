@@ -9,12 +9,12 @@ class Solution {
             int diff = heights[i+1] - heights[i];
             
             if(diff>0){
-                pq.add(diff);
+                pq.add(diff);  // add krdia diff pq mn
             }
             if(pq.size()>ladders){
-                bricks = bricks - pq.remove();
+                bricks = bricks - pq.remove();  // agr ladders km h toh pq se remove kia nd bricks ka use kiaa uss height ko climb krne ke liye
             }
-            if(bricks<0){
+            if(bricks<0){  // agr bricks bhi khtm hogyi and ladders bhi already khtm thi toh uss index tk hi phuch skte the hum
                 return i;
             }
         }
