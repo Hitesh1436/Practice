@@ -9,7 +9,8 @@ class Solution {
                     break;
                 }
             }
-            if(isvalid) count++;
+            if(isvalid) 
+                count++;
         }
         return count;
     }
