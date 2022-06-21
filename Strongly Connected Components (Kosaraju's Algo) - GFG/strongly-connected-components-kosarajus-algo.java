@@ -48,51 +48,58 @@ class Solution
     //Function to find number of strongly connected components in the graph.
     public int kosaraju(int V, ArrayList<ArrayList<Integer>> adj)
     {
-        // code here
-        // topological sort
-        Stack<Integer> stack=new Stack<>();
-        boolean[] vis=new boolean[V];
-        for(int i=0;i<V;i++) {
-            if(!vis[i])
-                topSort(adj,stack,i,vis);
-        }
-        // reverse list items
-        ArrayList<ArrayList<Integer>> newAdj=new ArrayList<ArrayList<Integer>>(); 
-        for(int i=0;i<V;i++) {
-            newAdj.add(new ArrayList<Integer>());
-        }
-        for(int i=0;i<V;i++) {
-            for(int x:adj.get(i)) {
-                newAdj.get(x).add(i);
+        boolean[] vis1 = new boolean[V];
+        Stack<Integer> st = new Stack<>();
+        for(int v = 0; v < V; v++){
+            if(!vis1[v]){
+                dfs1(v, adj, vis1, st);
             }
         }
-        // dfs search on topologically sorted items
-        Arrays.fill(vis,false);
-        int res=0;
-        while(!stack.isEmpty()) {
-            int i=stack.pop();
-            if(!vis[i]) {
-               dfs(newAdj,i,vis);
-               res++;
+        
+        // transpose
+        ArrayList<ArrayList<Integer>> tsp = new ArrayList<>();
+        for(int v = 0; v < V; v++){
+            tsp.add(new ArrayList<>());
+        }
+        
+        for(int v = 0; v < V; v++){
+            for(int nbr: adj.get(v)){
+                tsp.get(nbr).add(v);
             }
         }
-        return res;
+        
+        // dfs2
+        int count = 0;
+        boolean[] vis2 = new boolean[V];
+        while(st.size() > 0){
+            int v = st.pop();
+            if(!vis2[v]){
+                dfs2(v, tsp, vis2);
+                count++;
+            }
+        }
+        
+        return count;
     }
     
-    public void topSort(ArrayList<ArrayList<Integer>> adj,Stack<Integer> stack,int u,boolean[] vis) {
-        vis[u]=true;
-        for(int v:adj.get(u)) {
-            if(!vis[v])
-                topSort(adj,stack,v,vis);
+    public void dfs2(int v, ArrayList<ArrayList<Integer>> adj, boolean[] visited){
+        visited[v] = true;
+        for(int nbr: adj.get(v)){
+            if(!visited[nbr]){
+                dfs2(nbr, adj, visited);
+            }
         }
-        stack.push(u);
     }
     
-    public void dfs(ArrayList<ArrayList<Integer>> adj,int u,boolean[] vis) {
-        vis[u]=true;
-        for(int v:adj.get(u)) {
-            if(!vis[v])
-                dfs(adj,v,vis);
+    public void dfs1(int v, ArrayList<ArrayList<Integer>> adj, boolean[] visited, Stack<Integer> st){
+        
+        visited[v] = true;
+        for(int nbr: adj.get(v)){
+            if(!visited[nbr]){
+                dfs1(nbr, adj, visited, st);
+            }
         }
+        
+        st.push(v);
     }
 }
