@@ -35,31 +35,33 @@ class GFG
 class Solution
 {
     //Function to find a Mother Vertex in the Graph.
-    class Count {
-        int c;
-        int v;
-    }
     public int findMotherVertex(int V, ArrayList<ArrayList<Integer>>adj)
     {
-        // Code here
-        for(int i=0;i<V;i++) {
-            boolean[] vis=new boolean[V];
-            Count cou=new Count();
-            cou.c=0;
-            cou.v=V;
-            dfs(adj,i,vis,cou);
-            if(cou.c==V)
-                return i;
+        int mv = -1;
+        boolean[] vis = new boolean[V];
+        for(int v = 0; v < V; v++){
+            if(!vis[v]){
+                dfs(v, vis, adj);
+                mv = v;
+            }
         }
-        return -1;
+        Arrays.fill(vis, false);
+        dfs(mv, vis, adj);
+        
+        for(int v = 0; v < V; v++){
+            if(vis[v] == false){
+                return -1;
+            }
+        }
+        return mv;
     }
     
-    public void dfs(ArrayList<ArrayList<Integer>>adj,int u,boolean[] vis,Count cou) {
-        vis[u]=true;
-        cou.c++;
-        for(int v:adj.get(u)) {
-            if(!vis[v])
-                dfs(adj,v,vis,cou);
+    public void dfs(int v, boolean[] vis, ArrayList<ArrayList<Integer>> adj){
+        vis[v] = true;
+        for(int n: adj.get(v)){
+            if(!vis[n]){
+                dfs(n, vis, adj);
+            }
         }
     }
 }
