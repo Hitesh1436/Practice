@@ -56,32 +56,37 @@ class Main {
 
 /*Complete the function below*/
 
+
 class Solution{
-   //Function to return list containing vertices in Topological order. 
-   static int[] topoSort(int V, ArrayList<ArrayList<Integer>> adj){
-       boolean vis[] = new boolean[V];
-       Stack<Integer> st = new Stack<>();
-       for(int i = 0; i < V; i ++) {
-           if(!vis[i]) {
-               dfs(i, adj, st, vis);
-           }
-       }
-       int ans[] = new int[V];
-       int i = 0;
-       while(!st.isEmpty()) {
-           ans[i ++] = st.pop();
-       }
-       return ans;
-   }
-   
-   static void dfs(int v, ArrayList<ArrayList<Integer>> adj, Stack<Integer> st, boolean[] vis) {
-       vis[v] = true;
-       
-       for(int neighbour : adj.get(v)) {
-           if(!vis[neighbour]) {
-               dfs(neighbour, adj, st, vis);
-           }
-       }
-       st.push(v);
-   }
+    //Function to return list containing vertices in Topological order. 
+    static int[] topoSort(int V, ArrayList<ArrayList<Integer>> adj){ 
+        int[] tsort = new int[V];
+        
+        int[] inDegree = new int[V];
+        for(int v = 0; v < V; v++){
+            for(int n: adj.get(v)){
+                inDegree[n]++;
+            }
+        }
+        
+        ArrayDeque<Integer> queue = new ArrayDeque<>();
+        for(int v = 0; v < V; v++){
+            if(inDegree[v] == 0){
+                queue.add(v);
+            }
+        }
+        int idx = 0;
+        while(queue.size() > 0){
+            int v = queue.remove();
+            tsort[idx++] = v;
+            
+            for(int n: adj.get(v)){
+                inDegree[n]--;
+                if(inDegree[n] == 0){
+                    queue.add(n);
+                }
+            }
+        }
+        return tsort;
+    }
 }
