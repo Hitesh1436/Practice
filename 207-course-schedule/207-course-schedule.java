@@ -1,35 +1,46 @@
 class Solution {
     public boolean canFinish(int numCourses, int[][] prerequisites) {
-      ArrayList<ArrayList<Integer>>graph=new ArrayList<>(numCourses);
-      for(int i=0;i<numCourses;i++){
-          graph.add(new ArrayList<Integer>());
-      }
-      int len=prerequisites.length;
-      int inDegree[]=new int[numCourses];
-      for(int i=0;i<len;i++){
-          graph.get(prerequisites[i][1]).add(prerequisites[i][0]);
-          inDegree[prerequisites[i][0]]++;
-      }
-      Queue<Integer>q=new LinkedList<Integer>();
-      int count=0;   
-      for(int i=0;i<inDegree.length;i++){
-          if(inDegree[i]==0){
-             q.add(i);     
-          }
-      }
-      while(!q.isEmpty()){
-        int rem=q.remove();
-        count++; 
-        for(int i : graph.get(rem)){
-            inDegree[i]--;
-            if(inDegree[i]==0){
-                q.add(i);
+     ArrayList<Integer>[] graph = new ArrayList[numCourses];
+        for(int i = 0; i < graph.length; i++){
+            graph[i] = new ArrayList<>();
+        }
+        for(int[] req: prerequisites){
+            graph[req[0]].add(req[1]);
+        }
+        // inD -> inDegree array hi hai
+        int[] inD = new int[numCourses];
+        for(int v = 0; v < graph.length; v++){
+            for(int n: graph[v]){
+                inD[n]++;
+            }
+        } 
+        ArrayDeque<Integer> queue = new ArrayDeque<>();
+        for(int v = 0; v < graph.length; v++){
+            if(inD[v] == 0){
+                queue.add(v);
             }
         }
-      }
-      if(numCourses == count){
-          return true;
-      }
-        return false;
+        int[] ans = new int[graph.length];
+        int count = 0;
+        int idx = ans.length - 1;
+        while(queue.size() > 0){
+            int rem = queue.remove();
+            count++;
+            ans[idx] = rem;
+            idx--;
+            
+            for(int n: graph[rem]){
+                inD[n]--;
+                
+                if(inD[n] == 0){
+                    queue.add(n);
+                }
+            }
+        }
+        if(count == numCourses){
+            return true;
+        } else {
+            return false;
+        }
     }
 }
