@@ -20,18 +20,17 @@ class Solution {
                 queue.add(v);
             }
         }
-        int[] ans = new int[graph.length];
+        // int[] ans = new int[graph.length];
         int count = 0;
-        int idx = ans.length - 1;
+        // int idx = ans.length - 1;
         while(queue.size() > 0){
             int rem = queue.remove();
             count++;
-            ans[idx] = rem;
-            idx--;
+            // ans[idx] = rem;
+            // idx--;
             
             for(int n: graph[rem]){
                 inD[n]--;
-                
                 if(inD[n] == 0){
                     queue.add(n);
                 }
