@@ -7,6 +7,7 @@ class Solution {
         for(int[] req: prerequisites){
             graph[req[0]].add(req[1]);
         }
+        // in -> inDegree array hi hai
         int[] in = new int[numCourses];
         for(int v = 0; v < graph.length; v++){
             for(int n: graph[v]){
