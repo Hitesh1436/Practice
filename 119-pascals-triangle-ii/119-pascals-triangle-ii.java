@@ -1,13 +1,15 @@
 class Solution {
     public List<Integer> getRow(int n) {
-        Integer []arr = new Integer[n+1];
-        Arrays.fill(arr,0);
-        arr[0] = 1;
-        for(int i=1;i<=n;i++){
-            for(int j=i;j>0;j--){
-                arr[j] = arr[j] + arr[j-1];
-            }
+        List<Integer> ans = new ArrayList<>();
+         ans.add(1);
+        if(n==0){
+            return ans;
         }
-        return Arrays.asList(arr);
+        List<Integer> prev = getRow(n-1);
+        for(int i=0;i<prev.size()-1;i++){
+            ans.add(prev.get(i)+prev.get(i+1));
+        }
+        ans.add(1);
+        return ans;
     }
 }
