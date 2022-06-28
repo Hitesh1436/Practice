@@ -34,13 +34,7 @@ class Solution {
         }
         return true;
     }
-    void unionHelper(int x,int y){
-        int xx = find(x);
-        int yy = find(y);
-        if(xx != yy){
-                union(x,y);
-        }
-    }
+    
    void union(int X, int Y){
         if(rank[X] < rank[Y]){
             parent[X] = Y;
