@@ -12,6 +12,7 @@ class Solution {
                 // bn0 -> box number
                 int bno = i * grid.length + j;
                 if(ch != '/'){
+                    // cell no -> 4 * bno +0 phle ke liye and ese hi bkiyon ke liye +1,+2,+3 krke nikljyga
                     unionHelper(4 * bno + 0, 4 * bno + 1);
                     unionHelper(4 * bno + 2, 4 * bno + 3);
                 }
