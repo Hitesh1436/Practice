@@ -29,42 +29,31 @@ class GFG
 class Solution
 {
     //Function to find the minimum number of swaps required to sort the array.
-    public int minSwaps(int nums[]){
-      int len = nums.length;
-        HashMap<Integer, Integer> map = new HashMap<>();
-        for(int i=0;i<len;i++)
-            map.put(nums[i], i);
-            
-        Arrays.sort(nums);   
-        
-          // To keep track of visited elements. Initialize
-        // all elements as not visited or false.
-        boolean[] visited = new boolean[len];
-        Arrays.fill(visited, false);
-        
-          // Initialize result
-        int ans = 0;
-        for(int i=0;i<len;i++) {
-          
-              // already swapped and corrected or
-            // already present at correct pos
-            if(visited[i] || map.get(nums[i]) == i)
-                continue;
-                
-            int j = i, cycle_size = 0;
-            while(!visited[j]) {
-                visited[j] = true;
-                
-                  // move to next node
-                j = map.get(nums[j]);
-                cycle_size++;
-            }
-            
-              // Update answer by adding current cycle.
-            if(cycle_size > 0) {
-                ans += (cycle_size - 1);
-            }
+    public int minSwaps(int nums[])
+    {
+        //posMap -> position map bnya h given array ka
+        HashMap<Integer,Integer> posMap = new HashMap<>();  
+        for(int i=0;i<nums.length;i++){
+            posMap.put(nums[i],i);
         }
-        return ans;
+     Arrays.sort(nums);
+     boolean []vis = new boolean[nums.length];
+     int swap = 0;
+     for(int i=0;i<nums.length;i++){
+         if(vis[i]==true || posMap.get(nums[i])==i){
+             continue;
+         }
+         vis[i] = true;  // mark krdia h
+         
+         int j =i;  // j ko statr kia i se
+         int cycleSize =0;  
+         do{
+             j = posMap.get(nums[j]);  // phle map se dkha j vala khn se aaya hai
+             vis[j] = true;  // uss j vale ko mark krdia
+             cycleSize++;
+         }while(j !=i);  // jbtk i  and j equal ni hity mtlb j vaps i tk ni aata tbtk kiaa
+         swap += (cycleSize-1);
+     }
+     return swap;
     }
 }
