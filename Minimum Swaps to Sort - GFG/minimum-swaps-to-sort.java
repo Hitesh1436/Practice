@@ -29,31 +29,29 @@ class GFG
 class Solution
 {
     //Function to find the minimum number of swaps required to sort the array.
-    public int minSwaps(int nums[])
-    {
-        //posMap -> position map bnya h given array ka
-        HashMap<Integer,Integer> posMap = new HashMap<>();  
+    public int minSwaps(int nums[]){
+        HashMap<Integer,Integer> oldArrMap = new HashMap<>();
         for(int i=0;i<nums.length;i++){
-            posMap.put(nums[i],i);
+            oldArrMap.put(nums[i],i);
         }
-     Arrays.sort(nums);
-     boolean []vis = new boolean[nums.length];
-     int swap = 0;
-     for(int i=0;i<nums.length;i++){
-         if(vis[i]==true || posMap.get(nums[i])==i){
-             continue;
-         }
-         vis[i] = true;  // mark krdia h
-         
-         int j =i;  // j ko statr kia i se
-         int cycleSize =0;  
-         do{
-             j = posMap.get(nums[j]);  // phle map se dkha j vala khn se aaya hai
-             vis[j] = true;  // uss j vale ko mark krdia
-             cycleSize++;
-         }while(j !=i);  // jbtk i  and j equal ni hity mtlb j vaps i tk ni aata tbtk kiaa
-         swap += (cycleSize-1);
-     }
-     return swap;
+        Arrays.sort(nums);  // 3,5,6,10,19
+        
+        boolean []vis = new boolean[nums.length];
+        int ans =0;
+        for(int i=0;i<nums.length;i++){
+            if(vis[i]== true || oldArrMap.get(nums[i])==i){
+                continue;
+            }
+            vis[i] = true;
+            int j =i;
+            int cycleSize = 0;
+            do{
+                j = oldArrMap.get(nums[j]);
+                vis[j] = true;
+                cycleSize++;
+            }while(j!=i);
+            ans += cycleSize -1;
+        }
+        return ans;
     }
 }
