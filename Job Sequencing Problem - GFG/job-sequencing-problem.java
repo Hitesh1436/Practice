@@ -51,37 +51,41 @@ class Job {
 }
 */
 
-class Sorter implements Comparator<Job>{                                    
-    public int compare(Job o1 ,Job o2){
-        return o2.profit-o1.profit;
-    }
-}
-class Solution{ 
+class Solution{
+    //Function to find the maximum profit and the number of jobs done.
     int[] JobScheduling(Job arr[], int n){
-        int total=0;
-        int count=0;
-        Arrays.sort(arr,new Sorter());
-        boolean[] avail=new boolean[101];
-
-        for(int i=0;i<arr.length;i++){
-            if(avail[arr[i].deadline]==false){
-                total+=arr[i].profit;
-                avail[arr[i].deadline]=true;
+        Arrays.sort(arr,(a,b) ->{
+           return b.profit - a.profit;  // decreasing order mn krdia sort humne profit ke basis pr
+        });
+        parent = new int[101];
+        
+        for(int i=0;i<parent.length;i++){
+            parent[i] = i;
+        }
+        int count =0;
+        int profit =0;
+        for(Job j : arr){
+            int x = j.deadline;
+            int xLead = find(x);
+            
+            if(xLead>0){
+                // job j is done on xLead day
                 count++;
-            }
-            else {
-                for(int j=arr[i].deadline-1;j>=1;j--){
-                    if(avail[j]==false){
-                        count++;
-                        total+=arr[i].profit;
-                        avail[j]=true;
-                        break;
-                    }
-                }
+                profit += j.profit;
+                
+                parent[xLead] = find(xLead-1);
             }
         }
-        return new int[]{count,total};
+        return new int[]{count,profit};
     }
-    
+    int []parent;
+    int find(int x){
+        if(parent[x] ==x){
+            return x;
+        }else{
+            parent[x] = find(parent[x]);
+            return parent[x];
+        }
+    }
 }
 
