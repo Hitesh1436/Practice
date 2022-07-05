@@ -66,14 +66,14 @@ class Solution{
         int profit =0;
         for(Job j : arr){
             int x = j.deadline;
-            int xLead = find(x);
+            int empty = find(x);
             
-            if(xLead>0){
-                // job j is done on xLead day
+            if(empty>0){
+                // job j is done on empty day
                 count++;
                 profit += j.profit;
                 
-                parent[xLead] = find(xLead-1);
+                parent[empty] = find(empty-1);
             }
         }
         return new int[]{count,profit};
