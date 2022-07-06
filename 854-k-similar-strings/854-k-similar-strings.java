@@ -7,7 +7,9 @@ class Solution {
             int size = q.size();
             while(size-- > 0){
                 String s = q.remove();
-                if(s.equals(tar))return lvl;
+                if(s.equals(tar)){
+                    return lvl;
+                }
                 int i = 0;
                 while(s.charAt(i) == tar.charAt(i))i++;
                 int j = i;
@@ -16,10 +18,9 @@ class Solution {
                         StringBuilder sb = new StringBuilder(s);
                         sb.setCharAt(i, s.charAt(j));
                         sb.setCharAt(j, s.charAt(i));
-                        
-						//A small optimization.
-                        if(sb.toString().equals(tar))return lvl+1;
-                        
+                        if(sb.toString().equals(tar)){
+                            return lvl+1;
+                        }
                         q.add(sb.toString());
                     }
                     j++;
