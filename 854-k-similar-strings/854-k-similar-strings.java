@@ -1,43 +1,32 @@
 class Solution {
-    public String swap(String str, int i, int j){
-        StringBuilder sb = new StringBuilder(str);
-        sb.setCharAt(i, str.charAt(j));
-        sb.setCharAt(j, str.charAt(i));
-        return sb.toString();
-    }
-    public int kSimilarity(String s1, String s2){
-        String ans = s1;
-        LinkedList<String> q = new LinkedList<>();
-        
-        q.addFirst(s2);
-        int level = -1;
-        while(q.size()>0){
-            level++;
+    public int kSimilarity(String s1, String tar) {
+        Queue<String> q = new ArrayDeque<>();
+        q.add(s1);
+        int lvl = 0;
+        while(q.size() > 0){
             int size = q.size();
-            while(size-->0){
-                String rem = q.removeFirst();
-                if(rem.equals(ans)){
-                    return level;
+            while(size-- > 0){
+                String s = q.remove();
+                if(s.equals(tar))return lvl;
+                int i = 0;
+                while(s.charAt(i) == tar.charAt(i))i++;
+                int j = i;
+                while(j < s.length()){
+                    if(s.charAt(j) == tar.charAt(i) && tar.charAt(j) != s.charAt(j)){
+                        StringBuilder sb = new StringBuilder(s);
+                        sb.setCharAt(i, s.charAt(j));
+                        sb.setCharAt(j, s.charAt(i));
+                        
+						//A small optimization.
+                        if(sb.toString().equals(tar))return lvl+1;
+                        
+                        q.add(sb.toString());
+                    }
+                    j++;
                 }
-                int pos1=-1;
-                int pos2=-1;
-                
-                for(int i=0;i<rem.length();i++){
-                    if(rem.charAt(i)!=ans.charAt(i)){
-                        pos1=i;
-                        break;
-                    }  
-                }
-            for(int j=pos1+1;j<rem.length();j++){
-               if(rem.charAt(j)==ans.charAt(pos1) && rem.charAt(j)!=ans.charAt(j)){          
-                pos2 = j;
-                  String temp = swap(rem,pos1,j);
-                 q.addLast(temp); 
-                    }         
-                             
-                 }       
-            }  
+            }
+            lvl++;
         }
-        return -1;    
+        return lvl;
     }
 }
