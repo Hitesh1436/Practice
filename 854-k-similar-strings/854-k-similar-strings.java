@@ -6,16 +6,16 @@ class Solution {
         while(q.size() > 0){
             int size = q.size();
             while(size-- > 0){
-                String s = q.remove();
-                if(s.equals(s2))return lvl;
+                String rem  =   q.remove();
+                if(rem.equals(s2))return lvl;
                 int i = 0;
-                while(s.charAt(i) == s2.charAt(i))i++;
+                while(rem.charAt(i) == s2.charAt(i))i++;
                 int j = i;
-                while(j < s.length()){
-                    if(s.charAt(j) == s2.charAt(i) && s2.charAt(j) != s.charAt(j)){
-                        StringBuilder sb = new StringBuilder(s);
-                        sb.setCharAt(i, s.charAt(j));
-                        sb.setCharAt(j, s.charAt(i));
+                while(j < rem.length()){
+                    if(rem.charAt(j) == s2.charAt(i) && s2.charAt(j) != rem.charAt(j)){
+                        StringBuilder sb = new StringBuilder(rem);
+                        sb.setCharAt(i, rem.charAt(j));
+                        sb.setCharAt(j, rem.charAt(i));
                         if(sb.toString().equals(s2))return lvl+1;
                         q.add(sb.toString());
                     }
