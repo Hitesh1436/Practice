@@ -1,59 +1,64 @@
 class Solution {
-    public  String swapChar(String st,int i,int j){
-        StringBuilder sb = new StringBuilder(st);
-        sb.setCharAt(i,st.charAt(j));
-        sb.setCharAt(j,st.charAt(i));
+    class Pair {
+        String config;
+        int level;
+    }
+    public int slidingPuzzle(int[][] board) {
+        HashSet<String> vis = new HashSet<>();
+        
+        ArrayDeque<Pair> queue = new ArrayDeque<>();
+        Pair rootp = new Pair();
+        rootp.config = getConfig(board);
+        rootp.level = 0;
+        queue.add(rootp);
+        
+        while(queue.size() > 0){
+            // remove
+            Pair rem = queue.remove();
+            
+            // mark*
+            if(vis.contains(rem.config)){
+                continue;
+            }
+            vis.add(rem.config);
+
+            // work
+            if(rem.config.equals("123450")){
+                return rem.level;
+            } 
+            // addN*
+    int[][] dirs = {{1, 3}, {0, 2, 4}, {1, 5}, {0, 4}, {1, 3, 5}, {2, 4}};
+            int idx = rem.config.indexOf('0');
+            for(int i: dirs[idx]){
+                String nconfig = swap(rem.config, idx, i);
+                if(!vis.contains(nconfig)){
+                    Pair np = new Pair();
+                    np.config = nconfig;
+                    np.level = rem.level + 1;
+                    queue.add(np);
+                }
+            }
+        }
+        return -1;
+    }
+    public String swap(String str, int i, int j){
+        StringBuilder sb = new StringBuilder(str);
+        
+        char chi = sb.charAt(i);
+        char chj = sb.charAt(j);
+        sb.setCharAt(i, chj);
+        sb.setCharAt(j, chi);
         
         return sb.toString();
     }
-    
-     public  int slidingPuzzle(int[][] board) {
-    LinkedList<String> qu = new LinkedList<>();
-    String target = "123450";
-    
-    StringBuilder sb = new StringBuilder();
-    for(int i=0;i<board.length;i++){
-        for(int j=0;j<board[0].length;j++){
-            sb.append(board[i][j]);     // 2D matrix ko string mn convert krdiaa
-        }
-    }
-    
-    String initial = sb.toString();
-    
-    // isse pta chlega ki 0 jis i=bh index pr h vo kiske sth swap hoskta h
-        // index->    //    0      1       2      3      4      5   
-    int [][]swapIdx = {{1,3},{0,2,4},{1,5},{0,4},{1,3,5},{4,2}};
-    
-    qu.addLast(initial);
-    int level = 0;
-    HashSet<String>  vis = new HashSet<>();      // for visited mark krne ke liye
-    while(qu.size()>0){
-        int size = qu.size();
-        while(size-->0){
-            String rem = qu.removeFirst();
-            if(rem.equals(target)){
-                return level;
-            }
-// agr rem vala equal ni h toh ab pta krenge ki 0 konse index pr h 
-            int idx = -1;
-            for(int i=0;i<rem.length();i++){
-                if(rem.charAt(i)=='0'){
-                    idx = i;   // yhn se hume 0 ka index milgya hoga
-                    break;
-                }
-            }
-            int [] swap = swapIdx[idx];
-            for(int i=0;i<swap.length;i++){
-                String toBeAdded = swapChar(rem,idx,swap[i]);
-                if(vis.contains(toBeAdded)){
-                    continue;
-                }
-                qu.addLast(toBeAdded);
-                vis.add(toBeAdded);
+    public String getConfig(int[][] board){
+        StringBuilder sb = new StringBuilder();
+        
+        for(int[] row: board){
+            for(int val: row){
+                sb.append(val);
             }
         }
-        level++;
+        return sb.toString();
     }
-    return -1;
-  }
 }
