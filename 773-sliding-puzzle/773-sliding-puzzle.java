@@ -20,7 +20,7 @@ class Solution {
     
     String initial = sb.toString();
     
-    // isse pta chlega ki 0 jis bhi index pr h vo kiske sth swap hoskta h
+    // isse pta chlega ki 0 jis i=bh index pr h vo kiske sth swap hoskta h
         // index->    //    0      1       2      3      4      5   
     int [][]swapIdx = {{1,3},{0,2,4},{1,5},{0,4},{1,3,5},{4,2}};
     
