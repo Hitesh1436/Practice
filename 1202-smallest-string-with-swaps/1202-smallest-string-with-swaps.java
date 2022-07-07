@@ -1,54 +1,54 @@
 class Solution {
-    // graph
-    ArrayList<Integer> gp[];
+    int []parent;
+    int []rank;
     public String smallestStringWithSwaps(String s, List<List<Integer>> pairs) {
-        // prepare graph;
-        gp = new ArrayList[s.length()];
-        for(int i = 0; i < s.length(); i++) {
-            gp[i] = new ArrayList<>();
-        }
-        for(int i = 0; i <pairs.size(); i++) {
-            int u = pairs.get(i).get(0);
-            int v = pairs.get(i).get(1);
-            gp[u].add(v);
-            gp[v].add(u);
-        }
+        parent = new int[s.length()];
+        rank = new int[s.length()];
         
-        // dfs and fill
-        boolean vis[] = new boolean[s.length()];
-        char ans[] = new char[s.length()];
-        for(int i = 0; i < s.length(); i++) {
-            if(!vis[i]) {
-                ArrayList<Integer> idx = new ArrayList<>();
-                dfs(i, vis, idx);
-                fill(s, ans, idx);
-            }
+        for(int i=0;i<parent.length;i++){
+            parent[i] = i;
+            rank[i] =0;
         }
-        return String.copyValueOf(ans);
+         char ch[]=s.toCharArray();
+        for(int i=0;i<pairs.size();i++)
+        union(pairs.get(i).get(0),pairs.get(i).get(1));
+    Map<Integer,PriorityQueue<Character>> mp=new HashMap<>();
+    for(int i=0;i<s.length();i++){
+        int x=find(i);
+        if(mp.containsKey(x)){
+            PriorityQueue<Character> pq=mp.get(x);
+            pq.offer(ch[i]);
+            mp.put(x,pq);
+        }
+        else{
+         PriorityQueue<Character> pq=new PriorityQueue<>();
+            pq.offer(ch[i]);
+            mp.put(x,pq);
+        } 
     }
-    public void dfs(int i, boolean[] vis, ArrayList<Integer> idxs) {
-        vis[i] = true;
-        idxs.add(i);
-        for(int nei = 0; nei < gp[i].size(); nei++) {
-            if(!vis[gp[i].get(nei)]) {
-                dfs(gp[i].get(nei), vis, idxs);
-            }
+    char ans[]=new char[parent.length];
+    for (int i = 0; i < ans.length; i++) 
+        ch[i] = mp.get(find(i)).poll();
+    return new String(ch);
+    }
+    public int find(int x){
+        if(parent[x]==x){
+            return x;
+        }else{
+            parent[x]= find(parent[x]);
+            return parent[x];
         }
     }
-    public void fill(String s, char[] ans, ArrayList<Integer> idxs) {
-        int ch[] = new int[26];
-        Collections.sort(idxs);
-        for(int i = 0; i < idxs.size(); i++) {
-            ch[s.charAt(idxs.get(i)) - 'a']++;
-        }
-        for(int i = 0; i < idxs.size(); i++) {
-            for(int c = 0; c < 26; c++) {
-                if(ch[c] > 0) {
-                    ans[idxs.get(i)] = (char)(c + 'a');
-                    ch[c]--;
-                    break;
-                }
-            }
+    public void union(int x,int y){
+        int xl = find(x);
+        int yl = find(y);
+        if(rank[xl]<rank[yl]){
+            parent[yl]=xl;
+        }else if(rank[yl]<rank[xl]){
+            parent[xl]=yl;
+        }else{
+            parent[xl] = yl;
+            rank[yl]++;
         }
     }
 }
