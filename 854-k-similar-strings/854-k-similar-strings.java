@@ -1,7 +1,7 @@
 class Solution {
     public int kSimilarity(String s1, String s2) {
         HashSet<String> vis = new HashSet<>();
-        Queue<String> qu = new ArrayDeque<>();
+        ArrayDeque<String> qu = new ArrayDeque<>();
         int level =0;
         qu.add(s1);
         
