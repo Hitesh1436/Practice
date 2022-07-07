@@ -1,13 +1,13 @@
 class Solution {
    public List<Integer> eventualSafeNodes(int[][] graph) {
         int[] safeNode = new int[graph.length];
-        List<Integer> res = new ArrayList<>();
+        List<Integer> ans = new ArrayList<>();
         for(int i = 0; i < graph.length; i++){
             if(dfs(graph, i, safeNode)){
-               res.add(i);
+               ans.add(i);
             }
         }
-        return res;
+        return ans;
     }
 
     public boolean dfs(int[][] graph, int currentNode, int[] safeNode){
