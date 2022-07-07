@@ -1,43 +1,31 @@
 class Solution {
-    public List<Integer> eventualSafeNodes(int[][] graphList) {
-
-        int n  = graphList.length;
-        int []degree = new int[n];
-        boolean isSafe[] = new boolean[n];
-        Queue<Integer> q = new LinkedList<>();
-        HashSet<Integer>[]  neighbour= new HashSet[n];
-        for(int i=0;i<n;i++){
-            neighbour[i] = new HashSet<Integer>();
-        }
-        for(int i=0;i<n;i++){
-
-            if(graphList[i].length==0){
-                isSafe[i] = true;
-                q.offer(i);
+   public List<Integer> eventualSafeNodes(int[][] graph) {
+        int[] safeNode = new int[graph.length];
+        List<Integer> ans = new ArrayList<>();
+        for(int i = 0; i < graph.length; i++){
+            if(dfs(graph, i, safeNode)){
+               ans.add(i);
             }
-            for(int v:graphList[i]){
-             neighbour[v].add(i);   
-            }        
-            degree[i] = graphList[i].length;
+        }
+        return ans;
+    }
+
+    public boolean dfs(int[][] graph, int currentNode, int[] safeNode){
+        if(safeNode[currentNode] == 2){
+            return true;
+        }
+        if(safeNode[currentNode] == 1){
+            return false;
         }
 
-        while(!q.isEmpty()){
-
-            int curr = q.poll();
-            isSafe[curr] = true;
-
-            for(int v:neighbour[curr]){
-
-                degree[v]--;
-                if(degree[v]==0){
-                    q.offer(v);
-                }            
-            }        
+        safeNode[currentNode] = 1;
+        int[] edge = graph[currentNode];
+        for(int i = 0; i < edge.length; i++){
+            if(!dfs(graph, edge[i], safeNode)){
+                return false;
+            }
         }
-        ArrayList<Integer> res = new ArrayList<>();
-        for(int i=0;i<n;i++){
-            if(isSafe[i])res.add(i);
-        }  
-        return res;
-        }
+        safeNode[currentNode] = 2;
+        return true;
+    }
 }
