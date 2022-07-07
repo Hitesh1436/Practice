@@ -1,41 +1,39 @@
 class Solution {
-    class Pair {
+    class Pair{
         String config;
         int level;
     }
     public int slidingPuzzle(int[][] board) {
         HashSet<String> vis = new HashSet<>();
+        ArrayDeque<Pair> qu = new ArrayDeque<>();
         
-        ArrayDeque<Pair> queue = new ArrayDeque<>();
         Pair rootp = new Pair();
         rootp.config = getConfig(board);
         rootp.level = 0;
-        queue.add(rootp);
+        qu.add(rootp);
         
-        while(queue.size() > 0){
-            // remove
-            Pair rem = queue.remove();
-            
+        while(qu.size()>0){
+            // remove kro
+            Pair rem = qu.remove();
             // mark*
             if(vis.contains(rem.config)){
                 continue;
             }
             vis.add(rem.config);
-
             // work
             if(rem.config.equals("123450")){
                 return rem.level;
-            } 
-            // addN*
-    int[][] dirs = {{1, 3}, {0, 2, 4}, {1, 5}, {0, 4}, {1, 3, 5}, {2, 4}};
+            }
+            // add neighbour*
+            int [][]dirs = {{1,3},{0,2,4},{1,5},{0,4},{1,3,5},{2,4}};
             int idx = rem.config.indexOf('0');
             for(int i: dirs[idx]){
-                String nconfig = swap(rem.config, idx, i);
+                String nconfig = swap(rem.config,idx,i);  // new config aygii swap krne se
                 if(!vis.contains(nconfig)){
                     Pair np = new Pair();
                     np.config = nconfig;
                     np.level = rem.level + 1;
-                    queue.add(np);
+                    qu.add(np);
                 }
             }
         }
@@ -51,11 +49,10 @@ class Solution {
         
         return sb.toString();
     }
-    public String getConfig(int[][] board){
+    public String getConfig(int [][]grid){
         StringBuilder sb = new StringBuilder();
-        
-        for(int[] row: board){
-            for(int val: row){
+        for(int []row : grid){
+            for(int val : row){
                 sb.append(val);
             }
         }
