@@ -16,7 +16,7 @@ class Solution {
                  union(iL,jL);
              }
          }
-        PriorityQueue<Character>[]pq = new PriorityQueue[s.length()];
+        PriorityQueue<Character>[]pq = new PriorityQueue[s.length()];  // tki lexographically order mn ajye
         for(int i=0;i<pq.length;i++){
             pq[i] = new PriorityQueue<>();
         }
