@@ -1,23 +1,28 @@
 class Solution {
     public List<List<Integer>> allPathsSourceTarget(int[][] graph) {
-        List<List<Integer>> ans = new ArrayList<>();
-        Queue<List<Integer>> q = new LinkedList<>();
-        List<Integer> currList = new ArrayList<>();
-        currList.add(0);
-        q.add(currList);
-        while(!q.isEmpty()) {
-            currList = q.poll();
-            int v = currList.get(currList.size() - 1);
-            if(v == graph.length - 1) {
-                ans.add(currList);
-                continue;
-            }
-            for(int i : graph[v]) {
-                List<Integer> temp = new ArrayList<>(currList);
-                temp.add(i);
-                q.add(temp);
+        List<List<Integer>> result=new ArrayList<>();
+        int n=graph.length;
+        boolean [] visited=new boolean[n];
+        ArrayList<Integer> path=new ArrayList<Integer>();
+        path.add(0); //adding src in path
+        dfs(graph,0,n-1,visited,result,path);//dfs traversal for src 0 to n-1
+        return result;
+    }
+    
+    public static void dfs(int[][] graph,int src,int dest,boolean visited[],List<List<Integer>> result,List<Integer> path){
+        if(src==dest){
+            List<Integer> list=new ArrayList<>(path);
+            result.add(list);
+            return;
+        }
+        visited[src]=true;
+        for(int e :graph[src]){
+            if(!visited[e]){
+                path.add(e);
+                dfs(graph,e,dest,visited,result,path);
+                path.remove(path.size()-1);
             }
         }
-        return ans;
-   }    
+        visited[src]=false;
+    }
 }
