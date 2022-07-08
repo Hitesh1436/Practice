@@ -1,63 +1,49 @@
+// Top-down approach with memoization:
 class Solution {
-    int MAX = 100000000;
-
+    
+    private int houses[], cost[][], m, n, target, memo[][][];
+    private static final int MAX = Integer.MAX_VALUE;
+    
     public int minCost(int[] houses, int[][] cost, int m, int n, int target) {
-        int[][][] dp = new int[m][n][target + 1];
-        for (int i = 0; i < m; ++i) {
-            for (int j = 0; j < n; ++j)
-                Arrays.fill(dp[i][j], -1);
-        }
-
-        int ans = paintRecursively(houses, cost, m, n, target, 0, 0, -1, dp);
-        if (ans == MAX) {
-            return -1;
-        }
-        return ans;
+        this.houses = houses;
+        this.cost = cost;
+        this.m = m;
+        this.n = n;
+        this.target = target;
+        this.memo = new int[m][n + 1][target + 1];
+        return dp(0, 0, 0);
     }
-
-    //houseToBePainted = current house to be painted
-    //currentTarget = number of neighborhoods painted till now
-    //lastNbhColor = last neighbours color
-    public int paintRecursively(int[] houses, int[][] cost, int m, int n, int target,
-                                int houseToBePainted, // Dp state
-                                int currentTarget, // Dp state
-                                int lastNbhColor, // Dp state
-                                int[][][] dp
-    ) {
-        if (houseToBePainted == m) {
-            if (currentTarget == target) return 0;
-            return MAX;
+    
+    private int dp(int i, int color, int neighborhood) {
+        if (i == m)
+            return neighborhood != target ? -1 : 0;
+        
+        if (neighborhood > target)
+            return -1;
+        
+        if (memo[i][color][neighborhood] != 0)
+            return memo[i][color][neighborhood];
+        
+        int min = MAX;
+        if (houses[i] == 0) {
+            for (int clr = 1; clr <= n; clr++) {
+                int price = 0;
+                if (clr == color)
+                    price = dp(i + 1, clr, neighborhood);
+                else
+                    price = dp(i + 1, clr, neighborhood + 1);
+                
+                if (price >= 0)
+                    min = Math.min(min, cost[i][clr - 1] + price);
+            }    
+        } else {
+            if (houses[i] == color)
+                min = dp(i + 1, houses[i], neighborhood);
+            else
+                min = dp(i + 1, houses[i], neighborhood + 1);
         }
-        if (currentTarget == target + 1) return MAX;
-        if (lastNbhColor != -1) {
-            if (dp[houseToBePainted][lastNbhColor][currentTarget] != -1) {
-                return dp[houseToBePainted][lastNbhColor][currentTarget];
-            }
-        }
-        int minCost = MAX;
-        //Step 1: Choose a paint color
-        for (int currentColor = 0; currentColor < n; ++currentColor) {
-            // Do we even need to paint? Or the house is already painted with color that we chose.
-            boolean isFree = false;
-            if (houses[houseToBePainted] != 0) {
-                //Note: If house is already painted with a different color than the one which we are using, stop right away, since we cannot override a paint.
-                if (houses[houseToBePainted] != currentColor + 1)
-                    continue;
-                else // No need to pay to paint this color, it's already painted!
-                    isFree = true;
-            }
-            //Step 2: Are we using a new paint that was not same as the last one?
-            //Step 2A: If yes, we will create a new neighborhood from here 
-            if (currentColor != lastNbhColor) {
-                minCost = Math.min(minCost, paintRecursively(houses, cost, m, n, target, houseToBePainted + 1, currentTarget + 1, currentColor, dp) + ((isFree) ? 0 : cost[houseToBePainted][currentColor]));
-
-            } else { // Step2B: If no, we will continue with previous neighborhood 
-                minCost = Math.min(minCost, paintRecursively(houses, cost, m, n, target, houseToBePainted + 1, currentTarget, currentColor, dp) + ((isFree) ? 0 : cost[houseToBePainted][currentColor]));
-            }
-        }
-        if (lastNbhColor != -1) {
-            dp[houseToBePainted][lastNbhColor][currentTarget] = minCost;
-        }
-        return minCost;
+        
+        memo[i][color][neighborhood] = min == MAX ? -1 : min;
+        return memo[i][color][neighborhood];
     }
 }
