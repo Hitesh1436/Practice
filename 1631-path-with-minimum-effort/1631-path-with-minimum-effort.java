@@ -1,33 +1,20 @@
 class Solution {
-    public int minimumEffortPath(int[][] heights) {
-        int m = heights.length;
-        int n = heights[0].length;
-
-        int[][] efforts = new int[m][n]; 
-        for(int i = 0; i < m; i++)
-            Arrays.fill(efforts[i], Integer.MAX_VALUE);
-        //dist, row, col --> int[]
-        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[0]));
-        pq.offer(new int[]{0,0,0});
+    public int minimumEffortPath(int[][] arr) {
+        int n=arr.length,m=arr[0].length;
+        boolean [][]visited=new boolean[n][m];
+        Queue<int[]>q=new PriorityQueue<>((a,b)->a[2]-b[2]);
+        q.add(new int[]{0,0,0});
         
-        int[][] dir = new int[][] {{0,1},{0,-1},{1,0},{-1,0}};
-        while(!pq.isEmpty()){
-            int[] min = pq.poll();
-            int dist = min[0], row = min[1], col = min[2];
-            if(dist > efforts[row][col])
-                continue;
-            if(row == m-1 && col == n-1)
-                return dist;
-            for(int[] d : dir){
-                int newRow = row+d[0];
-                int newCol = col+d[1];
-                if(newRow >= 0 && newRow < m && newCol >= 0 && newCol < n){
-                    int newDist = Math.max(dist, Math.abs(heights[newRow][newCol] - heights[row][col]));
-                    if(newDist < efforts[newRow][newCol]){
-                        efforts[newRow][newCol] = newDist;
-                        pq.offer(new int[]{newDist, newRow, newCol});
-                    }
-                }
+        while(q.size()>0){
+            int[] t=q.poll();
+            int r=t[0],c=t[1];
+            if(visited[r][c]==false){
+                if(r==n-1&&c==m-1)return t[2];
+                visited[r][c]=true;
+                if(r>0)q.add(new int[]{r-1,c,Math.max(t[2],Math.abs(arr[r-1][c]-arr[r][c]))});
+                if(r<n-1)q.add(new int[]{r+1,c,Math.max(t[2],Math.abs(arr[r+1][c]-arr[r][c]))});
+                if(c>0)q.add(new int[]{r,c-1,Math.max(t[2],Math.abs(arr[r][c-1]-arr[r][c]))});
+                if(c<m-1)q.add(new int[]{r,c+1,Math.max(t[2],Math.abs(arr[r][c+1]-arr[r][c]))});
             }
         }
         return 0;
