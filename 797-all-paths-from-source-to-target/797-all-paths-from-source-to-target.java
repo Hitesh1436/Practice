@@ -1,28 +1,26 @@
 class Solution {
     public List<List<Integer>> allPathsSourceTarget(int[][] graph) {
-        List<List<Integer>> result=new ArrayList<>();
-        int n=graph.length;
-        boolean [] visited=new boolean[n];
-        ArrayList<Integer> path=new ArrayList<Integer>();
-        path.add(0); //adding src in path
-        dfs(graph,0,n-1,visited,result,path);//dfs traversal for src 0 to n-1
-        return result;
+        List<List<Integer>> res = new ArrayList<>();
+        int n = graph.length;
+        boolean []vis=new boolean[n];
+        List<Integer> path = new ArrayList<>();
+            path.add(0);  // src add krdia
+        dfs(graph,0,n-1,vis,res,path);
+        return res;
     }
-    
-    public static void dfs(int[][] graph,int src,int dest,boolean visited[],List<List<Integer>> result,List<Integer> path){
-        if(src==dest){
-            List<Integer> list=new ArrayList<>(path);
-            result.add(list);
+    private void dfs(int [][]graph,int src,int dest,boolean []vis,List<List<Integer>> res,List<Integer>path){
+        if(src == dest){
+            res.add(new ArrayList<>(path));
             return;
         }
-        visited[src]=true;
-        for(int e :graph[src]){
-            if(!visited[e]){
-                path.add(e);
-                dfs(graph,e,dest,visited,result,path);
+        vis[src]= true;
+        for(int nbr : graph[src]){
+            if(vis[nbr]== false){
+                path.add(nbr);
+                dfs(graph,nbr,dest,vis,res,path);
                 path.remove(path.size()-1);
             }
         }
-        visited[src]=false;
+        vis[src]=false;
     }
 }
