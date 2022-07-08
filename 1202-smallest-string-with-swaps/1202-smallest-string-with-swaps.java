@@ -2,45 +2,39 @@ class Solution {
     public String smallestStringWithSwaps(String s, List<List<Integer>> pairs) {
         parent = new int[s.length()];
         rank = new int[s.length()];
-        for(int i = 0; i < s.length(); i++){
+        for(int i=0;i<parent.length;i++){
             parent[i] = i;
-            rank[i] = 0;
+            rank[i] =0;
         }
-        
-        for(List<Integer> pair: pairs){
-            int i = pair.get(0);
-            int j = pair.get(1);
-            
-            int il = find(i);
-            int jl = find(j);
-            if(il != jl){
-                union(il, jl);
-            }
+         for(List<Integer> p : pairs){
+             int i = p.get(0);
+             int j = p.get(1);
+             
+             int iL = find(i);
+             int jL = find(j);
+             if(iL != jL){
+                 union(iL,jL);
+             }
+         }
+        PriorityQueue<Character>[]pq = new PriorityQueue[s.length()];
+        for(int i=0;i<pq.length;i++){
+            pq[i] = new PriorityQueue<>();
         }
-        
-        PriorityQueue<Character>[] pqs = new PriorityQueue[s.length()];
-        for(int i = 0; i < pqs.length; i++){
-            pqs[i] = new PriorityQueue<>();
-        }
-        
-        for(int i = 0; i < s.length(); i++){
-            int il = find(i);
+        for(int i=0;i<s.length();i++){
+            int iL = find(i);
             char ch = s.charAt(i);
-            pqs[il].add(ch);
+            pq[iL].add(ch);  // jo uss index ka lead hoga uss pq mn dlega vo character
         }
-        
         StringBuilder sb = new StringBuilder();
-        for(int i = 0; i < s.length(); i++){
-            int il = find(i);
-            char ch = pqs[il].remove();
+        for(int i=0;i<s.length();i++){
+            int iL = find(i);
+            char ch = pq[iL].remove();
             sb.append(ch);
         }
-        
         return sb.toString();
     }
-    int[] parent;
-    int[] rank;
-    
+     int[] parent;
+     int[] rank;
     void union(int x, int y){
         if(rank[x] < rank[y]){
             parent[x] = y;
