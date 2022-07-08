@@ -1,51 +1,35 @@
-class T {
-  public int i;
-  public int j;
-  public int d; // max difference of (i, j) and its neighbors
-  public T(int i, int j, int d) {
-    this.i = i;
-    this.j = j;
-    this.d = d;
-  }
-}
-
 class Solution {
-  public int minimumEffortPath(int[][] heights) {
-    final int m = heights.length;
-    final int n = heights[0].length;
-    final int[] dirs = {0, 1, 0, -1, 0};
-    Queue<T> minHeap = new PriorityQueue<>((a, b) -> a.d - b.d);
-    // dist[i][j] := max absolute difference to reach (i, j)
-    int[][] diff = new int[m][n];
-    Arrays.stream(diff).forEach(row -> Arrays.fill(row, Integer.MAX_VALUE));
-    boolean[][] seen = new boolean[m][n];
+    public int minimumEffortPath(int[][] heights) {
+        int m = heights.length;
+        int n = heights[0].length;
 
-    minHeap.offer(new T(0, 0, 0));
-    diff[0][0] = 0;
-
-    while (!minHeap.isEmpty()) {
-      final int i = minHeap.peek().i;
-      final int j = minHeap.peek().j;
-      final int d = minHeap.poll().d;
-      if (i == m - 1 && j == n - 1)
-        return d;
-      seen[i][j] = true;
-      for (int k = 0; k < 4; ++k) {
-        final int x = i + dirs[k];
-        final int y = j + dirs[k + 1];
-        if (x < 0 || x == m || y < 0 || y == n)
-          continue;
-        if (seen[x][y])
-          continue;
-        final int newDiff = Math.abs(heights[i][j] - heights[x][y]);
-        final int maxDiff = Math.max(diff[i][j], newDiff);
-        if (diff[x][y] > maxDiff) {
-          diff[x][y] = maxDiff;
-          minHeap.offer(new T(x, y, maxDiff));
+        int[][] efforts = new int[m][n]; 
+        for(int i = 0; i < m; i++)
+            Arrays.fill(efforts[i], Integer.MAX_VALUE);
+        //dist, row, col --> int[]
+        PriorityQueue<int[]> pq = new PriorityQueue<>(Comparator.comparingInt(a -> a[0]));
+        pq.offer(new int[]{0,0,0});
+        
+        int[][] dir = new int[][] {{0,1},{0,-1},{1,0},{-1,0}};
+        while(!pq.isEmpty()){
+            int[] min = pq.poll();
+            int dist = min[0], row = min[1], col = min[2];
+            if(dist > efforts[row][col])
+                continue;
+            if(row == m-1 && col == n-1)
+                return dist;
+            for(int[] d : dir){
+                int newRow = row+d[0];
+                int newCol = col+d[1];
+                if(newRow >= 0 && newRow < m && newCol >= 0 && newCol < n){
+                    int newDist = Math.max(dist, Math.abs(heights[newRow][newCol] - heights[row][col]));
+                    if(newDist < efforts[newRow][newCol]){
+                        efforts[newRow][newCol] = newDist;
+                        pq.offer(new int[]{newDist, newRow, newCol});
+                    }
+                }
+            }
         }
-      }
+        return 0;
     }
-
-    throw new IllegalArgumentException();
-  }
 }
