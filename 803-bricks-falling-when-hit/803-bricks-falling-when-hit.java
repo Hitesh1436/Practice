@@ -1,109 +1,77 @@
 class Solution {
-    int[] parents;
-    int[] sizes;
-    int m, n;
-    
-    private static final int[][] DIRECTIONS = {{1, 0}, {-1, 0}, {0, 1}, {0, -1}};
+    int[][] dirs = new int[][]{{1,0},{-1,0},{0,1},{0,-1}};
+
     public int[] hitBricks(int[][] grid, int[][] hits) {
-        this.m = grid.length;
-        this.n = grid[0].length;
+        //marking all the hits that has a brick with -1
+        for(int i=0;i<hits.length;i++)
+            if(grid[hits[i][0]][hits[i][1]] == 1)
+                grid[hits[i][0]][hits[i][1]] = -1;
         
-        // Step 1). copy table and removing all stones being hit
-        this.parents = new int[m * n + 1];
-        for (int i = 0; i <= m * n; i++) parents[i] = i;
-        this.sizes = new int[m * n + 1];
-        //Arrays.fill(sizes, 1);
+        //marking all the stable bricks
+        for(int i=0;i<grid[0].length;i++)
+            markAndCountStableBricks(grid, 0, i);
         
-        int[][] mat = new int[m][n];
-        for (int i = 0; i < m; i++) 
-            for (int j = 0; j < n; j++) 
-                mat[i][j] = grid[i][j];
-            
-        for (int[] hit : hits) 
-            mat[hit[0]][hit[1]] = 0;
-        
-        
-        for (int i = 0; i < m; i++) 
-            for (int j = 0; j < n; j++) 
-                if (mat[i][j] == 1) sizes[i * n + j] = 1;
-        
-        
-        
-        // Step 2). initialization, union all remaining entries
-        for (int j = 0; j < n; j++) 
-            if (mat[0][j] == 1) union(j, m * n);
-            
-        for (int i = 1; i < m; i++) {
-            for (int j = 0; j < n; j++) {
-                if (mat[i][j] == 0) continue;
-                
-                int id = i * n + j;
-                if (mat[i-1][j] == 1) union(id, (i-1) * n + j);
-                if (j != 0 && mat[i][j-1] == 1) union(id, i * n + (j-1));
-            }
-        }
-
-        
-        // Step 3). adding bricks being hit
         int[] res = new int[hits.length];
-        for (int h = hits.length - 1; h >= 0; h--) {
-            int x = hits[h][0];
-            int y = hits[h][1];
-            if (grid[x][y] == 0) continue;
+        //looping over hits array backwards and restoring bricks
+        for(int i=hits.length-1;i>=0;i--){
+            int row = hits[i][0];
+            int col = hits[i][1];
             
-            // hit on a brick, add that brick back
-            int id = x * n + y;
-            mat[x][y] = 1;
-            sizes[id] = 1;
+            //hit is at empty space so continue
+            if(grid[row][col] == 0)
+                continue;
             
-            int afterStable = sizes[m * n];
-            
-            for (int[] dir : DIRECTIONS) {
-                int newX = x + dir[0];
-                int newY = y + dir[1];
-                
-                if (newX < 0) {
-                    union(id, m * n);
-                    continue;
-                }
-                
-                if (newY < 0 || newX >= m || newY >= n) continue;
-                if (mat[newX][newY] == 0) continue;
-                
-                int nId = newX * n + newY;
-                union(id, nId);
-            }
-            int currStable = sizes[m * n];
-            
-            // hitting the brick actually causes some brick to fall
-            if (currStable - afterStable > 0) {
-                res[h] = currStable - afterStable - 1;
-            }
+            //marking it with 1, this signifies that a brick is present in an unstable state and will be restored in the future
+            grid[row][col] = 1;
+            // checking brick stability, if it's unstable no need to visit the neighbours
+            if(!isStable(grid, row, col))
+                continue;
+			
+			//So now as our brick is stable we can restore all the bricks connected to it
+            //mark all the unstable bricks as stable and get the count
+            res[i] = markAndCountStableBricks(grid, hits[i][0], hits[i][1])-1; //Subtracting 1 from the total count, as we don't wanna include the starting restored brick
         }
-        return res; 
-    }
-    
-    private int find(int x) {
-        while (x != parents[x]) {
-            parents[x] = parents[parents[x]];
-            x = parents[x];
-        }
-        return x;
-    }
-    
-    private void union(int x, int y) {
-        int xParent = find(x);
-        int yParent = find(y);
-      
-        if (xParent == yParent) return;
         
-        if (xParent == m * n) {
-            parents[yParent] = xParent;
-            sizes[xParent] += sizes[yParent];
-        } else {
-            parents[xParent] = yParent;
-            sizes[yParent] += sizes[xParent];
+        return res;
+    }
+    
+    private int markAndCountStableBricks(int[][] grid, int row, int col){
+        if(grid[row][col] == 0 || grid[row][col] == -1)
+            return 0;
+        
+        grid[row][col] = 2;
+        int stableBricks = 1;
+        for(int[] dir:dirs){
+            int r = row+dir[0];
+            int c = col+dir[1];
+            
+            if(r < 0 || r >= grid.length || c < 0 || c >= grid[0].length)
+                continue;
+            
+            if(grid[r][c] == 0 || grid[r][c] == -1 || grid[r][c] == 2)
+                continue;
+            
+            stableBricks += markAndCountStableBricks(grid, r, c);
         }
-
+        
+        return stableBricks;
+    }
+    
+    private boolean isStable(int[][] grid, int row, int col){
+        if(row == 0)
+            return true;
+        
+        for(int[] dir:dirs){
+            int r = row+dir[0];
+            int c = col+dir[1];
+            
+            if(r < 0 || r >= grid.length || c < 0 || c >= grid[0].length)
+                continue;
+            
+            if(grid[r][c] == 2)
+                return true;
+        }
+        
+        return false;
     }
 }
