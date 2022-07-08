@@ -18,7 +18,7 @@ class Solution {
             if(vis[nbr]== false){
                 path.add(nbr);
                 dfs(graph,nbr,dest,vis,res,path);
-                path.remove(path.size()-1);
+                path.remove(path.size()-1);  // backtracking kia h 
             }
         }
         vis[src]=false;
