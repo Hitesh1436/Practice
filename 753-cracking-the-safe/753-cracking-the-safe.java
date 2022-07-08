@@ -1,37 +1,36 @@
+// "De Bruijn sequence"
 class Solution {
     public String crackSafe(int n, int k) {
-        int targetCnt = (int)Math.pow(k,n);
-        boolean[] visited = new boolean[(int)Math.pow(10,n)];
-        visited[0] = true;
-        int visitedCnt = 1;
-        StringBuilder crackStr = new StringBuilder();
-        for(int i=0;i<n;i++){
-            crackStr.append('0');
+        Set<String> visited = new HashSet<String>();
+        //*start from string "00.."
+        String res = "";
+        for(int j = 0; j < n; j++){
+            res+=0;
         }
-        dfsAddPwd(n,k,crackStr,0,visited, visitedCnt,targetCnt);        
-        return foundStr;
+        //*calculate target length, which is k^n+n-1
+        int total = 1;
+        for(int i = 0; i < n; i++){
+            total *= k;
+        }
+        total += n-1;
+        //*run DFS
+        res=DFS(res, n, k, visited, total);
+        return res;
     }
-    
-    String foundStr;
-    
-    private void dfsAddPwd(int n, int k, StringBuilder crackStr,int prev, boolean[] visited,int visitedCnt, int targetCnt){
-        if(foundStr!=null ) return;
-        if(visitedCnt == targetCnt){
-            foundStr = crackStr.toString();
-            //System.out.println(foundStr);
-            return;
-        }
-        
-        int root = 10*prev % ((int)Math.pow(10,n));
-        for(int i=0;i<k;i++){
-            int current = root +i;
-            if(!visited[current]){                
-                crackStr.append(i);
-                visited[current] = true;
-                dfsAddPwd(n,k,crackStr,current,visited,visitedCnt+1,targetCnt);
-                crackStr.setLength(crackStr.length()-1);
-                visited[current] = false;
+    private String DFS(String res, int n, int k, Set<String> visited, int total){
+        int len = res.length();
+        visited.add(res.substring(len-n, len));
+        for(int i = 0; i < k; i++){
+            if(!visited.contains(res.substring(len-n+1, len)+i)){
+                String tmp = DFS(res+i, n, k, visited, total);
+                //*if length of result is less than total length, remove substring from visited and continue loop, else we are done! break the loop!
+                if(tmp.length() == total){
+                    res = tmp;
+                    break;
+                }
+                visited.remove(res.substring(len-n+1, len)+i);
             }
-        }
+        }     
+        return res;
     }
 }
