@@ -1,36 +1,36 @@
-// "De Bruijn sequence"
 class Solution {
     public String crackSafe(int n, int k) {
-        Set<String> visited = new HashSet<String>();
-        //*start from string "00.."
-        String res = "";
-        for(int j = 0; j < n; j++){
-            res+=0;
+        StringBuilder sb = new StringBuilder();
+        for(int i=0;i<n;i++){
+            sb.append(0);
         }
-        //*calculate target length, which is k^n+n-1
-        int total = 1;
-        for(int i = 0; i < n; i++){
-            total *= k;
-        }
-        total += n-1;
-        //*run DFS
-        res=DFS(res, n, k, visited, total);
-        return res;
+        HashSet<String> vis = new HashSet<>();
+        vis.add(sb.toString());
+        
+        int limit = (int)Math.pow(k,n);
+        dfs(sb,vis,limit,n,k);
+        
+        return sb.toString();
     }
-    private String DFS(String res, int n, int k, Set<String> visited, int total){
-        int len = res.length();
-        visited.add(res.substring(len-n, len));
-        for(int i = 0; i < k; i++){
-            if(!visited.contains(res.substring(len-n+1, len)+i)){
-                String tmp = DFS(res+i, n, k, visited, total);
-                //*if length of result is less than total length, remove substring from visited and continue loop, else we are done! break the loop!
-                if(tmp.length() == total){
-                    res = tmp;
-                    break;
+    private boolean dfs(StringBuilder sb,HashSet<String> vis,int lim,int n,int k){
+        if(vis.size()== lim){
+            return true;  // mtlb answer milgya 
+        }
+        String lnm1 = sb.substring(sb.length()-(n-1));  // lnm1-> length n minus one mtlb last ke n-1 change krna h new pwsrd bnne ke liye 
+        for(int i=0;i<k;i++){
+            String npwd = lnm1 + i; // npwd - > new password
+            if(!vis.contains(npwd)){
+                vis.add(npwd);
+                sb.append(i);
+                boolean flag = dfs(sb,vis,lim,n,k);
+                if(flag == true){
+                    return true;
+                }else{
+                    vis.remove(npwd);
+                    sb.deleteCharAt(sb.length()-1);
                 }
-                visited.remove(res.substring(len-n+1, len)+i);
             }
-        }     
-        return res;
+        }
+        return false;
     }
 }
