@@ -1,77 +1,92 @@
 class Solution {
-    int[][] dirs = new int[][]{{1,0},{-1,0},{0,1},{0,-1}};
-
     public int[] hitBricks(int[][] grid, int[][] hits) {
-        //marking all the hits that has a brick with -1
-        for(int i=0;i<hits.length;i++)
-            if(grid[hits[i][0]][hits[i][1]] == 1)
-                grid[hits[i][0]][hits[i][1]] = -1;
+        int m = grid.length;
+        int n = grid[0].length;
         
-        //marking all the stable bricks
-        for(int i=0;i<grid[0].length;i++)
-            markAndCountStableBricks(grid, 0, i);
-        
-        int[] res = new int[hits.length];
-        //looping over hits array backwards and restoring bricks
-        for(int i=hits.length-1;i>=0;i--){
-            int row = hits[i][0];
-            int col = hits[i][1];
-            
-            //hit is at empty space so continue
-            if(grid[row][col] == 0)
-                continue;
-            
-            //marking it with 1, this signifies that a brick is present in an unstable state and will be restored in the future
-            grid[row][col] = 1;
-            // checking brick stability, if it's unstable no need to visit the neighbours
-            if(!isStable(grid, row, col))
-                continue;
-			
-			//So now as our brick is stable we can restore all the bricks connected to it
-            //mark all the unstable bricks as stable and get the count
-            res[i] = markAndCountStableBricks(grid, hits[i][0], hits[i][1])-1; //Subtracting 1 from the total count, as we don't wanna include the starting restored brick
+        parent = new int[m * n + 1];
+        rank = new int[m * n + 1];
+        size = new int[m * n + 1];
+        for(int i = 0; i < parent.length; i++){
+            parent[i] = i;
+            size[i] = 1;
+            rank[i] = 0;
         }
+        for(int[] hit: hits){
+            int x = hit[0];
+            int y= hit[1];
+            
+            if(grid[x][y] == 1){
+                grid[x][y] = 2;
+            } 
+        }
+        for(int i = 0; i < m; i++){
+            for(int j = 0; j < n; j++){
+                if(grid[i][j] == 1){
+                    processNbrs(grid, i, j);
+                }
+            }
+        }
+        int[] res = new int[hits.length];
         
+        for(int i = hits.length - 1; i >= 0; i--){
+            int x = hits[i][0];
+            int y = hits[i][1];
+            
+            if(grid[x][y] == 2){
+                grid[x][y] = 1;
+                int brickCount = size[find(0)];
+                processNbrs(grid, x, y);
+                int newBrickCount = size[find(0)];
+                res[i] = Math.max(0, newBrickCount - brickCount - 1);
+            }
+        }
         return res;
     }
+    int[][] dirs = {{-1, 0}, {0, 1}, {1, 0}, {0, -1}};
+    void processNbrs(int[][] grid, int i, int j){
+        int m = grid.length;
+        int n = grid[0].length;
+        int box = i * n + j + 1;
     
-    private int markAndCountStableBricks(int[][] grid, int row, int col){
-        if(grid[row][col] == 0 || grid[row][col] == -1)
-            return 0;
-        
-        grid[row][col] = 2;
-        int stableBricks = 1;
-        for(int[] dir:dirs){
-            int r = row+dir[0];
-            int c = col+dir[1];
-            
-            if(r < 0 || r >= grid.length || c < 0 || c >= grid[0].length)
-                continue;
-            
-            if(grid[r][c] == 0 || grid[r][c] == -1 || grid[r][c] == 2)
-                continue;
-            
-            stableBricks += markAndCountStableBricks(grid, r, c);
+        for(int[] dir: dirs){
+            int nx = i + dir[0];
+            int ny = j + dir[1];
+            if(nx >= 0 && nx < grid.length && ny >= 0 && ny < grid[0].length && grid[nx][ny] == 1){
+                int nbox = nx * n + ny + 1;
+                union(box, nbox);
+            }
         }
-        
-        return stableBricks;
+        if(i == 0){
+            union(box, 0);
+        }
     }
-    
-    private boolean isStable(int[][] grid, int row, int col){
-        if(row == 0)
-            return true;
-        
-        for(int[] dir:dirs){
-            int r = row+dir[0];
-            int c = col+dir[1];
-            
-            if(r < 0 || r >= grid.length || c < 0 || c >= grid[0].length)
-                continue;
-            
-            if(grid[r][c] == 2)
-                return true;
+    int[] parent;
+    int[] rank;
+    int[] size;
+    void union(int X, int Y){
+        int x = find(X);
+        int y = find(Y);
+        if(x == y){
+            return;
         }
-        
-        return false;
+        if(rank[x] < rank[y]){
+            parent[x] = y;
+            size[y] += size[x];
+        } else if(rank[y] < rank[x]){
+            parent[y] = x;
+            size[x] += size[y];
+        } else {
+            parent[y] = x;
+            size[x] += size[y];
+            rank[x]++;
+        }
+    }
+    int find(int x){
+        if(parent[x] == x){
+            return parent[x];
+        } else {
+            parent[x] = find(parent[x]);
+            return parent[x];
+        }
     }
 }
