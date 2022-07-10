@@ -47,13 +47,13 @@ class Solution {
     void processNbrs(int[][] grid, int i, int j){
         int m = grid.length;
         int n = grid[0].length;
-        int box = i * n + j + 1;
+        int box = i * n + j + 1;  // box number nikala h grid se 
     
         for(int[] dir: dirs){
-            int nx = i + dir[0];
-            int ny = j + dir[1];
-            if(nx >= 0 && nx < grid.length && ny >= 0 && ny < grid[0].length && grid[nx][ny] == 1){
-                int nbox = nx * n + ny + 1;
+            int ni = i + dir[0];  // ni-> neighbour ka i
+            int nj = j + dir[1];  // ni-> neighbour ka j
+            if(ni >= 0 && ni < grid.length && nj >= 0 && nj < grid[0].length && grid[ni][nj] == 1){
+                int nbox = ni * n + nj + 1;
                 union(box, nbox);
             }
         }
