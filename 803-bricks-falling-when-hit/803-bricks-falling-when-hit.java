@@ -1,23 +1,24 @@
 class Solution {
+    int m;
+    int n;
     public int[] hitBricks(int[][] grid, int[][] hits) {
-        int m = grid.length;
-        int n = grid[0].length;
-        
-        parent = new int[m * n + 1];
-        rank = new int[m * n + 1];
-        size = new int[m * n + 1];
-        for(int i = 0; i < parent.length; i++){
+        m = grid.length;
+        n = grid[0].length;
+        // m*n +1 -> bcz ek extra lia h tki top valo ka union sbse upr 0(i.e roof) vle ke sth hoske
+        parent = new int[m*n+1];
+        rank = new int[m*n+1];
+        size = new int[m*n+1];
+        for(int i=0;i<parent.length;i++){
             parent[i] = i;
-            size[i] = 1;
-            rank[i] = 0;
+            rank[i] =0;
+            size[i] =1;
         }
-        for(int[] hit: hits){
-            int x = hit[0];
-            int y= hit[1];
-            
-            if(grid[x][y] == 1){
+        for(int []h : hits){
+            int x = h[0];
+            int y =h[1];
+            if(grid[x][y]==1){ // mtlb agr uss location pr brick thi toh usse fodoo 
                 grid[x][y] = 2;
-            } 
+            }
         }
         for(int i = 0; i < m; i++){
             for(int j = 0; j < n; j++){
@@ -60,33 +61,33 @@ class Solution {
             union(box, 0);
         }
     }
-    int[] parent;
-    int[] rank;
-    int[] size;
-    void union(int X, int Y){
-        int x = find(X);
-        int y = find(Y);
-        if(x == y){
-            return;
-        }
-        if(rank[x] < rank[y]){
-            parent[x] = y;
-            size[y] += size[x];
-        } else if(rank[y] < rank[x]){
-            parent[y] = x;
-            size[x] += size[y];
-        } else {
-            parent[y] = x;
-            size[x] += size[y];
-            rank[x]++;
-        }
-    }
+    int []parent;
+    int []rank;
+    int []size;
     int find(int x){
-        if(parent[x] == x){
-            return parent[x];
-        } else {
+        if(parent[x] ==x){
+            return x;
+        }else{
             parent[x] = find(parent[x]);
             return parent[x];
+        }
+    }
+    void union(int x,int y){
+        int xl = find(x);
+        int yl = find(y);
+        if(xl == yl){
+            return;
+        }
+        if(rank[xl]<rank[yl]){
+            parent[xl]= yl;
+            size[yl]+=size[xl];
+        }else if(rank[yl]<rank[xl]){
+            parent[yl]= xl;
+            size[xl]+= size[yl];
+        }else{
+            parent[yl]= xl;
+            size[xl]+= size[yl];
+            rank[xl]++;
         }
     }
 }
