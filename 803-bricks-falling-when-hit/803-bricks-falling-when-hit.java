@@ -27,18 +27,23 @@ class Solution {
                 }
             }
         }
+        // brick ko process krna start kia ab
         int[] res = new int[hits.length];
-        
+        // reverse mn brick create krna start kia humne nd yh vali brick bndii
         for(int i = hits.length - 1; i >= 0; i--){
             int x = hits[i][0];
             int y = hits[i][1];
             
-            if(grid[x][y] == 2){
-                grid[x][y] = 1;
-                int brickCount = size[find(0)];
-                processNbrs(grid, x, y);
-                int newBrickCount = size[find(0)];
-                res[i] = Math.max(0, newBrickCount - brickCount - 1);
+            if(grid[x][y] == 2){  // mtlb yhn futi brick thi tbhi kuch krna hoga
+                int brickCount = size[find(0)];  //brick bnane se phle dkha ki 0 ke andr kya size h and ke lead ka size dkho kya pta 0 lead na ho toh uske lead ka size dkhna hoga
+                grid[x][y] = 1;  // brick bnai h futi thi isliye
+                processNbrs(grid, x, y);   // koi brick judni hogi judd gyi hogi toh new brick nikalii
+                int newBrickCount = size[find(0)];//brick bnane ke baad dkho ki 0 ke andr kya size h and 0 ke lead ka size dkho kya pta 0 lead na ho toh uske lead ka size dkhna hoga
+               if(newBrickCount > brickCount){
+                    res[i] = Math.max(0, newBrickCount - brickCount - 1);
+               }else{
+                   res[i]=0;  // mtlb agr new brick nd phle vli brickcount same h mtlb kuch change ni hua toh yh kia
+               }
             }
         }
         return res;
@@ -52,12 +57,13 @@ class Solution {
         for(int[] dir: dirs){
             int ni = i + dir[0];  // ni-> neighbour ka i
             int nj = j + dir[1];  // ni-> neighbour ka j
+            // check kia valid bhi h ya ni mtlb grid mn rhna chaiye na nd iss nbr pr brick h ya ni
             if(ni >= 0 && ni < grid.length && nj >= 0 && nj < grid[0].length && grid[ni][nj] == 1){
-                int nbox = ni * n + nj + 1;
+                int nbox = ni * n + nj + 1;  // nbox-> neighbour bos nikala
                 union(box, nbox);
             }
         }
-        if(i == 0){
+        if(i == 0){  // roof h toh union krdo roof ke sth apne box ka
             union(box, 0);
         }
     }
