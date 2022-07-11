@@ -5,7 +5,9 @@ class Solution {
         int m = grid.length, n = grid[0].length;
         
         int[][] costs = new int[m][n];
-        for (int[] c : costs) Arrays.fill(c, Integer.MAX_VALUE);
+        for (int[] c : costs){
+            Arrays.fill(c, Integer.MAX_VALUE);
+        }
         costs[0][0] = 0;
         
         // min-heap storing triplets 0f {x, y, cost to reach (x,y) from (0,0)}
