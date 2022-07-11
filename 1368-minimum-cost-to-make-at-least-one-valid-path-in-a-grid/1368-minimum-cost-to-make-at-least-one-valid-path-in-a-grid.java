@@ -1,9 +1,8 @@
 class Solution {
     // 1: right  2: left  3: down  4: up
-    private   int[][] dirn = {{0,1}, {0,-1}, {1,0}, {-1,0}};
+      int[][] dirn = {{0,1}, {0,-1}, {1,0}, {-1,0}};
     public int minCost(int[][] grid) {
         int m = grid.length, n = grid[0].length;
-        
         int[][] costs = new int[m][n];
         for (int[] c : costs){
             Arrays.fill(c, Integer.MAX_VALUE);
@@ -11,11 +10,11 @@ class Solution {
         costs[0][0] = 0;
         
         // min-heap storing triplets 0f {x, y, cost to reach (x,y) from (0,0)}
-        PriorityQueue<int[]> heap = new PriorityQueue<>((a,b) -> a[2] - b[2]);
-        heap.offer(new int[]{0, 0, 0});
+        PriorityQueue<int[]> pq= new PriorityQueue<>((a,b) -> a[2] - b[2]);
+        pq.add(new int[]{0, 0, 0});
         
-        while (!heap.isEmpty()) {
-            int[] curr = heap.remove();
+        while (!pq.isEmpty()) {
+            int[] curr = pq.remove();
             int x = curr[0], y = curr[1], cost = curr[2];
             
             if (x == m-1 && y == n-1){
@@ -30,7 +29,7 @@ class Solution {
                 int newCost = cost + (i + 1 == grid[x][y] ? 0 : 1); 
                 if (costs[newX][newY] > newCost) {
                     costs[newX][newY] = newCost;
-                    heap.offer(new int[]{newX, newY, newCost});
+                    pq.add(new int[]{newX, newY, newCost});
                 }
             }
         }  
