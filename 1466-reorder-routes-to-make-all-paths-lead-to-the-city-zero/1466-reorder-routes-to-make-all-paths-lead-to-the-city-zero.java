@@ -5,6 +5,7 @@ class Solution {
         for(int i = 0 ; i < n ; i++) {
             graph[i] = new ArrayList<>();
         }
+        // graph bndia ab humne and set mn add krdia as string i.e start + "->" + end 
         for(int[] e : connections) {
             int u = e[0], v = e[1];
             graph[u].add(v);
@@ -13,7 +14,7 @@ class Solution {
         }
         Queue<Integer> q = new LinkedList<>();
         q.add(0);
-        int res = 0;
+        int ans = 0;
         boolean[] vis = new boolean[n];
         while(!q.isEmpty()) {
             int size = q.size();
@@ -22,12 +23,14 @@ class Solution {
                 vis[rem] = true;
                 for(int e : graph[rem]) {
                     if(!vis[e]) {
-                        if(set.contains(rem + "->" + e)) res++;
+                        if(set.contains(rem + "->" + e)){
+                            ans++;
+                        } 
                         q.add(e);   
                     }
                 }
             }
         }
-        return res;
+        return ans;
     }
 }
