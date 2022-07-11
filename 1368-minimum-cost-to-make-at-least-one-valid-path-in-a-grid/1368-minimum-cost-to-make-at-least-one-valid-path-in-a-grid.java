@@ -1,6 +1,6 @@
 class Solution {
     // 1: right  2: left  3: down  4: up
-    private static final int[][] dirn = {{0,1}, {0,-1}, {1,0}, {-1,0}};
+    private   int[][] dirn = {{0,1}, {0,-1}, {1,0}, {-1,0}};
     public int minCost(int[][] grid) {
         int m = grid.length, n = grid[0].length;
         
