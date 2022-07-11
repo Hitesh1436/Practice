@@ -1,21 +1,26 @@
 class Solution {
-    public boolean canVisitAllRooms(List<List<Integer>> rooms) {
-        boolean []vis = new boolean[rooms.size()];
-        dfs(rooms.get(0),0,rooms,vis);
-        for(int i=0;i<vis.length;i++){
-            if(vis[i] == false){
+    public boolean canVisitAllRooms(List<List<Integer>> R) {
+        boolean []vis = new boolean[R.size()];
+        ArrayDeque<Integer> qu = new ArrayDeque<>();
+        qu.add(0);
+        
+        while(qu.size()>0){
+            int rem = qu.remove();
+            if(vis[rem]){
+                continue;
+            }
+            vis[rem] = true;
+            for(int nbr : R.get(rem)){
+                if(!vis[nbr]){
+                    qu.add(nbr);
+                }
+            }
+        }
+        for(boolean room : vis){
+            if(!room){
                 return false;
             }
         }
         return true;
-    }
-    private void dfs(List<Integer>keysInRoom,int r,List<List<Integer>> rooms,boolean []vis){
-        vis[r] = true;  // mark krdia
-        
-        for(int i : keysInRoom){
-            if(vis[i]== false){
-                dfs(rooms.get(i),i,rooms,vis);
-            }
-        }
     }
 }
