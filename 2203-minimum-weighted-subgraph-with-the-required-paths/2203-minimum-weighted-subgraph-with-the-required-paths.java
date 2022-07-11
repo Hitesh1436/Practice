@@ -43,9 +43,9 @@ class Solution {
             Pair p = pq.poll();
             int u = p.v;
             long w = p.weight;
-            if(w > dist[u])
-                continue;
-            
+            if(w > dist[u]){
+                 continue;
+            }
             for(Pair p1: adj.get(u)){
                 int v = p1.v;
                 long weight = p1.weight;
