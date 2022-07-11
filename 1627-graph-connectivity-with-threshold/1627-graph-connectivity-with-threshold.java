@@ -1,45 +1,63 @@
 class Solution {
+    
+    public int find(int x){
+        
+        if(parent[x] == x)
+            return x;
+        
+        //Optimising by placing the same parent for all the elements to reduce reduntant calls
+        return parent[x] = find(parent[x]);
+    }
+    
+    public void union(int a, int b){
+        
+        a = find(a);
+        b = find(b);
+        
+        //Using Rank optimisation
+        if(rank[a] > rank[b]){
+            parent[b] = a;
+            rank[a] += rank[b];
+        }
+        
+        else{
+            parent[a] = b;
+            rank[b] += rank[a];
+        }
+        
+        //parent[b] = a;
+    }
+    
+    int parent[];
+    int rank[];
     public List<Boolean> areConnected(int n, int threshold, int[][] queries) {
-        int len = queries.length;
-        List<Boolean> result = new ArrayList<>(len);
-        UnionFind uf = new UnionFind(n);
-        for (int i = threshold + 1; i * 2 <= n; i++) {
-            for (int j = i * 2; j <= n; j += i) {
-                uf.union(i, j);
+        
+        List<Boolean> ans = new ArrayList<Boolean>();
+        parent = new int[n+1];
+        rank = new int[n+1];
+        
+        for(int i=1; i<=n; i++){
+            //Each element is its own parent
+            parent[i] = i;
+            //At beginning each element has rank 1
+            rank[i] = 1;
+        }
+        
+        // Finding the possible divisors with pairs above given threshold
+        for(int th = threshold+1; th<=n; th++){
+            
+            int mul = 1;
+            while(mul * th <= n){
+                //If possible pair then making a union of those paired element
+                union(th, mul*th);
+                mul++;
             }
         }
-        for (int[] query: queries) {
-            result.add(uf.isConnected(query[0], query[1]));
+        
+        //Generating ans for all possible queries
+        for(int[] query : queries){
+            ans.add((find(query[0]) == find(query[1])));
         }
-        return result;
-    }   
-    class UnionFind {
-        int[] root;
-        int[] rank;
-        public UnionFind(int n) {
-            root = new int[n + 1];
-            rank = new int[n + 1];
-        }    
-        public int find(int target) {
-            if (root[target] == 0) return target;
-            return root[target] = find(root[target]);
-        }
-        public boolean isConnected(int t1, int t2) {
-            return find(t1) == find(t2);
-        }
-        public void union(int t1, int t2) {
-            int r1 = find(t1);
-            int r2 = find(t2);
-            if (r1 != r2) {
-                if (rank[r1] > rank[r2]) {
-                    root[r2] = r1;
-                } else if (rank[r2] > rank[r1]) {
-                    root[r1] = r2;
-                } else {
-                    root[r2] = r1;
-                    rank[r1]++;
-                }
-            }
-        }
+        return ans;
     }
 }
