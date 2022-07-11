@@ -1,55 +1,61 @@
 class Solution {
-  public long minimumWeight(int n, int[][] edges, int src1, int src2, int dest) {
-    List<Pair<Integer, Integer>>[] graph1 = new List[n];
-    List<Pair<Integer, Integer>>[] graph2 = new List[n]; // reversed(graph1)
-
-    for (int i = 0; i < n; ++i) {
-      graph1[i] = new ArrayList<>();
-      graph2[i] = new ArrayList<>();
+    class Pair{
+        int v;
+        long weight;
+        Pair(int v, long weight){
+            this.v = v;
+            this.weight = weight;
+        }
     }
-
-    for (int[] e : edges) {
-      final int u = e[0];
-      final int v = e[1];
-      final int w = e[2];
-      graph1[u].add(new Pair<>(v, w));
-      graph2[v].add(new Pair<>(u, w));
+    long MAX = (long)1e15;
+    public long minimumWeight(int n, int[][] edges, int src1, int src2, int dest){ 
+        ArrayList<ArrayList<Pair>> adj, revAdj;
+        adj = new ArrayList<>();
+        revAdj = new ArrayList<>();
+        
+        for(int i=0;i<n;i++){
+            adj.add(new ArrayList<>());
+            revAdj.add(new ArrayList<>());
+        }
+        for(int[] e: edges){
+            adj.get(e[0]).add(new Pair(e[1], e[2]));
+            revAdj.get(e[1]).add(new Pair(e[0], e[2]));
+        }
+        long[] d1 = bfs(adj, n, src1);//src1 to all nodes
+        long[] d2 = bfs(adj, n, src2);//src2 to all nodes
+        long[] d3 = bfs(revAdj, n, dest);//dest to all nodes
+        
+        //Find 1 common point
+        long res = Long.MAX_VALUE;
+        for(int i=0;i<n;i++){
+            res = Math.min(res, d1[i] + d2[i] + d3[i]);
+        }
+        return res >= MAX ? -1 : res;
     }
-
-    long[] fromSrc1 = dijkstra(graph1, src1);  // src1 to all vertices
-    long[] fromSrc2 = dijkstra(graph1, src2);  // src2 to all vertices
-    long[] fromDest = dijkstra(graph2, dest);   // destination to all vertices 
-    long ans = kMax;
-
-    for (int i = 0; i < n; ++i) {
-      if (fromSrc1[i] == kMax || fromSrc2[i] == kMax || fromDest[i] == kMax)
-        continue;
-      ans = Math.min(ans, fromSrc1[i] + fromSrc2[i] + fromDest[i]);
+    public long[] bfs(ArrayList<ArrayList<Pair>> adj, int n, int s){
+        long[] dist = new long[n];
+        Arrays.fill(dist, MAX);
+        PriorityQueue<Pair> pq = new PriorityQueue<>((x1, x2) -> (int)(x1.weight-x2.weight));
+        pq.add(new Pair(s, 0));
+        dist[s] = 0;
+        
+        while(!pq.isEmpty()){
+            Pair p = pq.poll();
+            int u = p.v;
+            long w = p.weight;
+            if(w > dist[u])
+                continue;
+            
+            for(Pair p1: adj.get(u)){
+                int v = p1.v;
+                long weight = p1.weight;
+                if(dist[v] > dist[u] + weight)
+                {
+                    dist[v] = dist[u] + weight;
+                    pq.add(new Pair(v, dist[v]));
+                }   
+            }
+        }
+        return dist;
     }
-
-    return ans == kMax ? -1 : ans;
-  }
-
-  private static long kMax = (long) 1e10;
-
-  private long[] dijkstra(List<Pair<Integer, Integer>>[] graph, int src) {
-    Queue<Pair<Long, Integer>> minHeap =
-        new PriorityQueue<>(Comparator.comparing(Pair::getKey)); // (d, u)
-    long[] dist = new long[graph.length];
-    Arrays.fill(dist, kMax);
-    minHeap.offer(new Pair<>(0L, src));
-    while (!minHeap.isEmpty()) {
-      final long d = minHeap.peek().getKey();
-      final int u = minHeap.poll().getValue();
-      if (dist[u] != kMax)
-        continue;
-      dist[u] = d;
-      for (var node : graph[u]) {
-        final int v = node.getKey();
-        final int w = node.getValue();
-        minHeap.offer(new Pair<>(d + w, v));
-      }
-    }
-    return dist;
-  }
 }
