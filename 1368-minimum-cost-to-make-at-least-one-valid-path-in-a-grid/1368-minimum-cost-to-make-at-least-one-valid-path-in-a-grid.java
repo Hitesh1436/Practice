@@ -1,6 +1,6 @@
 class Solution {
     // 1: right  2: left  3: down  4: up
-    private static final int[][] DIRECTIONS = {{0,1}, {0,-1}, {1,0}, {-1,0}};
+    private static final int[][] dirn = {{0,1}, {0,-1}, {1,0}, {-1,0}};
     public int minCost(int[][] grid) {
         int m = grid.length, n = grid[0].length;
         
@@ -13,17 +13,18 @@ class Solution {
         heap.offer(new int[]{0, 0, 0});
         
         while (!heap.isEmpty()) {
-            int[] curr = heap.poll();
+            int[] curr = heap.remove();
             int x = curr[0], y = curr[1], cost = curr[2];
             
-            if (x == m-1 && y == n-1) return cost;
-            
-            
+            if (x == m-1 && y == n-1){
+                 return cost;
+            }
             for (int i = 0; i < 4; i++) {
-                int[] dir = DIRECTIONS[i];
+                int[] dir = dirn[i];
                 int newX = x + dir[0], newY = y + dir[1];
-                if (newX < 0 || newY < 0 || newX >= m || newY >= n) continue;
-                
+                if (newX < 0 || newY < 0 || newX >= m || newY >= n){
+                     continue;
+                } 
                 int newCost = cost + (i + 1 == grid[x][y] ? 0 : 1); 
                 if (costs[newX][newY] > newCost) {
                     costs[newX][newY] = newCost;
