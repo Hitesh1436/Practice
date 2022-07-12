@@ -53,21 +53,26 @@ class DriverClass
 */
 class Solution
 {
-    static int[] bellman_ford(int V, ArrayList<ArrayList<Integer>> adj, int S)
-    {
-        // Write your code here
-        int[] dist=new int[V];
-        Arrays.fill(dist,100000000);
-        dist[S]=0;
-        for(int i=1;i<=V-1;i++) {
-            for(ArrayList<Integer> arr:adj) {
-                int u=arr.get(0);
-                int v=arr.get(1);
-                int w=arr.get(2);
-                dist[v]=Math.min(dist[v],dist[u]+w);
+    static int[] bellman_ford(int V, ArrayList<ArrayList<Integer>> adj, int S){
+        int []dis = new int[V];
+        Arrays.fill(dis,100000000);
+        dis[S] =0;
+        
+        for(int i=1;i<=V-1;i++){
+            for(ArrayList<Integer>e : adj){
+                int u = e.get(0);
+                int v = e.get(1);
+                int p = e.get(2);
+                if(dis[u] == 100000000){
+                    continue;
+                }else if(dis[v] == 100000000){
+                 dis[v] = dis[u] + p;   
+                }else{
+                    dis[v] = Math.min(dis[v],dis[u]+p);
+                }
             }
         }
-        return dist;
+        return dis;
     }
 }
 
