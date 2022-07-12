@@ -32,10 +32,8 @@ class GFG{
 
 
 //User function Template for Java
-class Solution 
-{ 
-    int findMaxFlow(int N, int M, ArrayList<ArrayList<Integer>> Edges) 
-    {// code here
+class Solution{ 
+    int findMaxFlow(int N, int M, ArrayList<ArrayList<Integer>> Edges){ 
         int g[][] = new int[N][N];
         for(int i=0;i<Edges.size();i++){
             int u = Edges.get(i).get(0)-1;
@@ -45,6 +43,23 @@ class Solution
             g[v][u]+=w;
         }
         return ford(g,0,N-1,N);
+    }
+    int ford(int[][] g,int source,int sink,int n){
+        int[] p=new int[n];
+        Arrays.fill(p,-1);
+        int res=0;
+        while(bfs(g,p,source,sink,n)!=0){
+            int mn = bfs(g,p,source,sink,n);
+            res+=mn;
+            int v= sink;
+            while(v!=source){
+                int u=p[v];
+                g[u][v]-=mn;
+                g[v][u]+=mn;
+                v=p[v];
+            }
+        }
+        return res;
     }
     int bfs(int[][] g,int[] p,int source,int sink,int n){
         int mn=Integer.MAX_VALUE;
@@ -71,22 +86,5 @@ class Solution
             }
         }
         return 0;
-    }
-    int ford(int[][] g,int source,int sink,int n){
-        int[] p=new int[n];
-        Arrays.fill(p,-1);
-        int res=0;
-        while(bfs(g,p,source,sink,n)!=0){
-            int mn = bfs(g,p,source,sink,n);
-            res+=mn;
-            int v= sink;
-            while(v!=source){
-                int u=p[v];
-                g[u][v]-=mn;
-                g[v][u]+=mn;
-                v=p[v];
-            }
-        }
-        return res;
     }
 }
