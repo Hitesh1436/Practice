@@ -40,45 +40,16 @@ class GFG
 
 class Solution
 {
-    public void dfs(ArrayList<ArrayList<Integer>> adj, int index, boolean[]visited){
-        if(visited[index]==true){
-            return;
-        }    
-        visited[index] = true;
+    public boolean isEularCircuitExist(int V, ArrayList<ArrayList<Integer>> adj)
+    {
+        // Code here
+        int count = 0;
+        for(int i = 0; i < V; i++){
+            if(adj.get(i).size() % 2 == 1){
+                count++;
+            }
+        }
         
-        for(int i: adj.get(index)){
-            dfs(adj, i, visited);    
-        }
-    }
-    
-    public boolean isEularCircuitExist(int V, ArrayList<ArrayList<Integer>> adj){
-        boolean[]visited = new boolean[V];
-        int i = 0;
-        //Find the 1st vertex that has degree>0
-        for(; i<adj.size();i++){
-            if(adj.get(i).size()!=0){
-                break;
-            }
-        }
-        //Check if all vertices with non zero degree are connected
-        if(i<V){
-            dfs(adj, i, visited);
-            
-            for(int j=0; j<V;j++){
-                if(visited[j]==false && adj.get(j).size()>0){
-                    return false;
-                }
-            }
-        }
-        //Check if any vertex has odd degree
-        int odd = 0;
-        
-        for(int j=0; j<V;j++){
-            if(adj.get(j).size()%2!=0){
-                odd++;
-                return false;
-            }
-        }
-        return true;
+        return count == 0;
     }
 }
