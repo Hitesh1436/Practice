@@ -1,8 +1,6 @@
 class Solution {
-    public int[] sortedSquares(int[] A) {
-	//result array
+    public int[] sortedSquares(int[] A){
 	int[] res = new int[A.length];
-	//pointers for left and right
 	int lo = 0; int hi = A.length - 1;
 	//iterate from n to 0
 	for (int i = A.length - 1; i >= 0; i--) {
@@ -19,7 +17,6 @@ class Solution {
 			hi--;
 		}
 	}
-	//result
 	return res;
   }
 }
