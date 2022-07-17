@@ -1,22 +1,17 @@
 class Solution {
     public int[] countPoints(int[][] points, int[][] queries) {
-        int[] ans = new int[queries.length];
-		int i = 0;
-		for (int query[]: queries) {
-			int a = query[0];
-			int b = query[1];
-			int r = query[2];
-			int result = 0;
-			for (int[] p : points) {
-				int x1 = p[0];
-				int y1 = p[1];
-				if (r * r >= (a-x1)*(a-x1)+ (b-y1)*(b-y1)) {
-					result++;
-				}
-			}
-			
-			ans[i++] = result;
-		}
-		return ans;
+        int [] answer = new int[queries.length];
+        int i = 0, count;
+        for(int [] query : queries){
+            count = 0;
+            int x = query[0], y = query[1], rad = query[2]*query[2];
+            for(int [] point : points){
+                if((y-point[1])*(y-point[1])+(x-point[0])*(x-point[0]) <= rad){
+                   count++; 
+                }      
+            }
+            answer[i++] = count;
+        }
+        return answer;
     }
 }
