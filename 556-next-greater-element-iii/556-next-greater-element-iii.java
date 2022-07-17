@@ -1,39 +1,44 @@
 class Solution {
     public int nextGreaterElement(int n) {
+        char []arr = (n+"").toCharArray();
         
-        int[] freq = new int[10];
-        
-        long temp = n;
-        int prev = 0;
-        while(prev <= temp%10){
-            prev = (int) temp%10;
-            freq[prev]++;
-            temp = temp/10;
-        }
-        if(temp == 0 ){
-            return -1;
-        }
-        int toReplace = (int) temp%10;
-        temp = temp/10;
-        freq[toReplace]++;
-        
-        for(int i=toReplace+1; i<10; i++){
-            if(freq[i]>0){
-                temp = temp*10 + i;
-                freq[i]--;
+        int i = arr.length-1;
+        while(i>0){
+            if(arr[i-1]>=arr[i]){
+                i--;
+            }else{
                 break;
             }
         }
-        for(int i=0;i<freq.length; i++){
-            while(freq[i]>0){
-                temp = temp*10 + i;
-                freq[i]--;
-            }
-        }
-        
-        if(temp>Integer.MAX_VALUE){
+        if(i==0){
             return -1;
         }
-        return (int)temp;
+        int idx1 = i-1;
+        int j = arr.length-1;
+        while(j>idx1){
+            if(arr[j]>arr[idx1]){
+                break;
+            }
+            j--;
+        }
+        // swap 
+        swap(arr,idx1,j);
+        
+        // reverse from end to i
+        int left = i;
+        int right = arr.length -1;
+        while(left < right){
+            swap(arr,left,right);
+            left++;
+            right--;
+        }
+        String res = new String(arr);
+        long val = Long.parseLong(res);
+        return (val > Integer.MAX_VALUE ? -1 : (int)val);
+    }
+    void swap(char[]arr,int i,int j){
+        char temp = arr[i];
+        arr[i] = arr[j];
+        arr[j] = temp;
     }
 }
