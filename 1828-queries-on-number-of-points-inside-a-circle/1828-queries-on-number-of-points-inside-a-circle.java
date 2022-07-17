@@ -1,6 +1,6 @@
 class Solution {
     public int[] countPoints(int[][] points, int[][] queries) {
-        int [] answer = new int[queries.length];
+        int [] ans = new int[queries.length];
         int i = 0, count;
         for(int [] query : queries){
             count = 0;
@@ -10,8 +10,8 @@ class Solution {
                    count++; 
                 }      
             }
-            answer[i++] = count;
+            ans[i++] = count;
         }
-        return answer;
+        return ans;
     }
 }
