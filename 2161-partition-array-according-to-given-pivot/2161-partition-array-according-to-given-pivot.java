@@ -16,7 +16,6 @@ class Solution {
 		for(int j = 0; j < c;  j++) {
 			ans[i++] = pivot;
 		}
-		
 		//filling values greater than pivot from start
         while(start < nums.length) {
             if(nums[start] > pivot) {
