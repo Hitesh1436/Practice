@@ -1,6 +1,5 @@
 // Time complexity = 2n = O(n)
-// Space complexity = O(1), or O(n) if the result array is including in the complexity analysis.
-
+// Space complexity = O(1), or O(n) if the result array is included in the complexity analysis       
 class Solution {
     public int[] pivotArray(int[] nums, int pivot) {
         int[] result = new int[nums.length];
@@ -14,12 +13,10 @@ class Solution {
                 result[right--] = nums[nums.length - 1 - i];
             }
         }
-        
         while(left <= right) {
             result[left++] = pivot;
             result[right--] = pivot;
         }
-        
         return result;
     } 
 }
