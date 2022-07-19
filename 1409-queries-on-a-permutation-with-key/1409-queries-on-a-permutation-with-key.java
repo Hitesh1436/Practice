@@ -1,15 +1,32 @@
 class Solution {
     public int[] processQueries(int[] queries, int m) {
-        ArrayList<Integer> p = new ArrayList<>();
-        for(int i = 1; i <= m; i++) {
-            p.add(i);
+         int n = queries.length;
+         int[] p = new int[m];
+         int[] res = new int[n];
+
+        for(int i=0; i<m; i++){
+            p[i]=i+1;
         }
-        int ans[] = new int[queries.length];
-        for(int i = 0; i < queries.length; i++) {
-            ans[i] = p.indexOf(queries[i]);
-            p.remove(ans[i]);
-            p.add(0, queries[i]);
+        for(int i=0; i<n; i++){
+            int pos = findPos(p, queries[i]); // find the position
+            res[i]=pos;
+            moveToFirst(p, queries[i], pos); // move the number to first position
         }
-        return ans;
+        return res;
+    }
+    private void moveToFirst(int[] p, int num, int pos){
+        int temp = p[pos];
+        while(pos>0){
+            p[pos]=p[pos-1];
+            pos--;
+        }
+        p[0]=temp;
+  }
+    private int findPos(int[] p, int num){
+        for(int i=0; i<p.length; i++){
+            if(p[i]==num)
+                return i;
+        }
+        return 0;
     }
 }
