@@ -1,22 +1,29 @@
-// Time complexity = 2n = O(n)
-// Space complexity = O(1), or O(n) if the result array is included in the complexity analysis       
+// O(n)
 class Solution {
     public int[] pivotArray(int[] nums, int pivot) {
-        int[] result = new int[nums.length];
-        int left = 0, right = nums.length - 1;
-        
-        for(int i = 0; i < nums.length; i++) {
-            if(nums[i] < pivot) {
-                result[left++] = nums[i];
-            }
-            if(nums[nums.length - 1 - i] > pivot) {
-                result[right--] = nums[nums.length - 1 - i];
-            }
+        int[] ans = new int[nums.length];
+        int start = 0;
+        int i = 0, c = 0;
+		//filling values less than pivot from start
+        while(start < nums.length) {
+            if(nums[start] < pivot) {
+                ans[i++] = nums[start];
+            } else if(nums[start] ==  pivot) c++;
+            start++;
         }
-        while(left <= right) {
-            result[left++] = pivot;
-            result[right--] = pivot;
+        start = 0;
+		//putting pivot values in centre (c -> count of number of pivot in array)
+		for(int j = 0; j < c;  j++) {
+			ans[i++] = pivot;
+		}
+		
+		//filling values greater than pivot from start
+        while(start < nums.length) {
+            if(nums[start] > pivot) {
+                ans[i++]= nums[start];
+            }
+            start++;
         }
-        return result;
-    } 
+        return ans;
+    }
 }
