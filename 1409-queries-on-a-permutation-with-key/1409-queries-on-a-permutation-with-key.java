@@ -1,19 +1,15 @@
 class Solution {
     public int[] processQueries(int[] queries, int m) {
-      List<Integer> al = new ArrayList<>();
-    int final_arr[] = new int[queries.length];
-    for(int i=1;i<=m;i++) 
-        al.add(i);
-    
-    for(int i=0;i<queries.length;i++){
-        int temp = queries[i];
-            if(al.contains(temp)){
-                final_arr[i] = al.indexOf(temp);
-                al.remove(al.indexOf(temp));
-                al.add(0,temp);
+        ArrayList<Integer> p = new ArrayList<>();
+        for(int i = 1; i <= m; i++) {
+            p.add(i);
         }
+        int ans[] = new int[queries.length];
+        for(int i = 0; i < queries.length; i++) {
+            ans[i] = p.indexOf(queries[i]);
+            p.remove(ans[i]);
+            p.add(0, queries[i]);
+        }
+        return ans;
     }
-    
-     return final_arr;
-   }
 }
