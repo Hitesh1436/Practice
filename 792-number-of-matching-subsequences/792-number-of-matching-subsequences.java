@@ -1,7 +1,7 @@
 class Solution {
     public int numMatchingSubseq(String t, String[] words) {
         int count=0;
-        Map<String,Boolean> m = new HashMap<>();
+        HashMap<String,Boolean> m = new HashMap<>();
         for(String s : words){
             if(m.containsKey(s)){
                 if(m.get(s)){
