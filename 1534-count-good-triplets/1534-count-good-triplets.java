@@ -1,4 +1,4 @@
-import java.lang.Math;
+// import java.lang.Math;
 class Solution {
 public int countGoodTriplets(int[] arr, int a, int b, int c) {
     int count=0;
