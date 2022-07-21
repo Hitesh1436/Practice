@@ -11,6 +11,7 @@ class Solution {
         }
         int right =1;
         for(int i=n-2;i>=0;i--){
+            // right lia tb last vale ke liye 1 hogya toh n-2 se loop chlega actual
             right = right *nums[i+1];
             left[i] = left[i] * right;
         }
