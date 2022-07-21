@@ -1,28 +1,28 @@
 class Solution {
     public int maximumSwap(int num) {
-       char []arr = (num +"").toCharArray();
-        int []right = new int[arr.length];
-        for(int i=arr.length -1;i>=0;i--){
-            if(i== arr.length -1){
-                right[i] =-1;
-            }else if(i == arr.length -2){
-                right[i] = arr.length -1;
-            }else{
-                if(arr[i+1]>arr[right[i+1]]){
-                    right[i] = i+1;
-                }else{
-                    right[i] = right[i+1];
+        if(num < 10) return num;
+        
+        char[] arr = String.valueOf(num).toCharArray();
+        
+        int[] rightIndex = new int[10]; // to hold the last index of each digit     
+        
+        for(int i=0; i<arr.length; i++){
+            rightIndex[arr[i] - '0'] = i;  // arr[i] - '0' converts char to num
+        }
+        
+        for(int i=0; i<arr.length; i++){  // index of present digit we are looking at
+            for(int j=9; j>arr[i] - '0'; j--){ // max digit could be 9 and min be GREATER than the present digit we looking at
+                if(rightIndex[j] > i){  // if index of 'j' (starts with 9) is greater than present index (basically, is the bigger digit at RIGHT of present digit)
+                    // swap and return the answer
+                    char temp = arr[i];
+                    arr[i] = arr[rightIndex[j]];
+                    arr[rightIndex[j]] = temp;
+                    return Integer.valueOf(new String(arr)); // return here 
                 }
             }
         }
-       for(int i = 0; i < arr.length - 1; i++){
-            if(arr[i] < arr[right[i]]){
-                char temp = arr[i];
-                arr[i] = arr[right[i]];
-                arr[right[i]] = temp;
-                break;
-            }
-        }
-        return Integer.parseInt(new String(arr));
+        
+		// if we reach till here, that means no swapping is required in the input number.
+        return num;
     }
 }
