@@ -1,18 +1,33 @@
-// T(C) -> O(nlogn)
 class Solution {
     public boolean carPooling(int[][] trips, int capacity) {
-        TreeMap<Integer, Integer> m = new TreeMap<>();
-        for (int[] v: trips){
-            int num_passengers = v[0];
-            int start = v[1];
-            int end = v[2];
-            m.put(start, m.getOrDefault(start, 0) + num_passengers); // baith rha h toh add kia pass
-            m.put(end, m.getOrDefault(end, 0) - num_passengers); // utrega rha h toh minus kia pass
+        HashMap<Integer, Integer> map = new HashMap<>();
+        ArrayList<Integer> stops = new ArrayList<>(); 
+        for(int[] trip: trips){
+            int people = trip[0];
+            int from   = trip[1];
+            int to     = trip[2];
+            if(map.containsKey(from) == false){
+                map.put(from, +people);
+                stops.add(from);
+            } else {
+                map.put(from, map.get(from) + people);
+            }
+            if(map.containsKey(to) == false){
+                map.put(to, -people);
+                stops.add(to);
+            } else {
+                map.put(to, map.get(to) - people);
+            }
         }
-        int count=0;
-        for (int c: m.values()){
-            count+=c;
-            if(count>capacity) return false;
+        Collections.sort(stops);
+        int pic = 0;
+        for(int stop: stops){
+            int delta = map.get(stop);
+            pic += delta;
+            
+            if(pic > capacity){
+                return false;
+            }
         }
         return true;
     }
