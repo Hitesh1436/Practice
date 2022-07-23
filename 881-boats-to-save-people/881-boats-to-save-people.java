@@ -11,11 +11,12 @@ class Solution {
                 l++;
                 r--;
             } else {
+                // bas max wt vale ko dala ans++ kia nd right vale ko km krdia
                 ans++;
                 r--;
             }
         }
-        if(l == r){
+        if(l == r){  // dono idx same hn mtlb akela bchgya toh uske liie 1 add kia bas
             ans += 1;
         }
         return ans;
