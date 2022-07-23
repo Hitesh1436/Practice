@@ -1,30 +1,31 @@
 class Solution {
+    int bit[];
     public List<Integer> countSmaller(int[] nums) {
-        List<Integer> result = new ArrayList<>();
-        List<Integer> sorted = new ArrayList<>();
-    for(int i=nums.length-1; i>=0; i--){
-        if(sorted.isEmpty()){
-            sorted.add(nums[i]);
-            result.add(0);
-        }else if(nums[i]>sorted.get(sorted.size()-1)){
-            sorted.add(sorted.size(), nums[i]);
-            result.add(sorted.size()-1);
-        }else{
-            int l=0; 
-            int r=sorted.size()-1;
-            while(l<r){
-                int m = l + (r-l)/2;
-                if(nums[i]>sorted.get(m)){
-                    l=m+1;
-                }else{
-                    r=m;
-                }
-            }
-            sorted.add(r, nums[i]);
-            result.add(r);
-        }    
+        int n=nums.length, min=nums[0], max=nums[0];
+        for(int x: nums){
+            min=Math.min(min, x);
+            max=Math.max(max, x);
+        }
+        min=(min<0?min:0);
+        int net=max-min+5;
+        bit=new int[net];
+        Integer arr[]=new Integer[n];
+        for(int i=n-1;i>=0;i--)
+        {
+            nums[i]-=min;
+            arr[i]=(Integer)get(nums[i]-1);
+            update(nums[i], net);
+        }
+        return Arrays.asList(arr);
     }
-    Collections.reverse(result);
-    return result;
+    public int get(int x){
+        int sum=0;
+        for(++x; x>0; x-=(x&(-x)))
+            sum+=bit[x];
+        return sum;
+    }
+    public void update(int x, int n){
+        for(++x; x<n;x+=(x&(-x)))
+            bit[x]+=1;
     }
 }
