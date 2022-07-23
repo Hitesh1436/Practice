@@ -1,45 +1,41 @@
 class Solution {
     public boolean exist(char[][] board, String word) {
-        int m = board.length;
-        int n = board[0].length;
-        boolean [][] vis = new boolean[m][n];
-        char start = word.charAt(0);
-        for(int i=0;i<m;i++){
-            for(int j=0;j<n;j++){
-                if(board[i][j]==start){
-                    // vis = new boolean[m][n];
-                    if(dfs(board,word,0,i,j,vis)== true){
-                        return true;
-                    }
+        boolean visited[][]=new boolean[board.length][board[0].length]; // to keep of characters inside recursive function which we have already included
+        for(int i=0;i<board.length;i++){ // to traverse and start searching for word from each index of 2d array
+            for(int j=0;j<board[i].length;j++){
+                if(solve(board,visited,word,0,i,j)){ // i.e index=0 keeps track of which index of word we are looking for inside recursive function 
+                    return true;
                 }
             }
         }
         return false;
     }
-    private boolean dfs(char [][]board,String word,int idx,int i,int j,boolean[][]vis){
-        if(idx >= word.length()){
-            return true;    // mtlb sb milchuke the toh true dega
-        }
-        if(board[i][j] != word.charAt(idx)){
-            return false;
-        }
-        vis[i][j] = true;  // mark krdia
+    private boolean solve(char[][] board,boolean[][] visited,String word,int index,int row,int col){
         
-        if(idx+1 >=word.length()){
+        if(index==word.length()){ // check if we have already found all the words
             return true;
         }
-        int [][]dir = {{0,1},{0,-1},{1,0},{-1,0}};
-        for(int d=0;d<4;d++){
-            int x = i + dir[d][0];
-            int y = j + dir[d][1];
-            if(x>=0 && y>=0 && x<board.length && y<board[0].length && vis[x][y]==false){
-               boolean ans = dfs(board,word,idx+1,x,y,vis);
-                if(ans == true){
-                    return true;
-                }
-            }
+        if(row<0 || row>=board.length || col<0 || col>=board[0].length){ 
+            return false;
         }
-        vis[i][j] = false;
-        return false;
+        if(board[row][col]!=word.charAt(index) || visited[row][col]==true){ // incase if the character isn't matching or we have already visited the index return false
+            return false;
+        }
+        visited[row][col]=true;
+           // now we traverse all the four directions of the array
+        if(solve(board,visited,word,index+1,row+1,col)){
+            return true;
+        }    
+        if(solve(board,visited,word,index+1,row-1,col)){
+            return true;
+        }
+        if(solve(board,visited,word,index+1,row,col+1)){
+            return true;
+        }
+        if(solve(board,visited,word,index+1,row,col-1)){
+            return true;
+        }         
+        visited[row][col]=false;          
+        return false;         
     }
 }
