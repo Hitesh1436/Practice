@@ -14,53 +14,25 @@
  * }
  */
 class Solution {
+    TreeNode prev = null, first = null, second = null;
+
     public void recoverTree(TreeNode root) {
-        TreeNode prev = null;
-        TreeNode curr = root;
-        TreeNode n1 = null;
-        TreeNode n2 = null;
-        
-        while(curr != null){
-            if(curr.left == null){
-                if(prev!= null){
-                    if(curr.val < prev.val){
-                        if(n1 == null){
-                          n1 = prev;    // yh tb h jb gtl values sth mn thi vo case handle hus
-                          n2 = curr;  
-                        }else{
-                            n2 = curr;
-                        }  
-                    }
-                }
-                 prev = curr;
-                curr = curr.right;
-            }else{
-                TreeNode iop = curr.left;
-                while(iop.right != null && iop.right != curr){
-                    iop = iop.right;
-                }
-                if(iop.right == null){
-                    iop.right = curr;
-                    curr = curr.left;
-                }else{   
-                  if(prev!= null){
-                        if(curr.val < prev.val){
-                            if(n1 == null){
-                              n1 = prev;    
-                              n2 = curr;  
-                            }else{
-                                n2 = curr;
-                            }  
-                        }
-                    }
-                    prev = curr;
-                    iop.right = null;
-                    curr = curr.right;
-                }
-            }
+        evalSwappedNodes(root);
+        int temp = first.val;
+        first.val = second.val;
+        second.val = temp;
+    }
+
+    private void evalSwappedNodes(TreeNode curr) {
+        if (curr == null)
+            return;
+        evalSwappedNodes(curr.left);
+        if (prev != null && prev.val > curr.val) {
+            if (first == null)
+                first = prev;
+            second = curr;
         }
-        int temp = n1.val;
-        n1.val = n2.val;
-        n2.val = temp;
+        prev = curr;
+        evalSwappedNodes(curr.right);
     }
 }
