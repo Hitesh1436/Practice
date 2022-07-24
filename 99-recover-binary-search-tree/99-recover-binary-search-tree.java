@@ -16,21 +16,21 @@
 class Solution {
     TreeNode prev = null, first = null, end = null;
     public void recoverTree(TreeNode root) {
-        evalSwappedNodes(root);
+        helper(root);
         int temp = first.val;
         first.val = end.val;
         end.val = temp;
     }
-    private void evalSwappedNodes(TreeNode root) {
+    private void helper(TreeNode root) {
         if (root == null)
             return;
-        evalSwappedNodes(root.left);
+        helper(root.left);
         if (prev != null && prev.val > root.val) {
             if (first == null)
                 first = prev;
             end = root;
         }
         prev = root;
-        evalSwappedNodes(root.right);
+        helper(root.right);
     }
 }
