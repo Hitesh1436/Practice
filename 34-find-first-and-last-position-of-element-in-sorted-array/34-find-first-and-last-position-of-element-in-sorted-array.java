@@ -1,3 +1,4 @@
+// T(C) -> O(nlogn)
 class Solution {
 	public int[] searchRange(int[] nums, int target) {
 		int[] ans = { -1, -1 };
