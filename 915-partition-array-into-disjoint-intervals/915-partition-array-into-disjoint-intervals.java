@@ -1,17 +1,18 @@
 class Solution {
     public int partitionDisjoint(int[] nums) {
-        int currMax = nums[0];
-        int possibleMax = nums[0];
-        int length = 1;
-        for (int i = 1; i < nums.length; ++i) {
-            if (nums[i] < currMax) {
-                length = i + 1;
-                currMax = possibleMax;
-            } else {
-                possibleMax = Math.max(possibleMax, nums[i]);
+        int pi = 0;
+        int mtp = nums[0];
+        int mts = nums[0];
+        
+        for(int i = 1; i < nums.length; i++){
+            mts = Math.max(nums[i], mts);
+            
+            if(nums[i] < mtp){
+                pi = i;
+                mtp = mts;
             }
         }
         
-        return length;
+        return pi + 1;
     }
 }
