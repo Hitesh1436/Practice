@@ -1,3 +1,4 @@
+// T(C) -> O(m*n) S(C) -> O(m+n)
 class Solution {
     public void setZeroes(int[][] matrix) {
         int r = matrix.length;
