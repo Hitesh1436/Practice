@@ -12,13 +12,14 @@ class Solution {
             }
             swap(nums,i,j);
         }
-        reverse(nums,i+1,n-1);
+        reverse(nums,i+1);
     }
-   private void reverse(int []arr,int i,int j){
-        while(i<j){
-            swap(arr,i,j);
-            i++;
-            j--;
+   private void reverse(int []arr,int start){
+       int end = arr.length -1;
+        while(start<end){
+            swap(arr,start,end);
+            start++;
+            end--;
         }
     }
     private void swap(int []arr,int i,int j){
