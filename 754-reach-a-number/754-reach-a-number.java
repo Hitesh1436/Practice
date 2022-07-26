@@ -1,19 +1,16 @@
 class Solution {
     public int reachNumber(int target) {
-        int sum = 0, jump = 1;
-		// to make every target positive
+        int x =0;
         target = Math.abs(target);
-        while(sum < target){
-            sum += jump;
-            jump++;
+        while(true){
+            int range = x*(x+1)/2;
+            if(range>=target && range%2 == target%2){
+                // agr mnle 16 h toh range toh 21 mn agyi pr 16 even h nd 21 mn 2-2 ka gap se bas odd ayenge toh hume even dkhna pdega 
+                break;
+            }else{
+                x++;
+            }
         }
-        
-        if((sum - target)%2 == 0){
-            return jump-1;
-        } 
-        else if((sum+jump-target)%2 == 0){
-            return jump;
-        } 
-        else    return jump+1;
+        return x;
     }
 }
