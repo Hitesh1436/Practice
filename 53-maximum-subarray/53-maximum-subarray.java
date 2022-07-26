@@ -1,14 +1,13 @@
+// T(C) -> O(N) , S(C) -> O(N)
 class Solution {
     public int maxSubArray(int[] nums) {
-        int n = nums.length;
-        int max = Integer.MIN_VALUE, sum = 0;
-        for(int i=0;i<n;i++){
-            sum += nums[i];
-            max = Math.max(sum,max);
-            if(sum<0){
-                sum = 0;
-            }
-        }
-        return max;
-    }
+	int[] dp = new int[nums.length];
+	dp[0] = nums[0];
+	int maxsum = nums[0];
+	for (int i = 1; i < nums.length; i++) {
+		dp[i] = Math.max(nums[i], nums[i] + dp[i-1]);
+		maxsum = Math.max(maxsum, dp[i]);
+	}
+	return maxsum;
+   }   
 }
