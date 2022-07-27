@@ -1,18 +1,11 @@
 class Solution {
-
-    public int maxProfit(int[] prices){ 
-    
-        // time : O(N)
-        // space: O(1)
-        
-        int lowest_price = prices[0];
-        int max_profit = 0;
-        
-        for(int i = 1; i < prices.length; i++)
-        {
-            lowest_price = Math.min(lowest_price, prices[i]);
-            max_profit = Math.max(max_profit, prices[i] - lowest_price);
+    public int maxProfit(int[] p) {
+        int lowestPrice = p[0];
+        int maxProfit = 0;
+        for(int i=1;i<p.length;i++){
+            lowestPrice = Math.min(p[i],lowestPrice);
+            maxProfit = Math.max(maxProfit,p[i]-lowestPrice);
         }
-        return max_profit;
+        return maxProfit;
     }
 }
