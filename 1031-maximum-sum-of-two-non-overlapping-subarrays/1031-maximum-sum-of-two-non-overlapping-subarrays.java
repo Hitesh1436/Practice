@@ -7,14 +7,12 @@ class Solution {
         
         int maxLval = 0;
         int ans=0;
-        for(int i=L;i<=A.length-M;i++)
-        {
+        for(int i=L;i<=A.length-M;i++){
             maxLval = Math.max(maxLval,sums[i]-sums[i-L]);
             ans = Math.max(ans,sums[i+M]-sums[i]+maxLval);
         }
         int maxRval = 0 ;
-        for(int i=M;i<=A.length-L;i++)
-        {
+        for(int i=M;i<=A.length-L;i++){
             maxRval = Math.max(maxRval,sums[i]-sums[i-M]);
             ans = Math.max(ans,sums[i+L]-sums[i]+maxRval);
         }
