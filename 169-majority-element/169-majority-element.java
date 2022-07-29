@@ -1,17 +1,15 @@
+// T(C)-> O(n) , S(C) -> O(n)
 class Solution {
     public int majorityElement(int[] nums) {
-        int count =0;
-        Integer me = null;  // me->majority element
-        for(int i=0;i<nums.length;i++){
-            if(count == 0){
-                me = nums[i];
-                count =1;
-            }else if(nums[i] == me){
-                count++;
-            }else{
-                count--;
+        HashMap<Integer,Integer> map = new HashMap<>();
+        for(int num : nums){
+            map.put(num,map.getOrDefault(num,0)+1);
+        }
+        for(int num : map.keySet()){
+            if(map.get(num)>nums.length/2){
+                return num;
             }
         }
-        return me;
+        return -1;
     }
 }
