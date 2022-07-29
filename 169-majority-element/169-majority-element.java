@@ -1,15 +1,20 @@
-// T(C)-> O(n) , S(C) -> O(n)
+// Moore Voting Algorithm T(C)-> O(n) , S(C) -> O(1)
 class Solution {
     public int majorityElement(int[] nums) {
-        HashMap<Integer,Integer> map = new HashMap<>();
-        for(int num : nums){
-            map.put(num,map.getOrDefault(num,0)+1);
-        }
-        for(int num : map.keySet()){
-            if(map.get(num)>nums.length/2){
-                return num;
+        int val = nums[0];
+        int count =1;
+        for(int i=1;i<nums.length;i++){
+            if(nums[i] == val){
+                count++;
+            }else{
+                if(count >0){
+                    count--;
+                }else{
+                    val = nums[i];
+                    count =1;
+                }
             }
         }
-        return -1;
+        return val;
     }
 }
