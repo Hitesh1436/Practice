@@ -9,7 +9,7 @@ class Solution {
                 return -1;
             }
         });
-        int count =1;  // ek arrow toh chalegi hi kmse km
+        int count = 1;  // ek arrow toh chalegi hi kmse km
         int end = points[0][1];
         for(int i=1;i<points.length;i++){
             int []pt = points[i];
