@@ -1,21 +1,27 @@
 class Solution {
     public int findMinArrowShots(int[][] points) {
-        ArrayList<int[]> list = new ArrayList<>();
-        Arrays.sort(points, (a,b) -> Integer.compare(a[0], b[0]));
-        for(int[] point: points){
-            if(list.size() == 0){
-                list.add(point);
+        Arrays.sort(points,(a,b)->{
+            if(a[0] > b[0]){
+                return +1;
+            }else if(a[0] == b[0]){
+                return 0;
+            }else{
+                return -1;
             }
-            else{
-                int[] ele = list.get(list.size()-1);
-                if(point[0] <= ele[1]){
-                    ele[1] = Math.min(ele[1], point[1]);
-                }
-                else{
-                    list.add(point);
-                }
+        });
+        int count =1;  // ek arrow toh chalegi hi kmse km
+        int end = points[0][1];
+        for(int i=1;i<points.length;i++){
+            int []pt = points[i];
+            if(pt[0] > end){
+            //agle vale ka start end ke baad khtm horha h toh mtlb arrow bdhegi
+                count++;
+                end = pt[1];
+            }else{
+        //start se phle ende horha h toh count ni bdhega and end niklega min se
+                end = Math.min(end,pt[1]);
             }
         }
-        return list.size();
+        return count;
     }
 }
