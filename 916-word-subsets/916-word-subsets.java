@@ -1,35 +1,28 @@
+// T.C-> O(N^2) , S.>CO(N)
 class Solution {
-    public List<String> wordSubsets(String[] w1, String[] w2) {
-        int []word2Map = new int[26];
-        List<String> ans = new ArrayList<>();
-        for(String word : w2){
-            int n = word.length();
-            int []map = new int[26];
-            
-            for(int i=0;i<n;i++){
-                char ch = word.charAt(i);
-                map[ch - 'a']++;
-                word2Map[ch -'a'] = Math.max(word2Map[ch-'a'],map[ch-'a']);
+    public List<String> wordSubsets(String[] words1, String[] words2) {
+        List<String> al=new ArrayList<>();
+        int target[]=new int[26];
+        for(String b:words2){
+            int temp[]=new int[26];
+            for(char ch:b.toCharArray()){
+                temp[ch-'a']++;
+                target[ch-'a']=Math.max(target[ch-'a'],temp[ch-'a']);
             }
         }
-        for(String wd : w1){
-            int []map = new int[26];
-            int m = wd.length();
-            boolean isValid = true;
-            for(int i=0;i<m;i++){
-                char ch = wd.charAt(i);
-                map[ch -'a']++;
+        for(String word:words1){
+            int freq[]=new int[26];
+            for(char ch:word.toCharArray()) freq[ch-'a']++;
+            if(isSubset(freq,target)){
+                al.add(word);
             }
-            for(int j=0 ;j<26;j++){
-                if(map[j]<word2Map[j]){
-                    isValid = false;
-                    break;
-                }
-            }
-            if(isValid == true){
-                ans.add(wd);
-            } 
         }
-        return ans;
+        return al;
+    }
+    static boolean isSubset(int freq[],int target[]){
+        for(int i=0;i<26;i++){
+            if(freq[i]<target[i]) return false;
+        }
+        return true;
     }
 }
