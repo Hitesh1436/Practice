@@ -4,19 +4,19 @@ class Solution {
         for(int num : nums){
             set.add(num);
         }
-        int count = 0;
+        int longestLength = 0;
         for(int num : nums){
             if(!set.contains(num-1)){
                 int currNum = num;
-                int subCount = 1;
+                int currLength = 1;
                 
                 while(set.contains(currNum+1)){
                     currNum++;
-                    subCount++;
+                    currLength++;
                 }
-                count = Math.max(count , subCount);
+                longestLength = Math.max(longestLength , currLength);
             }
         }
-        return count;
+        return longestLength;
     }
 }
