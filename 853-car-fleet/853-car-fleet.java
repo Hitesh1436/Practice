@@ -1,15 +1,17 @@
 class Solution {
     public int carFleet(int target, int[] position, int[] speed) {
-        PriorityQueue<Car> pq = new PriorityQueue<>();
+       Car[] cars = new Car[position.length];
         for(int i=0;i<position.length;i++){
-            Car c = new Car(position[i],speed[i]);
-            pq.add(c);
+            cars[i] = new Car(position[i],speed[i]);
+            
         }
+        Arrays.sort(cars);
+        
         int groups =0;
         double time =0;
-        while(pq.size()>0){
-            Car rem = pq.remove();  // cTime -> current time 
-            double cTime = (target -rem.pos)*1.0 /rem.speed;
+        for(int i= cars.length -1;i>=0;i--){
+            Car rem = cars[i];  
+            double cTime = (target -rem.pos)*1.0 /rem.speed;  // cTime -> current time 
             if(cTime > time){
                 time = cTime;
                 groups++;
@@ -25,7 +27,7 @@ class Solution {
             this.speed = speed;
         }
         public int compareTo(Car c){
-            return c.pos - this.pos;
+            return this.pos - c.pos;
         }
     }
 }
