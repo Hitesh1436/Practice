@@ -5,13 +5,17 @@ class Solution {
             map.put(position[i],speed[i]);
         }
         double time =0;
-        int ans =0;
+        int groups =0;
         for(Map.Entry<Integer,Integer>car : map.entrySet()){
-            double currTime = (target - car.getKey())* 1.0 /car.getValue();
+            int pos = car.getKey();  // pos -> position
+            int sp = car.getValue(); // sp -> speed
+            int dist = target - pos;
+            double currTime = dist * 1.0 / sp;
             if(currTime > time){
-                time = currTime;ans++;
+                time = currTime;
+                groups++;
             }
         }
-        return ans;
+        return groups;
     }
 }
