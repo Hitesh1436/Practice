@@ -1,13 +1,13 @@
 class Solution {
     public int romanToInt(String s) {
-        int n = 0;
+        int sum = 0;
         char prev = ' ';
         for (int i = 0; i < s.length(); i++) {
             char c = s.charAt(i);
-            n += getValue(c, prev);
+            sum += getValue(c, prev);
             prev = c;
         }
-        return n;
+        return sum;
     }
     
     private int getValue(char c, char prev) {
