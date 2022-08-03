@@ -1,70 +1,45 @@
 class Solution {
     public String longestPalindrome(String s) {
-      if (s == null || s.length() == 0) return "";
-        // Prepocess the string s by inserting '#' characters between each character in s, including
-        // the outer boundaries. The processed result is in the format of a char array for faster
-        // manipulations.
-        char[] originalStr = s.toCharArray();
-        char[] processedStr = preProcessing(originalStr);
-        int N = processedStr.length;
-        // Create an array to store the lengths of the palindrome for each center point in s (initially
-        // all 0's).
-        int[] p = new int[N];
-        // Define two pointers to track.
-        int center = 0; // mirror line
-        int right = 0; // right bound
-        // Loop through the processed string skipping the boundaries.
-        for (int i = 1; i < N - 1; i++) {
-            // The mirror index on the left of the mirror line.
-            int mirror = center - (i - center);
-            // When the cursor is within the current palindromic boundaries, make sure the expansion
-            // does not overreach the current right boundary.
-            if (right > i) {
-                p[i] = Math.min(right  - i, p[mirror]);
-            }
-            // Expand while the palindrome condition matches.
-            while (processedStr[i + (1 + p[i])] == processedStr[i - (1 + p[i])]) {
-                p[i]++;
-            }
-            // If the expansion goes beyond the right bound, update the center and the right bound
-            // correspondingly.
-            if (i + p[i] > right) {
-                center = i;
-                right = i + p[i];
-            }
+        int len = s.length();
+        if (len == 0) {
+            return "";
         }
-        // Find the longest palindrome.
+        char[] sChars = s.toCharArray();
+        /*
+         * length of common string found
+         * set dp[i][j] to 0 if s[i - 1] != s[j];
+         */
+        int[][] dp = new int[2][len + 1];
+        int currRow = 0;
         int maxLen = 0;
-        int centerIdx = 0;
-        for (int i = 1; i < N - 1; i++) {
-            if (p[i] > maxLen) {
-                maxLen = p[i];
-                centerIdx = i;
+        int start = 0;
+        /*
+         * find longest common string between s and s' (reversed s)
+         * for orginal string, from sChars[0] to sChars[len - 1]
+         * for reversed view, from sChars[len - 1] to sChars[0];
+         */
+        for (int i = 0; i <= len; i++) {
+            for (int j = len; j >= 0; j--) {
+                if (i == 0 || j == len) {
+                    dp[currRow][j] = 0;
+                } else if (sChars[i - 1] == sChars[j]) {
+                    dp[currRow][j] = dp[1 - currRow][j + 1] + 1;
+                    int currLen = dp[currRow][j];
+                    /*
+                     * 1. longest common substring length
+                     * 2. skip those common substrings doesn't "produced" by reverse.
+                     */
+                    if (i - 1 == j + currLen - 1 && i - currLen == j && currLen > maxLen) {
+                        start = j;
+                        maxLen = currLen;
+                    }
+                } else {
+                    dp[currRow][j] = 0;
+                }
             }
+            // * switch the working row of dp[][] to the next row (i)
+            currRow = 1 - currRow;
         }
-        // We can use String.substring method here, but still the array operation is slightly faster.
-        return new String(Arrays.copyOfRange(originalStr, (centerIdx - 1 - maxLen) / 2, (centerIdx - 1 + maxLen) / 2));
+        return s.substring(start, start + maxLen);
     }
-
-    /**
-     * <h2>Helper class for preprocessing.</h2>Preprocess string str into a char array.
-     * For example, if <code>s = "abaabac"</code>, then the resulting char array <code>chars = "$#a#b#a#a#b#a#c#@"</code>,
-     * where "#" are interleaved symbol to avoid even/odd-Length palindromes uniformly, while "$" and "@" are
-     * prepended and appended to each end to avoid bounds checking (they must be different!).
-     * @param str input string to be processed
-     * @return processed string with "#"'s
-     */
-    private  char[] preProcessing(char[] str) {
-        int n = str.length;
-        // Here we use char arrays for speed.
-        char[] chars = new char[2 * n + 3];
-        chars[0] = '$';
-        chars[2 * n + 2] = '@';
-        for (int i = 0; i < n; i++) {
-            chars[2 * i + 1] = '#';
-            chars[2 * i + 2] = str[i];
-        }
-        chars[n * 2 + 1] = '#';
-        return chars;
-    }
-  }
+}
