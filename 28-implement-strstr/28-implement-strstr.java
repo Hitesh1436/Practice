@@ -1,9 +1,30 @@
+/**
+ * Brute Force string matching.
+ * Time Complexity: O(M * N)
+ * Space Complexity: O(1)
+ */
 class Solution {
     public int strStr(String haystack, String needle) {
-    if(haystack.contains(needle)){
-        return haystack.indexOf(needle);
-} else{
-      return -1;   
+        if (haystack == null || needle == null) {
+            throw new IllegalArgumentException("Input strings are null");
+        }
+        int hLen = haystack.length();
+        int nLen = needle.length();
+        if (nLen == 0) {
+            return 0;
+        }
+        if (hLen < nLen) {
+            return -1;
+        }
+        for (int i = 0; i <= hLen - nLen; i++) {
+            int j = 0;
+            while (j < nLen && haystack.charAt(i + j) == needle.charAt(j)) {
+                j++;
+            }
+            if (j == nLen) {
+                return i;
+            }
+        }
+        return -1;
     }
-  }
 }
