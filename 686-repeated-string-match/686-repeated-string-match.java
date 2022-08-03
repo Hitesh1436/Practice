@@ -1,3 +1,5 @@
+// Time: O(∣A∣+∣B∣)
+// Space:O(∣A∣+∣B∣)
 class Solution {
   public int repeatedStringMatch(String A, String B) {
     final int n = (int) Math.ceil((double) B.length() / (double) A.length());
