@@ -1,10 +1,11 @@
-// Time Complexity : O(n)
-// Space Complexity : O(1)
+// Time Complexity : O(N)
+// Space Complexity : O(N)
 class Solution {
     public String reverseWords(String s) {
-         int i = 0; // i will be looking for non-space
-         int n = s.length();
-        String result = new String();
+        Stack <String> st = new Stack<>();
+        int i = 0;
+        int n = s.length();
+        String result = "";
         while(i<n){
             while(i<n && s.charAt(i) == ' '){
                 i++;
@@ -12,20 +13,20 @@ class Solution {
             if(i>=n){
                 break;
             }
-            int j = i+1; // j is looking for space
+            int j = i+1;
             while(j<n && s.charAt(j) != ' '){
                 j++;
             }
-            String sub = s.substring(i, j);
-            if(result.length() == 0){
-                result = sub;
-            }
-            else{
-                result = sub + " " + result;
-            }
-            i = j+1; 
+            String sub = s.substring(i,j);
+            st.push(sub);
+            i = j+1;
+        }
+        if(result.length()==0){
+            result = st.pop();
+        }
+        while(!st.isEmpty()){
+            result = result + " " + st.pop();
         }
         return result;
     }
 }
-
