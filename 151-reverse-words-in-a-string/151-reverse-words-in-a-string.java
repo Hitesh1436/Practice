@@ -1,31 +1,18 @@
 class Solution {
-    // reverses the part of an array and returns the input array for convenience
-public char[] reverse(char[] arr, int i, int j) {
-    while (i < j) {
-        char tmp = arr[i];
-        arr[i++] = arr[j];
-        arr[j--] = tmp;
-    }
-    return arr;
-}
-
-public String reverseWords(String s) {
-    // reverse the whole string and convert to char array
-    char[] str = reverse(s.toCharArray(), 0, s.length()-1);
-    int start = 0, end = 0; // start and end positions of a current word
-    for (int i = 0; i < str.length; i++) {
-        if (str[i] != ' ') { // if the current char is letter 
-            str[end++] = str[i]; // just move this letter to the next free pos
-        } else if (i > 0 && str[i-1] != ' ') { // if the first space after word
-            reverse(str, start, end-1); // reverse the word
-            str[end++] = ' '; // and put the space after it
-            start = end; // move start position further for the next word
+    public String reverseWords(String s) {
+        s = s.trim();//triming all the extra spaces in front or back of the string!
+        String str[] = s.split("\\s+");//Splitting String where words are separated by regular whitespace or multiple whitespaces or tabs!
+        Stack<String> st = new Stack<>();
+        for(String sus: str){
+            st.push(sus);//pushsing all string inside the stack ==> as stack is filo so it will reverse the order of the string!
         }
+        Stack<String> sus2 = new Stack<>();
+        String ans = "";//to store our ans!
+        while(!st.isEmpty()){
+            ans+=(st.pop());//adding all strings to our ans from our st stack!
+            ans+=" ";//ans simultaniously adding regular whitespaces
+        }
+        ans = ans.trim();//at last eliminating trailing space
+        return ans;
     }
-    reverse(str, start, end-1); // reverse the tail word if it's there
-    // here's an ugly return just because we need to return Java's String
-    // also as there could be spaces at the end of original string 
-    // we need to consider redundant space we have put there before
-    return new String(str, 0, end > 0 && str[end-1] == ' ' ? end-1 : end);
-  }
 }
