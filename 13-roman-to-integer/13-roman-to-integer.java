@@ -1,32 +1,23 @@
+// Time: O(n)O(n)
+// Space: O(128) = O(1)O(128)=O(1)
 class Solution {
-    public int romanToInt(String s) {
-        int sum = 0;
-        char prev = ' ';
-        for (int i = 0; i < s.length(); i++) {
-            char c = s.charAt(i);
-            sum += getValue(c, prev);
-            prev = c;
-        }
-        return sum;
-    }
-    
-    private int getValue(char c, char prev) {
-        switch (c) {
-            case 'I':
-                return 1;
-            case 'V':
-                return prev == 'I' ? 3 : 5;
-            case 'X':
-                return prev == 'I' ? 8 : 10;
-            case 'L':
-                return prev == 'X' ? 30 : 50;
-            case 'C':
-                return prev == 'X' ? 80 : 100;
-            case 'D':
-                return prev == 'C' ? 300 : 500;
-            case 'M':
-                return prev == 'C' ? 800 : 1000;
-        }
-        return -1;
-    }
+  public int romanToInt(String s) {
+    int ans = 0;
+    int[] roman = new int[128];
+    roman['I'] = 1;
+    roman['V'] = 5;
+    roman['X'] = 10;
+    roman['L'] = 50;
+    roman['C'] = 100;
+    roman['D'] = 500;
+    roman['M'] = 1000;
+    for (int i = 0; i + 1 < s.length(); ++i)
+      if (roman[s.charAt(i)] < roman[s.charAt(i + 1)]){
+          ans -= roman[s.charAt(i)];
+      }
+      else{
+          ans += roman[s.charAt(i)];
+      }
+    return ans + roman[s.charAt(s.length() - 1)];
+   }
 }
