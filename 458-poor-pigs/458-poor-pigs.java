@@ -4,6 +4,7 @@ class Solution {
         int i=0;
         while(Math.pow(test+1,i)< buckets){
             i++;
-        }return i;
+        }
+        return i;
     }
 }
