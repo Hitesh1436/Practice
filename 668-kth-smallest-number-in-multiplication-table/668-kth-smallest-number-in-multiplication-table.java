@@ -4,7 +4,6 @@ class Solution {
         int hi = m * n;
         while(lo < hi){
             int mid = lo + (hi - lo) / 2;
-            
             int count = 0;
             int j = n;
             for(int i = 1; i <= m; i++){
