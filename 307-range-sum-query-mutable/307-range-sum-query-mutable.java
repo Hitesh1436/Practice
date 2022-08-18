@@ -1,30 +1,60 @@
 class NumArray {
-    int[] tree;
-    int[] nums;
-    int size;
-    public NumArray(int[] nums) {
-        this.size = nums.length;
-        this.nums = new int[size];
-        this.tree = new int[size];
-        for (int i = 0; i < size; ++i)
-            update(i, nums[i]);
+    class Node {
+        int str; int end;
+        Node left; Node right;
+        int val;
     }
-    public void update(int i, int val) {
-        int delta = val - nums[i];
-        nums[i] = val;
-        for (; i < size; i |= i + 1)
-            tree[i] += delta;
-    }
-    public int sumRange(int i, int j) {
-        return sum(j) - sum(i - 1);
-    }
-    public int sum(int ind) {
-        int ans = 0;
-        while (ind >= 0) {
-            ans += tree[ind];
-            ind &= ind + 1;
-            ind--;
+    Node root;
+    public Node construct(int[] nums, int lo, int hi){
+        if(lo == hi){
+            Node node = new Node();
+            node.str = node.end = lo;
+            node.left = node.right = null;
+            node.val = nums[lo];
+            return node;
         }
-        return ans;
+        Node node = new Node();
+        node.str = lo;
+        node.end = hi;
+        
+        int mid = (lo + hi) / 2;
+        node.left = construct(nums, lo, mid);
+        node.right = construct(nums, mid + 1, hi);
+        node.val = node.left.val + node.right.val;
+        
+        return node;
+    }
+    public NumArray(int[] nums) {
+        root = construct(nums, 0, nums.length - 1);
+    }
+    public void update(Node node, int idx, int val){
+        if(node.str == node.end){
+            node.val = val;
+            return;
+        }
+        int mid = (node.str + node.end) / 2;
+        if(idx <= mid){
+            update(node.left, idx, val);
+        } else {
+            update(node.right, idx, val);
+        }
+        node.val = node.left.val + node.right.val;
+    }
+    public void update(int index, int val) {
+        update(root, index, val);
+    }
+    public int query(Node node, int qs, int qe){
+        if(qs > node.end || qe < node.str){
+            return 0;
+        } else if(node.str >= qs && node.end <= qe){
+            return node.val;
+        } else {
+            int lval = query(node.left, qs, qe);
+            int rval = query(node.right, qs, qe);
+            return lval + rval;
+        }
+    }
+    public int sumRange(int left, int right) {
+        return query(root, left, right);
     }
 }
