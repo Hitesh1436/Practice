@@ -2,7 +2,7 @@
   // Space Complexity: O(1) input array is modified
 class Solution {
     public int countSquares(int[][] matrix) {
-    int result = 0;
+    int noOfSqrs = 0;
     for(int i = 0; i < matrix.length; i++) {
       for(int j = 0; j < matrix[0].length; j++) {
         // for top most row(i == 0) and left most column j == 0, directly
@@ -11,9 +11,9 @@ class Solution {
           int min = Math.min(matrix[i-1][j], Math.min(matrix[i][j-1], matrix[i-1][j-1]));
           matrix[i][j] = min + 1;
         }
-        result += matrix[i][j];
+        noOfSqrs += matrix[i][j];
       }
     }
-    return result;
+    return noOfSqrs;
   }
 }
