@@ -1,15 +1,15 @@
 class Solution {
     public int[] sortedSquares(int[] nums) {
-        int l = 0;
-        int r = nums.length -1;
         int []ans = new int[nums.length];
-        for(int i=nums.length-1 ;i>=0;i--){
-            if(Math.abs(nums[l])>=Math.abs(nums[r])){
-                ans[i] = nums[l]*nums[l];
-                l++;
-           }else{
-                ans[i] = nums[r] * nums[r];
-                r--;
+        int i = 0;
+        int j = nums.length -1;
+        for(int k = nums.length -1;k>=0;k--){
+            if(Math.abs(nums[i])>= Math.abs(nums[j])){
+                ans[k] = nums[i]*nums[i];
+                i++;
+            }else{
+                ans[k] = nums[j]*nums[j];
+                j--;
             }
         }
         return ans;
