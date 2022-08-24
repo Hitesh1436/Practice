@@ -1,3 +1,5 @@
+// Time Complexity :- BigO(N)
+// Space Complexity :- BigO(1)
 class Solution {
     public void rotate(int[] nums, int k) {
         k = k % nums.length;
