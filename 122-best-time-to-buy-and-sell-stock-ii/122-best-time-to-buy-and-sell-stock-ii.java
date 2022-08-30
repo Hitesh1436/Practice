@@ -1,18 +1,11 @@
 class Solution {
     public int maxProfit(int[] prices) {
-		// We need prices for 2 days at least to find the profit.
-        if (prices.length <= 1) {
-            return 0;
+        int n = prices.length;
+        int[] dp = new int[n];
+        dp[0]=0;
+        for(int i=1;i<n;i++){
+            dp[i] = dp[i-1] + Math.max(0,prices[i]-prices[i-1]);
         }
-        int totalProfit = 0;
-        for (int i = 1; i < prices.length; i++) {
-            // Checking if we can profit with previous day's price.
-            // If yes, then we buy on previous day and sell on current day.
-            // Add all such profits to get the total profit.
-            if (prices[i - 1] < prices[i]) {
-                totalProfit += prices[i] - prices[i - 1];
-            }
-        }
-        return totalProfit;
+        return dp[n-1];
     }
 }
