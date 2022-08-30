@@ -1,3 +1,4 @@
+// T(C)->O(n^2), S(C)-> O(n)
 class Solution {
     public int jump(int[] nums) {
         int n = nums.length;
