@@ -1,13 +1,18 @@
 class Solution {
-    public int jump(int[] N) {
-        int n = N.length - 1, curr = -1, next = 0, ans = 0;
-        for (int i = 0; next < n; i++) {
-            if (i > curr) {
-                ans++;
-                curr = next;
+    public int jump(int[] nums) {
+        int n = nums.length;
+        int []dp = new int[n];
+        Arrays.fill(dp,Integer.MAX_VALUE);
+        dp[n-1] =0;
+        for(int i=n-2;i>=0;i--){
+            int min = Integer.MAX_VALUE;
+            for(int j=i+1;j<=Math.min(n-1,i+nums[i]);j++){
+                min = Math.min(min,dp[j]);
             }
-            next = Math.max(next, N[i] + i);
+            if(min != Integer.MAX_VALUE){
+                dp[i] = min +1;
+            }
         }
-        return ans;
+        return dp[0];
     }
 }
