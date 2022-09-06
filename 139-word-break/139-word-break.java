@@ -1,15 +1,22 @@
 class Solution {
-    public boolean wordBreak(String s, List<String> dict) {
-        boolean []dp = new boolean[s.length()+1];
-        dp[0] = true;
-        for(int i=0;i<=s.length();i++){
-            for(int j=0;j<i;j++){
-                if(dp[j] && dict.contains(s.substring(j,i))){
-                    dp[i] = true;
-                    break;
-                }
+    boolean flag = false;
+    HashMap<String, Boolean> map = new HashMap<>();
+    boolean solve(String s, List<String> wordDict){
+        if(s.length()==0){
+            return true;
+        }
+        if(map.containsKey(s)){
+            return map.get(s);
+        } 
+        for(String word : wordDict){
+            if(s.startsWith(word)){
+                flag = flag || solve(s.substring(word.length()), wordDict);
             }
         }
-        return dp[s.length()];
+        map.put(s, flag);
+        return map.get(s);
+    }
+    public boolean wordBreak(String s, List<String> wordDict) {
+        return solve(s, wordDict);
     }
 }
