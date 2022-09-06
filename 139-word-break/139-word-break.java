@@ -1,7 +1,7 @@
 class Solution {
     boolean flag = false;
     HashMap<String, Boolean> map = new HashMap<>();
-    boolean solve(String s, List<String> wordDict){
+    private boolean solve(String s, List<String> wordDict){
         if(s.length()==0){
             return true;
         }
