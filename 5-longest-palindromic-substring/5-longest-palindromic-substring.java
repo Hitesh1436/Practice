@@ -1,46 +1,22 @@
 class Solution {
     public String longestPalindrome(String s) {
-        // code line +8 to line +15
-        int strLen = 2 * s.length() + 3;
-        char[] sChars = new char[strLen];
-        /*
-         * To ignore special cases at the beginning and end of the array
-         * "abc" -> @ # a # b # c # $
-         * "" -> @#$
-         * "a" -> @ # a # $
-         */
-        sChars[0] = '@';
-        sChars[strLen - 1] = '$';
-        int t = 1;
-        for (char c : s.toCharArray()) {
-            sChars[t++] = '#';
-            sChars[t++] = c;
-        }
-        sChars[t] = '#';
-        int maxLen = 0;
-        int start = 0;
-        int maxRight = 0;
-        int center = 0;
-        int[] p = new int[strLen]; // i's radius, which not includes i
-        for (int i = 1; i < strLen - 1; i++) {
-            if (i < maxRight) {
-                p[i] = Math.min(maxRight - i, p[2 * center - i]);
-            }
-            // expand center
-            while (sChars[i + p[i] + 1] == sChars[i - p[i] - 1]) {
-                p[i]++;
-            }
-            // update center and its bound
-            if (i + p[i] > maxRight) {
-                center = i;
-                maxRight = i + p[i];
-            }
-            // update ans
-            if (p[i] > maxLen) {
-                start = (i - p[i] - 1) / 2;
-                maxLen = p[i];
+        boolean[][] dp = new boolean[s.length()][s.length()];
+        String res = "";
+        for(int g = 0; g < dp[0].length; g++){
+            for(int i = 0, j = g; j < dp[0].length; i++, j++){
+                if(g == 0){
+                    dp[i][j] = true;
+                } else if(g == 1){
+                    dp[i][j] = s.charAt(i) == s.charAt(j);
+                } else {
+                    dp[i][j] = s.charAt(i) == s.charAt(j) && dp[i + 1][j - 1];
+                }
+                
+                if(dp[i][j]){
+                    res = s.substring(i, j + 1);
+                }
             }
         }
-        return s.substring(start, start + maxLen);
+        return res;
     }
 }
