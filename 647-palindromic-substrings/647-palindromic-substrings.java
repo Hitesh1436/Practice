@@ -1,28 +1,21 @@
 class Solution {
     public int countSubstrings(String s) {
-        int count = 0;
-        for(int i = 0; i < s.length(); i++){
-            //count odd length palindrome, 
-            //only one center character
-            count += countPalindromesAroundCenter(s, i, i);
-            
-            //count even length palindrome, 
-            //two center character
-            count += countPalindromesAroundCenter(s, i, i + 1);
-        } 
-        
-        return count;
-    }
-    
-    
-    private int  countPalindromesAroundCenter(String s, int l, int r){
-        int count = 0;
-        while(l >= 0 && r < s.length()){
-            //just return count, as we found first mismatch
-            if(s.charAt(l--) != s.charAt(r++))  return count;
-            
-            count++;
+        boolean[][] dp = new boolean[s.length()][s.length()];
+        int res = 0;
+        for(int g = 0; g < dp[0].length; g++){
+            for(int i = 0, j = g; j < dp[0].length; i++, j++){
+                if(g == 0){
+                    dp[i][j] = true;
+                } else if(g == 1){
+                    dp[i][j] = s.charAt(i) == s.charAt(j);
+                } else {
+                    dp[i][j] = s.charAt(i) == s.charAt(j) && dp[i + 1][j - 1];
+                }
+                if(dp[i][j]){
+                    res++;
+                }
+            }
         }
-        return count;
+        return res;
     }
 }
