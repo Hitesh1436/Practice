@@ -14,7 +14,7 @@ class Solution {
             }
         }
     }
-     public List<List<String>> partition(String s) {
+    public List<List<String>> partition(String s) {
         IsPalindrome(s);
         List<List<String>>[] dp = new List[s.length()];
         return helper(s, s.length() - 1, dp);
@@ -30,11 +30,9 @@ class Solution {
             return (List<List<String>>)dp[j];
         }
         List<List<String>> mres = new ArrayList<>();
-        
         for(int i = j; i >= 0; i--){
             if(ip[i][j] == true){
                 String palin = s.substring(i, j + 1);
-                
                 List<List<String>> rres = helper(s, i - 1, dp);
                 for(List<String> rlist: rres){
                     ArrayList<String> mlist = new ArrayList<>(rlist);
@@ -46,4 +44,4 @@ class Solution {
         dp[j] = mres;
         return mres;
     }
-  }
+}
