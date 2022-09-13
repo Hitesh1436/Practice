@@ -1,25 +1,25 @@
 class Solution {
     public int nthUglyNumber(int n) {
         int[] dp = new int[n + 1];
-        dp[1] = 1;
-        int p2 = 1;
-        int p3 = 1;
-        int p5 = 1;
+        dp[1] =  1;
+        int iof2 = 1;  // iof -> index of 
+        int iof3 = 1;
+        int iof5 = 1;
         for(int i = 2; i < dp.length; i++){
-            int f2 = dp[p2] * 2;
-            int f3 = dp[p3] * 3;
-            int f5 = dp[p5] * 5;
+            int mof2 = dp[iof2] * 2;  // mof -> multiple of 
+            int mof3 = dp[iof3] * 3;
+            int mof5 = dp[iof5] * 5;
             
-            dp[i] = Math.min(f2, Math.min(f3, f5));
+            dp[i] = Math.min(mof2, Math.min(mof3, mof5));
             
-            if(dp[i] == f2){
-                p2++;
+            if(dp[i] == mof2){
+                iof2++;
             }
-            if(dp[i] == f3){
-                p3++;
+            if(dp[i] == mof3){
+                iof3++;
             }
-            if(dp[i] == f5){
-                p5++;
+            if(dp[i] == mof5){
+                iof5++;
             }
         }
         return dp[n];
