@@ -9,16 +9,15 @@
  * }
  */
 class Solution {
+    public ListNode reverseList(ListNode head) {
+      return helper(head,null);
+    }
     public ListNode helper(ListNode head,ListNode prev){
         if(head == null){
-            return prev;
-        }
+           return prev;
+       } 
         ListNode fwd = head.next;
-         head.next = prev;
+        head.next = prev;
         return helper(fwd,head);
-    }
-    
-    public ListNode reverseList(ListNode head) {
-        return helper(head,null);
     }
 }
