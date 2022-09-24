@@ -18,7 +18,7 @@ class Solution {
         List<String> res = new ArrayList<>();
         for(String word: words){
             flag = false;
-            isComplex(word, 0, 0);
+            wordBreak(word, 0, 0);
             if(flag == true){
                 res.add(word);
             }
@@ -26,7 +26,7 @@ class Solution {
         return res;
     }
     boolean flag = false;
-    private void isComplex(String word, int i, int wsf){
+    private void wordBreak(String word, int i, int wsf){
         if(i == word.length()){  // wsf -> word so far
             if(wsf >= 2){
                 flag = true;
@@ -40,7 +40,7 @@ class Solution {
             if(temp.arr[ch - 'a'] != null){
                 temp = temp.arr[ch - 'a'];
                 if(temp.eow == true){
-                    isComplex(word, j + 1, wsf + 1);
+                    wordBreak(word, j + 1, wsf + 1);
                 }
             } else {
                 return;
