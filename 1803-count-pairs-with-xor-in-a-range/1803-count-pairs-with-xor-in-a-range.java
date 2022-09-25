@@ -1,24 +1,47 @@
 class Solution {
-     public int countPairs(int[] A, int low, int high) {
-        return test(A, high + 1) - test(A, low);
+    class Node {
+        Node[] children = new Node[2];
+        int count = 0;
     }
-
-    private int test(int[] A, int x) {
-        Map<Integer, Integer> count = new HashMap<>(), count2 = new HashMap<>();
-        for (int a : A)
-            count.put(a, count.getOrDefault(a, 0) + 1);
-        int res = 0;
-        while (x > 0) {
-            for (int k : count.keySet()) {
-                int v = count.get(k);
-                count2.put(k >> 1, count2.getOrDefault(k >> 1, 0) + v);
-                if ((x & 1) > 0)
-                    res += v * count.getOrDefault((x - 1) ^ k, 0);
+    void insert(int num){
+        Node temp = root;
+        for(int i = 15; i >= 0; i--){
+            int bit = (num & (1 << i)) == 0? 0: 1;
+            if(temp.children[bit] == null){
+                temp.children[bit] = new Node();
             }
-            count = count2;
-            count2 = new HashMap<>();
-            x >>= 1;
+            temp = temp.children[bit];
+            temp.count++;
+        } 
+    }
+    int helper(int num, int k){
+        int countSmaller = 0;
+        Node temp = root;
+        for(int i = 15; i >= 0; i--){
+            int kbit = (k & (1 << i)) == 0 ? 0: 1;
+            int nbit = (num & (1 << i)) == 0 ? 0: 1;
+            
+            if(kbit == 1){
+                if(temp.children[nbit] != null){
+                    countSmaller += temp.children[nbit].count;
+                }
+                nbit = Math.abs(nbit - 1);
+            } 
+            if(temp.children[nbit] == null){
+                break;
+            } else {
+                temp = temp.children[nbit];
+            }
+        }  
+        return countSmaller;
+    }
+    Node root = new Node();
+    public int countPairs(int[] nums, int low, int high) {
+        int res = 0;
+        for(int num: nums){
+            res += helper(num, high + 1) - helper(num, low);
+            insert(num);
         }
-        return res / 2;
+        return res;
     }
 }
