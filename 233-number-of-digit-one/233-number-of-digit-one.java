@@ -1,21 +1,24 @@
 class Solution {
     public int countDigitOne(int n) {
         int res = 0;
-        int m = 1;
-        int k = 0;
-        while(n >= m) {
-            int a = (n / (m * 10)) * m;
-            int b = n % (m * 10) - k;
-
-            if(b <= 0) {
-                b = 0;
-            } else if(b >= m) {
-                b = m;
+        
+        int place = 1;
+        while(place <= n){
+            int q = n / (10 * place);  // q-> quotient
+            int r = n % (10 * place);  // r-> remiander
+            
+            int extra = 0;
+            if(r >= 2 * place){
+                extra = place;
+            } else if(r >= place){
+                extra = r - place + 1;
+            } else {
+                extra = 0;
             }
-            res = res + a + b;
-            m = m * 10;
-            k = k * 10 + 9;
+            res += q * place + extra;
+            place = place * 10;
         }
+        
         return res;
     }
 }
