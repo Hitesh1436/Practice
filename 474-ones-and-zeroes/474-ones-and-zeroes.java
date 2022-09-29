@@ -1,30 +1,38 @@
 class Solution {
+    String[] arr;
     public int findMaxForm(String[] strs, int m, int n) {
-        int[][] dp = new int[m + 1][n + 1];
+        arr = strs;
+        int[][][] dp = new int[arr.length][m + 1][n + 1];
+        return helper(0, m, n, dp);
+    }
+    
+    
+    public int helper(int idx, int m, int n, int[][][] dp){
+        if(idx == arr.length) {
+            return 0;
+        } else if(dp[idx][m][n] != 0){
+            return dp[idx][m][n];
+        }
         
-        for(String str : strs){
-            //count of onees and zeors for this string
-            int[]count = getCount(str);
-            
-            for(int zeroes = m; zeroes >= count[0]; zeroes--){
-                for(int ones = n; ones >= count[1]; ones--){
-                    
-                 //update the current subset length,
-                //find the maximum subsets length, when consider current element or when we donn't consider
-              dp[zeroes][ones] = Math.max(dp[zeroes][ones], 1 + dp[zeroes - count[0]][ones - count[1]]);
-                }  
+        int czeroes = 0;
+        int cones = 0;
+        for(char ch: arr[idx].toCharArray()){
+            if(ch == '0'){
+                czeroes++;
+            } else {
+                cones++;
             }
         }
-        return dp[m][n];
-    }
-       
-    private int[] getCount(String str){
-        int[] count = new int[2];
         
-        //count zeroes and ones of current string
-        for(char c : str.toCharArray()){
-            count[c - '0']++;
+        int len1 = 0;
+        if(czeroes <= m && cones <= n){
+            len1 = 1 + helper(idx + 1, m - czeroes, n - cones, dp);
         }
-        return count;
+        
+        int len2 = 0 + helper(idx + 1, m, n, dp);
+        int res = Math.max(len1, len2);
+        
+        dp[idx][m][n] = res;
+        return res;
     }
 }
