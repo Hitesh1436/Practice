@@ -23,10 +23,12 @@ class Solution {
                             break;
                         }
                     }
+                    
                     dp[e][f] = 1 + Math.max(dp[e - 1][lo - 1], dp[e][f - lo]);
                 }
             }
         }
+        
         return dp[eggs][n];
     }
 }
