@@ -13,18 +13,15 @@ class Solution {
         if(head == null || head.next == null){
             return;
         }
-        
         left = head;
         helper(head);
-    }
-    
+    }    
     ListNode left;
     boolean work = true;
-    void helper(ListNode right){
+   public void helper(ListNode right){
         if(right == null){
             return;
         }
-        
         helper(right.next);
         
         if(work == true && (left == right || left.next == right)){
@@ -37,8 +34,6 @@ class Solution {
             right.next = temp;
 
             left = temp;
-        }
-        
-        
+        } 
     }
 }
